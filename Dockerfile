@@ -1,0 +1,60 @@
+# Multi-stage Dockerfile for frontend-cursala - Optimized for faster builds
+# Build triggered: 2025-11-25
+
+FROM node:20-alpine AS base
+WORKDIR /app
+
+# Install common build tools (needed for native dependencies like sharp)
+RUN apk add --no-cache python3 make g++ libc6-compat
+
+# Copy package files first for better caching
+COPY package*.json ./
+
+FROM base AS deps-prod
+# Install production dependencies only
+RUN npm ci --only=production --legacy-peer-deps && npm cache clean --force
+
+FROM base AS deps-dev
+# Install all dependencies (including dev) for building
+RUN npm ci --legacy-peer-deps && npm cache clean --force
+
+FROM base AS builder
+# Copy all deps from deps-dev stage for building
+COPY --from=deps-dev /app/node_modules ./node_modules
+
+# Copy source and build
+COPY . .
+RUN npm run build
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+# Install dumb-init for proper signal handling
+RUN apk add --no-cache dumb-init
+
+# Copy production dependencies
+COPY --from=deps-prod /app/node_modules ./node_modules
+
+# Copy built assets only
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+
+# Create the static directory that docker-compose expects to mount
+RUN mkdir -p /app/dist/src/static
+
+# Add a non-root user for security
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN chown -R appuser:appgroup /app
+USER appuser
+
+EXPOSE 80
+
+# Disable Next.js telemetry
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+ENV PORT=80
+
+# Use dumb-init for proper signal handling
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["npm", "run", "start:prod"]

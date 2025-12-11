@@ -1,0 +1,26 @@
+{
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "tailwindCSS.experimental.configFile": "src/css/style.css",
+  "files.associations": {
+    "*.css": "tailwindcss",
+    "*.tsx": "typescriptreact"
+  },
+  "editor.quickSuggestions": {
+    "strings": true,
+    "comments": "on",
+    "other": "on"
+  },
+  "editor.inlineSuggest.enabled": true,
+  "editor.suggest.preview": true,
+  "tailwindCSS.includeLanguages": {
+    "typescript": "typescript",
+    "typescriptreact": "html"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["className\\s*=\\s*[\"']([^\"']*)[\"']", "[\"`'](.*?)['\"`]"]
+  ],
+  "tailwindCSS.validate": true,
+  "tailwindCSS.showPixelEquivalents": true,
+  "tailwindCSS.emmetCompletions": true
+}

@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colores principales de marca */
+  --color-brand-primary: #0081c2;
+  --color-brand-primary-dark: #00385b;
+  --color-brand-secondary: #fac40e;
+  --color-brand-tertiary: #262626;
+  --color-brand-tertiary-light: #7e7d82;
+  --color-brand-tertiary-lighten: #b0afb5;
+
+  /* Font Families */
+  /* --font-satoshi: Satoshi, sans-serif; */
+
+  /* Breakpoints */
+  --breakpoint-2xsm: 375px;
+  --breakpoint-xsm: 425px;
+  --breakpoint-3xl: 2000px;
+
+  /* Animación de fade in up para FAQ items */
+  @keyframes fadeInUp {
+      0% {
+          opacity: 0;
+          transform: translateY(20px);
+      }
+      100% {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+}
+
+@layer base {
+    body {
+        @apply relative text-base text-brand-tertiary ;
+        font-family: 'Titillium Web', sans-serif;
+    }
+}
+
+@layer utilities {
+    /* Utilidad para ocultar scrollbar */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+}
+
+/* Estilos para inputs de fecha */
+.custom-input-date::-webkit-calendar-picker-indicator {
+    background: transparent;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 20px;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+    @apply appearance-none;
+}

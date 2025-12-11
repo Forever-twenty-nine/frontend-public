@@ -1,0 +1,104 @@
+name: build-and-push-frontend
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Extract short sha
+        id: meta
+        run: echo "sha=${GITHUB_SHA::8}" >> $GITHUB_OUTPUT
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ghcr.io/forever-twenty-nine/frontend-cursala:latest
+            ghcr.io/forever-twenty-nine/frontend-cursala:sha-${{ steps.meta.outputs.sha }}
+          platforms: linux/amd64
+          cache-from: type=registry,ref=ghcr.io/forever-twenty-nine/frontend-cursala:buildcache
+          cache-to: type=registry,ref=ghcr.io/forever-twenty-nine/frontend-cursala:buildcache,mode=max
+
+  deploy:
+      name: SSH deploy to VPS
+      needs: docker
+      runs-on: ubuntu-latest
+      timeout-minutes: 30  # Aumentar timeout general
+      steps:
+        - name: Deploy to VPS via SSH
+          env:
+            DEPLOY_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+            DEPLOY_HOST: ${{ secrets.VPS_HOST }}
+            DEPLOY_USER: ${{ secrets.VPS_USER }}
+            DEPLOY_PORT: ${{ secrets.VPS_SSH_PORT }}
+            GHCR_DEPLOY_PAT: ${{ secrets.GHCR_DEPLOY_PAT }}
+            COMPOSE_PATH: ${{ secrets.DEPLOY_COMPOSE_PATH }}
+            IMAGE_NAME: ghcr.io/forever-twenty-nine/frontend-cursala
+          run: |
+            mkdir -p ~/.ssh
+            echo "$DEPLOY_KEY" > ~/.ssh/deploy_key
+            chmod 600 ~/.ssh/deploy_key
+            ssh-keyscan -p ${DEPLOY_PORT:-22} $DEPLOY_HOST >> ~/.ssh/known_hosts 2>/dev/null || true
+
+            # Función para ejecutar comandos SSH con retry
+            ssh_cmd() {
+              ssh -i ~/.ssh/deploy_key -p ${DEPLOY_PORT:-22} -o ConnectTimeout=30 -o ServerAliveInterval=60 -o ServerAliveCountMax=10 $DEPLOY_USER@$DEPLOY_HOST "$1"
+            }
+
+            echo "🔐 Logging into registry..."
+            ssh_cmd "echo '$GHCR_DEPLOY_PAT' | docker login ghcr.io -u sebasechazu --password-stdin"
+
+            echo "📦 Pulling latest image..."
+            ssh_cmd "docker pull $IMAGE_NAME:latest"
+
+            echo "🔄 Updating compose services..."
+            ssh_cmd "cd $(dirname $COMPOSE_PATH) && docker-compose -f $COMPOSE_PATH pull frontend"
+
+            echo "🛑 Stopping old container..."
+            ssh_cmd "docker stop f-cursala || true && docker rm -f f-cursala || true"
+
+            echo "📁 Extracting .next files for nginx..."
+            ssh_cmd "
+              TMP_CONTAINER=\$(docker create $IMAGE_NAME:latest)
+              rm -rf /opt/cursala/.next
+              mkdir -p /opt/cursala/.next
+              docker cp \$TMP_CONTAINER:/app/.next/. /opt/cursala/.next/ 2>/dev/null || true
+              docker rm \$TMP_CONTAINER
+              chmod -R 755 /opt/cursala/.next
+              echo '✅ .next files extracted successfully'
+            "
+
+            echo "🚀 Starting new container..."
+            ssh_cmd "cd $(dirname $COMPOSE_PATH) && docker-compose -f $COMPOSE_PATH up -d frontend"
+
+            echo "🔄 Restarting nginx to serve new static files..."
+            ssh_cmd "docker restart nginx-proxy && sleep 5"
+
+            echo "✅ Deploy completed successfully!"
