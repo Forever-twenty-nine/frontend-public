@@ -44,9 +44,17 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
 
                 if (!isMounted) return;
 
-                // Fetch promotional data
-                const ids = coursesData.map((c: any) => c?._id || c?.id).filter(Boolean);
-                const promos = await getCoursesWithActivePromotions(ids);
+                // Fetch promotional data (with error handling)
+                let promos: Record<string, boolean> = {};
+                try {
+                    const ids = coursesData.map((c: any) => c?._id || c?.id).filter(Boolean);
+                    if (ids.length > 0) {
+                        promos = await getCoursesWithActivePromotions(ids);
+                    }
+                } catch (error) {
+                    console.warn('Failed to fetch promotions, continuing without them:', error);
+                    // Continue without promotions - not critical for app functionality
+                }
 
                 if (isMounted) {
                     setPromotionsMap(promos || {});

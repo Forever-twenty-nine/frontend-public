@@ -11,6 +11,11 @@ export type CoursesWithActivePromotions = Record<string, boolean>;
 export const getCoursesWithActivePromotions = async (
   courseIds: string[],
 ): Promise<CoursesWithActivePromotions> => {
+  // En desarrollo, deshabilitar temporalmente las promociones para evitar errores
+  if (process.env.NODE_ENV === 'development') {
+    return {};
+  }
+
   try {
     const response = await api.post(
       "/api/fetch?path=/promotional-codes/courses-with-active",

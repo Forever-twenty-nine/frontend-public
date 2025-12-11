@@ -1,7 +1,7 @@
 # Multi-stage Dockerfile for frontend-cursala - Optimized for faster builds
 # Build triggered: 2025-11-25
 
-FROM node:20-alpine AS base
+FROM node:24-alpine AS base
 WORKDIR /app
 
 # Install common build tools (needed for native dependencies like sharp)
@@ -26,7 +26,7 @@ COPY --from=deps-dev /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
-FROM node:20-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 
 # Install dumb-init for proper signal handling
@@ -54,6 +54,7 @@ EXPOSE 80
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 ENV PORT=80
+ENV HOSTNAME=0.0.0.0
 
 # Use dumb-init for proper signal handling
 ENTRYPOINT ["dumb-init", "--"]

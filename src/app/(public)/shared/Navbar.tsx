@@ -100,23 +100,24 @@ const Navbar: React.FC = () => {
  <div className="flex items-center justify-between px-4 py-3">
  <Link href="/" className="shrink-0">
  {/* Logo para modo claro */}
+ <div style={{ position: 'relative', width: '160px', height: '32px' }}>
  <Image
- width={140}
- height={30}
  src="/logo/cursala.svg"
  alt="Logo Cursala"
- className="h-8 w-auto "
- priority
+ fill
+ loading="eager"
+ unoptimized
  />
+ </div>
  {/* Logo para modo oscuro */}
+ <div style={{ position: 'relative', width: '160px', height: '32px' }} className="hidden">
  <Image
- width={140}
- height={30}
  src="/logo/cursala-negativo.svg"
  alt="Logo Cursala"
- className="hidden h-8 w-auto "
- priority
+ fill
+ unoptimized
  />
+ </div>
  </Link>
  <button
  onClick={toggleMobileMenu}
@@ -194,23 +195,24 @@ const Navbar: React.FC = () => {
  <div className="flex h-16 items-center justify-between lg:h-20">
  <Link href="/" className="shrink-0">
  {/* Logo para modo claro */}
+ <div style={{ position: 'relative', width: '160px', height: '32px' }}>
  <Image
- width={160}
- height={32}
  src="/logo/cursala.svg"
  alt="Logo Cursala"
- className="h-8 w-auto"
- priority
+ fill
+ loading="eager"
+ unoptimized
  />
+ </div>
  {/* Logo para modo oscuro */}
+ <div style={{ position: 'relative', width: '200px', height: '40px' }} className="hidden">
  <Image
- width={160}
- height={32}
  src="/logo/cursala-negativo.svg"
  alt="Logo Cursala"
- className="hidden h-8 w-auto lg:h-10"
- priority
+ fill
+ unoptimized
  />
+ </div>
  </Link>
  <div className="flex justify-start ml-12 w-full gap-4">
  <Navigation />

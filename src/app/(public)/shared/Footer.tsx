@@ -95,23 +95,23 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
         <div className="md:flex md:justify-between gap-20">
           <div className="text-center">
             {/* Logo para modo claro - negro */}
-            <Image
-              src="/logo/cursala.svg"
-              alt="Logo Cursala"
-              width={160}
-              height={32}
-              className="h-8 w-auto mb-3 lg:h-8"
-              priority
-            />
+            <div style={{ position: 'relative', width: '160px', height: '32px' }} className="mb-3">
+              <Image
+                src="/logo/cursala.svg"
+                alt="Logo Cursala"
+                fill
+                unoptimized
+              />
+            </div>
             {/* Logo para modo oscuro - blanco */}
-            <Image
-              src="/logo/cursala-negativo.svg"
-              alt="Logo Cursala"
-              width={160}
-              height={32}
-              className="hidden h-8 w-auto mb-3 lg:h-8"
-              priority
-            />
+            <div style={{ position: 'relative', width: '160px', height: '32px' }} className="hidden mb-3">
+              <Image
+                src="/logo/cursala-negativo.svg"
+                alt="Logo Cursala"
+                fill
+                unoptimized
+              />
+            </div>
             <h3 className="text-left text-sm font-bold text-brand-tertiary-light">Descubriendo expertos</h3>
           </div>
           <div className="w-full md:flex gap-20">

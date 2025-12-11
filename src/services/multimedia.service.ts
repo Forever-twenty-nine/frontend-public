@@ -127,17 +127,10 @@ export const getUserProfileImage = async (
   const cacheBreaker = Math.floor(Date.now() / 60000);
   const directUrl = `/api/direct?path=/user/${encodedFileName}/image&cb=${cacheBreaker}`;
 
-  // Verificar si hay token de autenticación disponible
-  const token = localStorage.getItem("token");
-  if (!token) {
-    throw new Error("Se requiere autenticación para acceder a la imagen de perfil");
-  }
-
   try {
     const resp = await axios.get(directUrl, {
       headers: {
         Accept: "image/jpeg, image/png",
-        Authorization: `Bearer ${token}`,
       },
       responseType: "blob",
     });

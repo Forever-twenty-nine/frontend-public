@@ -58,7 +58,14 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
  setCourse(foundCourse);
 
  // Verificar promociones usando el ID completo del curso
- const promos = await getCoursesWithActivePromotions([foundCourse._id]);
+                // Fetch promotional data (with error handling)
+                let promos: Record<string, boolean> = {};
+                try {
+                    promos = await getCoursesWithActivePromotions([foundCourse._id]);
+                } catch (error) {
+                    console.warn('Failed to fetch promotions, continuing without them:', error);
+                    // Continue without promotions - not critical for app functionality
+                }
  setHasPromotion(Boolean(promos?.[foundCourse._id]));
 
  // Cargar imagen del curso

@@ -20,7 +20,8 @@ export async function GET(request: NextRequest) {
 
   try {
     // Construir la URL del backend con el archivo
-    const backendUrl = process.env.NEXT_PUBLIC_URL_BACK || "http://localhost:8080/api/v1";
+    // Usar URL_BACK_SSR para llamadas del servidor (Docker), URL_BACK para cliente
+    const backendUrl = process.env.NEXT_PUBLIC_URL_BACK_SSR || process.env.NEXT_PUBLIC_URL_BACK || "http://localhost:8080/api/v1";
     const fileUrl = `${backendUrl}/file/${encodeURIComponent(fileName)}/publicdownload`;
     
     // Si hay token, agregarlo como query parameter
