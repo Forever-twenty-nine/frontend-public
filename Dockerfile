@@ -1,6 +1,7 @@
 # Multi-stage Dockerfile for frontend-cursala - Optimized for faster builds
 # Build triggered: 2025-11-25
 
+LABEL environment="preview"
 FROM node:24-alpine AS base
 WORKDIR /app
 
