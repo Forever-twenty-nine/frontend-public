@@ -8,7 +8,7 @@ export const getImages = async (
   const directUrl = `/api/direct?path=/file/${encodedFileName}/image&cb=${cacheBreaker}`;
 
   try {
-    // Para imágenes públicas, no requerimos autenticación
+    // Intentar cargar desde Bunny CDN vía backend
     const resp = await axios.get(directUrl, {
       headers: {
         Accept: "image/jpeg, image/png",
@@ -22,8 +22,20 @@ export const getImages = async (
 
     return resp;
   } catch (error) {
-    console.error("Error obteniendo imagen desde direct:", error);
-    throw error;
+    // Si Bunny CDN no está disponible, usar placeholder
+    // Esto es normal en desarrollo local
+    try {
+      const placeholderResp = await axios.get("/images/placeholder.couse.png", {
+        headers: {
+          Accept: "image/jpeg, image/png",
+        },
+        responseType: "blob",
+      });
+      return placeholderResp;
+    } catch (placeholderError) {
+      console.error("Error: No se pudo cargar imagen ni placeholder:", placeholderError);
+      throw error;
+    }
   }
 };
 

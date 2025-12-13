@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Navbar from "@/app/(public)/shared/Navbar";
 import Footer from "@/app/(public)/shared/Footer";
-import { getPublishedCourses, getImages, getPublicFile } from "@/services";
+import { getPublishedCourses, getImages, getPublicFile, getCourseById } from "@/services";
 import { getUserProfileImage } from "@/services/multimedia.service";
 import { getCoursesWithActivePromotions } from "@/services/promotionalCodes";
 import PromotionalTooltip from "@/components/ui/overlays/PromotionalTooltip";
@@ -48,14 +48,17 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
  const response = await getPublishedCourses();
  const raw = Array.isArray((response as any)?.data)
  ? (response as any).data
- : [];
+ : (response as any)?.data?.items || [];
  const coursesData: any[] = Array.isArray(raw) ? raw : [];
  
  // Buscar el curso por el ID corto (últimos 8 caracteres del _id)
  const foundCourse = coursesData.find((c: any) => c._id.slice(-8) === courseId);
 
  if (foundCourse) {
- setCourse(foundCourse);
+ // Obtener los detalles completos del curso usando el ID completo
+ const courseDetailResponse = await getCourseById(foundCourse._id);
+ const courseDetail = (courseDetailResponse as any)?.data || courseDetailResponse;
+ setCourse(courseDetail);
 
  // Verificar promociones usando el ID completo del curso
                 // Fetch promotional data (with error handling)
@@ -69,9 +72,9 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
  setHasPromotion(Boolean(promos?.[foundCourse._id]));
 
  // Cargar imagen del curso
- if (foundCourse.imageUrl) {
+ if (courseDetail.imageUrl) {
  try {
- const imgResponse = await getImages(foundCourse.imageUrl);
+ const imgResponse = await getImages(courseDetail.imageUrl);
  if (imgResponse?.data) {
  const objectURL = URL.createObjectURL(imgResponse.data);
  objectUrls.current.push(objectURL);
@@ -84,10 +87,10 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
  }
 
  // Cargar foto del profesor si existe
- if (foundCourse.mainTeacherInfo?.profilePhotoUrl) {
+ if (courseDetail.mainTeacherInfo?.profilePhotoUrl) {
  try {
  const photoResponse = await getUserProfileImage(
- foundCourse.mainTeacherInfo.profilePhotoUrl,
+ courseDetail.mainTeacherInfo.profilePhotoUrl,
  );
  if (photoResponse?.data) {
  const objectURL = URL.createObjectURL(photoResponse.data);
@@ -319,12 +322,12 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
  Descripción del Curso
  </h2>
  <p className="whitespace-pre-line text-gray-700 leading-relaxed text-justify">
- {course.longDescription || course.description}
- </p>
- </div>
+                  {course.description}
+                </p>
+              </div>
 
- {/* Información del profesor */}
- {course.mainTeacherInfo && (
+              {/* Información del profesor */}
+              {course.mainTeacherInfo && (
  <div className="rounded-lg bg-white p-8 border border-solid border-brand-tertiary-lighten/40">
  <h2 className="mb-4 text-2xl font-bold text-gray-900">
  Profesor
@@ -333,7 +336,7 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
  {teacherPhotoUrl ? (
  <Image
  src={teacherPhotoUrl}
- alt={course.mainTeacherInfo.teacherName}
+ alt={course.mainTeacherInfo.firstName && course.mainTeacherInfo.lastName ? `${course.mainTeacherInfo.firstName} ${course.mainTeacherInfo.lastName}` : 'Profesor'}
  width={80}
  height={80}
  className="rounded-full object-cover"
@@ -357,12 +360,18 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
  )}
  <div className="flex-1">
  <h3 className="text-xl font-semibold text-gray-900">
- {course.mainTeacherInfo.teacherName ||
- `${course.mainTeacherInfo.firstName} ${course.mainTeacherInfo.lastName}`}
+ {course.mainTeacherInfo.firstName && course.mainTeacherInfo.lastName
+ ? `${course.mainTeacherInfo.firstName} ${course.mainTeacherInfo.lastName}`
+ : 'Nombre del profesor'}
  </h3>
  {course.mainTeacherInfo.professionalDescription && (
  <p className="mt-2 text-gray-700 text-justify">
  {course.mainTeacherInfo.professionalDescription}
+ </p>
+ )}
+ {course.mainTeacherInfo.email && (
+ <p className="mt-1 text-sm text-gray-600">
+ {course.mainTeacherInfo.email}
  </p>
  )}
  </div>

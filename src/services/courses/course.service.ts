@@ -42,7 +42,7 @@ export const getVisibleCourses = async () => {
 
 export const getCourseById = async (id: string) => {
   try {
-    const resp = await api.get(`/api/fetch?path=/course/${id}`, {
+    const resp = await api.get(`/api/fetch?path=/courses/public/${id}`, {
       headers: {
         "Content-Type": "application/json",
       },

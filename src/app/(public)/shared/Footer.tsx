@@ -18,7 +18,12 @@ const FooterCoursesList: React.FC = () => {
         setLoading(true);
         setError(null);
         const response = await getCoursesOnHome();
-        const data = response.data || response;
+        // La respuesta tiene estructura: { status, message, data: [...] }
+        const data = Array.isArray((response as any)?.data) 
+          ? (response as any).data 
+          : Array.isArray(response) 
+          ? response 
+          : [];
         if (isMounted) {
           setCourses(Array.isArray(data) ? data.slice(0, 10) : []);
         }

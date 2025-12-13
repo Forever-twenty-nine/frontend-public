@@ -38,9 +38,13 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
                 setLoading(true);
                 setError(null);
 
-                // Fetch courses
+                // Fetch courses - La respuesta tiene estructura: { status, message, data: [...] }
                 const response = await getCoursesOnHome();
-                const coursesData: Course[] = response.data || response;
+                const coursesData: Course[] = Array.isArray((response as any)?.data) 
+                    ? (response as any).data 
+                    : Array.isArray(response) 
+                    ? response 
+                    : [];
 
                 if (!isMounted) return;
 

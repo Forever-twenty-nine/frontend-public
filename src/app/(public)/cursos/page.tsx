@@ -58,27 +58,52 @@ export interface Course {
 type PromotionsMap = Record<string, boolean>;
 
 const getCourseStatus = (course: Course) => {
+ // Verificar si tenemos fechas válidas
+ if (!course.startDate) {
+ return {
+ label: "PRÓXIMAMENTE",
+ className: "bg-brand-tertiary text-white",
+ };
+ }
+
  const currentDate = new Date();
  currentDate.setUTCHours(0, 0, 0, 0);
 
- const registrationOpenDate = new Date(course.registrationOpenDate || course.startDate);
- registrationOpenDate.setUTCHours(0, 0, 0, 0);
-
  const courseStartDate = new Date(course.startDate);
+ if (isNaN(courseStartDate.getTime())) {
+ return {
+ label: "PRÓXIMAMENTE",
+ className: "bg-brand-tertiary text-white",
+ };
+ }
  courseStartDate.setUTCHours(0, 0, 0, 0);
 
- const courseEndDate = course.endDate ? new Date(course.endDate) : null;
- if (courseEndDate) {
- courseEndDate.setUTCHours(23, 59, 59, 999);
+ // Determinar fecha de apertura de inscripciones
+ const registrationOpenDate = course.registrationOpenDate 
+ ? new Date(course.registrationOpenDate)
+ : new Date(courseStartDate.getTime() - 30 * 24 * 60 * 60 * 1000); // 30 días antes por defecto
+ 
+ if (isNaN(registrationOpenDate.getTime())) {
+ return {
+ label: "PRÓXIMAMENTE",
+ className: "bg-brand-tertiary text-white",
+ };
  }
+ registrationOpenDate.setUTCHours(0, 0, 0, 0);
 
- if (courseEndDate && currentDate > courseEndDate) {
+ // Verificar fecha de finalización
+ const courseEndDate = course.endDate ? new Date(course.endDate) : null;
+ if (courseEndDate && !isNaN(courseEndDate.getTime())) {
+ courseEndDate.setUTCHours(23, 59, 59, 999);
+ if (currentDate > courseEndDate) {
  return {
  label: "FINALIZADO",
  className: "bg-brand-tertiary text-white",
  };
  }
+ }
 
+ // Verificar estado según fechas
  if (currentDate < registrationOpenDate) {
  const month = registrationOpenDate
  .toLocaleString("es-ES", { month: "long" })
@@ -89,23 +114,17 @@ const getCourseStatus = (course: Course) => {
  };
  }
 
- if (currentDate >= registrationOpenDate) {
  if (currentDate >= courseStartDate) {
  return {
  label: "EN CURSO",
  className: "bg-brand-primary text-white",
  };
- } else {
+ }
+
+ // Entre fecha de inscripción y fecha de inicio
  return {
  label: "INSCRIPCIÓN ABIERTA",
  className: "bg-brand-secondary text-brand-tertiary",
- };
- }
- }
-
- return {
- label: "PRÓXIMAMENTE",
- className: "bg-brand-tertiary text-white",
  };
 };
 
@@ -352,13 +371,9 @@ const CoursesPage: React.FC = () => {
  async function fetchCourses() {
  try {
  const response = await getPublishedCourses();
- const raw = Array.isArray((response as any)?.data)
- ? (response as any).data
- : Array.isArray(response as any)
- ? (response as any)
- : ((response as any)?.data?.data ?? []);
-
- const coursesData: any[] = Array.isArray(raw) ? raw : [];
+ 
+ // La respuesta tiene estructura: { status, message, data: { items: [], total: N } }
+ const coursesData: any[] = (response as any)?.data?.items || [];
 
  const coursesWithoutImages = coursesData.map((course: any) => ({
  ...course,
@@ -369,7 +384,7 @@ const CoursesPage: React.FC = () => {
  registrationOpenDate: course.registrationOpenDate || "",
  endDate: course.endDate || "",
  modality: course.modality || "",
- price: course.price || 0,
+ price: typeof course.price === 'number' ? course.price : 0,
  teacherName: course.teacherName || "",
  maxInstallments: course.maxInstallments || 0,
  interestFree: course.interestFree || false,

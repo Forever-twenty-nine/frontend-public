@@ -3,7 +3,7 @@ import { IIWANTOTRAIN } from "@/types";
 
 export const createIWantToTrain = async (data: IIWANTOTRAIN): Promise<void> => {
   try {
-    const resp = await api.post(`/api/fetch?path=/createIWantToTrain`, data, {
+    const resp = await api.post(`/api/fetch?path=/iwanttotrain/createIWantToTrain`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -20,7 +20,7 @@ export const createIWantToTrain = async (data: IIWANTOTRAIN): Promise<void> => {
 
 export const requestACourse = async (data: IIWANTOTRAIN): Promise<void> => {
   try {
-    const resp = await api.post(`/api/fetch?path=/createRequestACourse`, data, {
+    const resp = await api.post(`/api/fetch?path=/requestACourse/createRequestACourse`, data, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -46,7 +46,7 @@ export const createBusinessTraining = async (
 ): Promise<void> => {
   try {
     const resp = await api.post(
-      `/api/fetch?path=/createBusinessTraining`,
+      `/api/fetch?path=/businessTraining/createBusinessTraining`,
       data,
       {
         headers: {

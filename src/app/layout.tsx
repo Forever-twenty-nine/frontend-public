@@ -20,8 +20,8 @@ export const metadata: Metadata = {
     default: 'Cursala - Plataforma de Cursos Online',
     template: '%s | Cursala'
   },
-  description: 'Cursala - Plataforma de cursos online. Aprende nuevas habilidades con nuestros cursos especializados y certificaciones profesionales.',
-  keywords: ['cursos online', 'educación', 'capacitación', 'certificaciones', 'e-learning', 'formación profesional', 'cursos especializados'],
+  description: 'Cursala - Plataforma de cursos online. Aprende nuevas habilidades con nuestros cursos especializados.',
+  keywords: ['cursos online', 'educación', 'capacitación', 'e-learning', 'formación profesional', 'cursos especializados'],
   authors: [{ name: 'Cursala' }],
   creator: 'Cursala',
   publisher: 'Cursala',
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     url: 'https://cursala.com',
     siteName: 'Cursala',
     title: 'Cursala - Plataforma de Cursos Online',
-    description: 'Aprende nuevas habilidades con nuestros cursos especializados y certificaciones profesionales',
+    description: 'Aprende nuevas habilidades con nuestros cursos especializados',
     images: [
       {
         url: '/logo-cursala.png',
