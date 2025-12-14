@@ -232,7 +232,7 @@ const Navbar: React.FC = () => {
  </Link>
  <Link
  href="/proximamente"
- className="relative inline-block px-4 py-2 text-sm font-semibold text-brand-primary rounded-full transition duration-500 bg-transparent border border-solid border-brand-primary hover: hover:bg-brand-primary/10 hover:ring-[3px] active:bg-brand-tertiary active:text-white active:ring-brand-secondary "
+ className="relative inline-block px-4 py-2 text-sm font-semibold text-brand-primary-dark rounded-full transition duration-500 bg-transparent border border-solid border-brand-primary hover:bg-brand-primary hover:text-white hover:ring-[3px] active:bg-brand-tertiary active:text-white active:ring-brand-secondary "
  >
  Ingresar
  </Link>

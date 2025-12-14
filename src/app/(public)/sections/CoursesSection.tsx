@@ -223,9 +223,9 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
             <div className="max-w-7xl mx-auto px-4">
                 {/* Header */}
                 <div className="mb-8 text-center md:mb-12">
-                    <h1 className="font-bold text-3xl lg:text-5xl leading-tight max-w-2xl mx-auto mb-4 lg:mb-6 bg-linear-to-bl from-brand-primary/60 to-brand-primary bg-clip-text text-transparent">
+                    <h2 className="font-bold text-3xl lg:text-5xl leading-tight max-w-2xl mx-auto mb-4 lg:mb-6 bg-linear-to-bl from-brand-primary/60 to-brand-primary bg-clip-text text-transparent">
                         Desarrolla tus habilidades y avanza en tu carrera profesional
-                    </h1>
+                    </h2>
                     <p className="max-w-3xl mx-auto text-lg text-brand-tertiary">
                         En Cursala te damos las competencias que hoy exige la industria para convertirte en el talento que las empresas necesitan.
                     </p>
@@ -277,7 +277,7 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
                     <div className="mt-8 flex justify-center md:mt-12">
                         <Link
                             href="/cursos"
-                            className="group inline-flex items-center gap-2 rounded-full bg-brand-primary px-6 py-3 text-base font-semibold text-white shadow-lg transition-all duration-500 hover:bg-brand-primary-dark hover:ring-[3px] hover:ring-brand-primary active:ring-brand-secondary active:bg-brand-tertiary"
+                            className="group inline-flex items-center gap-2 rounded-full bg-black px-6 py-3 text-base font-bold text-white shadow-2xl border-2 border-white transition-all duration-500 hover:bg-brand-primary-dark hover:text-white hover:ring-[3px] hover:ring-brand-primary active:bg-brand-tertiary active:text-white active:ring-brand-secondary focus:outline-none focus:ring-4 focus:ring-brand-primary"
                         >
                             Ver Todos los Cursos
                             <svg

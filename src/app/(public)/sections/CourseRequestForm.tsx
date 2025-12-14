@@ -32,6 +32,7 @@ export const CourseRequestForm: React.FC = () => {
 
  return (
  <div className="rounded-lg bg-white p-6 shadow-2xl shadow-brand-primary-dark/40 md:p-8">
+	 <h2 className="mb-6 text-2xl font-bold text-brand-primary text-center">Solicitar un curso personalizado</h2>
  <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
  {/* Nombre */}
  <div>

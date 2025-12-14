@@ -112,12 +112,12 @@ const getCourseStatus = (course: Course) => {
  };
  }
 
- if (currentDate >= courseStartDate) {
- return {
- label: "EN CURSO",
- className: "bg-brand-primary text-white",
- };
- }
+    if (currentDate >= courseStartDate) {
+        return {
+            label: "EN CURSO",
+            className: "bg-black text-white border border-white",
+        };
+    }
 
  // Entre fecha de inscripción y fecha de inicio
  return {
@@ -205,9 +205,9 @@ const CourseCard: React.FC<{
  </div>
  </div>
  <div className="flex grow flex-col justify-between p-4">
- <h3 className="mb-2 line-clamp-2 leading-snug text-lg font-bold text-brand-tertiary transition-colors group-hover:text-brand-primary :text-blue-400">
- {course.name}
- </h3>
+                <h2 className="mb-2 line-clamp-2 leading-snug text-lg font-bold text-brand-tertiary transition-colors group-hover:text-brand-primary :text-blue-400">
+                    {course.name}
+                </h2>
  {/* lo ocultaría para obligar a saber más del curso dentro del detalle */}
  {/* <p className="mb-3 line-clamp-2 grow text-sm text-gray-600 ">
  {course.description}

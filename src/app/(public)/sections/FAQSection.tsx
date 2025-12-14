@@ -106,9 +106,9 @@ const FAQSection: React.FC<FAQSectionProps> = ({
 	 aria-controls={`faq-answer-${item.id}`}
 	 aria-label={isOpen ? `Cerrar respuesta: ${item.question}` : `Abrir respuesta: ${item.question}`}
  >
- <span className="flex-1 font-semibold text-lg text-brand-tertiary group-hover:text-brand-primary">
+ <h3 className="flex-1 font-semibold text-lg text-brand-tertiary group-hover:text-brand-primary m-0">
  {item.question}
- </span>
+ </h3>
  
  {/* Icon */}
  <svg
@@ -149,9 +149,9 @@ const FAQSection: React.FC<FAQSectionProps> = ({
  <div className="mt-8 text-center md:mt-10">
  <Link
  href="/preguntas"
- className="inline-flex items-center gap-2 rounded-full bg-brand-primary px-6 py-3 font-semibold text-white transition-all duration-500 hover:bg-brand-primary-dark hover:ring-[3px] hover:ring-brand-primary group active:ring-brand-secondary active:bg-brand-tertiary "
+ className="inline-flex items-center gap-2 rounded-full bg-brand-primary-dark px-6 py-3 font-semibold text-white shadow-2xl border-2 border-brand-primary transition-all duration-500 hover:bg-black hover:text-white hover:ring-[3px] hover:ring-brand-primary group active:bg-brand-tertiary active:text-white focus:outline-none focus:ring-4 focus:ring-brand-primary "
  >
- <span>Ver todas las preguntas</span>
+ <span className="text-white font-bold">Ver todas las preguntas</span>
  <svg
  className="h-5 w-5 transition-transform group-hover:translate-x-1"
  fill="none"
