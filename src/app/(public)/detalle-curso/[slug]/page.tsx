@@ -7,8 +7,6 @@ import Navbar from "@/app/(public)/shared/Navbar";
 import Footer from "@/app/(public)/shared/Footer";
 import { getPublishedCourses, getImages, getPublicFile, getCourseById } from "@/services";
 import { getUserProfileImage } from "@/services/multimedia.service";
-import { getCoursesWithActivePromotions } from "@/services/promotionalCodes";
-import PromotionalTooltip from "@/components/ui/overlays/PromotionalTooltip";
 import { extractCourseIdFromSlug } from "@/utils/slugify";
 import { showError, showSuccess } from "@/utils/swal";
 
@@ -60,16 +58,7 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
  const courseDetail = (courseDetailResponse as any)?.data || courseDetailResponse;
  setCourse(courseDetail);
 
- // Verificar promociones usando el ID completo del curso
-                // Fetch promotional data (with error handling)
-                let promos: Record<string, boolean> = {};
-                try {
-                    promos = await getCoursesWithActivePromotions([foundCourse._id]);
-                } catch (error) {
-                    console.warn('Failed to fetch promotions, continuing without them:', error);
-                    // Continue without promotions - not critical for app functionality
-                }
- setHasPromotion(Boolean(promos?.[foundCourse._id]));
+ // Eliminada lógica de promociones (PromotionalTooltip)
 
  // Cargar imagen del curso
  if (courseDetail.imageUrl) {
@@ -284,15 +273,6 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
 
  {/* Info del curso */}
  <div className="flex-1">
- {hasPromotion && (
- <div className="mb-3 inline-block">
- <PromotionalTooltip>
- <span className="cursor-pointer rounded-full bg-green-600 px-4 py-2 text-sm font-bold text-white shadow-lg">
- 🎉 DESCUENTO DISPONIBLE
- </span>
- </PromotionalTooltip>
- </div>
- )}
  <h1 className="mb-4 text-3xl font-bold md:text-4xl text-brand-tertiary">
  {course.name}
  </h1>
@@ -333,31 +313,31 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
  Profesor
  </h2>
  <div className="flex items-start gap-4">
- {teacherPhotoUrl ? (
- <Image
- src={teacherPhotoUrl}
- alt={course.mainTeacherInfo.firstName && course.mainTeacherInfo.lastName ? `${course.mainTeacherInfo.firstName} ${course.mainTeacherInfo.lastName}` : 'Profesor'}
- width={80}
- height={80}
- className="rounded-full object-cover"
- />
- ) : (
- <div className="flex h-20 w-20 items-center justify-center rounded-full bg-brand-primary ">
- <svg
- className="h-10 w-10 text-brand-primary"
- fill="none"
- stroke="currentColor"
- viewBox="0 0 24 24"
- >
- <path
- strokeLinecap="round"
- strokeLinejoin="round"
- strokeWidth={2}
- d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
- />
- </svg>
+ <div style={{ width: 80, height: 80, position: 'relative' }} className="flex items-center justify-center rounded-full bg-brand-primary overflow-hidden">
+   {teacherPhotoUrl ? (
+     <Image
+       src={teacherPhotoUrl}
+       alt={course.mainTeacherInfo.firstName && course.mainTeacherInfo.lastName ? `${course.mainTeacherInfo.firstName} ${course.mainTeacherInfo.lastName}` : 'Profesor'}
+       fill
+       style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+       className="rounded-full"
+     />
+   ) : (
+     <svg
+       className="h-10 w-10 text-white"
+       fill="none"
+       stroke="currentColor"
+       viewBox="0 0 24 24"
+     >
+       <path
+         strokeLinecap="round"
+         strokeLinejoin="round"
+         strokeWidth={2}
+         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+       />
+     </svg>
+   )}
  </div>
- )}
  <div className="flex-1">
  <h3 className="text-xl font-semibold text-gray-900">
  {course.mainTeacherInfo.firstName && course.mainTeacherInfo.lastName

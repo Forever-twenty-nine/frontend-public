@@ -52,7 +52,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({
  <div className="max-w-7xl mx-auto px-4">
  <div className="flex items-center justify-center gap-3">
  <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
- <span className="text-gray-600">
+ <span className="text-brand-tertiary">
  Cargando preguntas frecuentes...
  </span>
  </div>
@@ -80,7 +80,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({
  <div className="container mx-auto max-w-4xl px-4">
  {/* Header */}
  <div className="mb-8 text-center md:mb-12">
- <h2 className="mb-3 text-3xl font-bold text-gray-900 md:text-4xl">
+ <h2 className="mb-3 text-3xl font-bold text-brand-tertiary md:text-4xl">
  Preguntas Frecuentes
  </h2>
  <p className="mx-auto max-w-2xl text-base text-brand-tertiary md:text-lg">
@@ -96,15 +96,15 @@ const FAQSection: React.FC<FAQSectionProps> = ({
  return (
  <div
  key={item.id}
- className="overflow-hidden rounded-lg border-2 border-brand-tertiary-lighten/40 bg-white transition-shadow"
+ className="overflow-hidden rounded-lg border-2 border-brand-tertiary bg-white transition-shadow"
  >
  {/* Question */}
  <button
- onClick={() => toggleItem(item.id)}
- className="flex w-full cursor-pointer items-start justify-between gap-4 px-4 py-4 text-left bg-brand-tertiary-lighten/5 transition-colors md:px-6 group"
- aria-expanded={isOpen}
- aria-controls={`faq-answer-${item.id}`}
- 
+	 onClick={() => toggleItem(item.id)}
+	 className="flex w-full cursor-pointer items-start justify-between gap-4 px-4 py-4 text-left bg-brand-tertiary-lighten/20 transition-colors md:px-6 group"
+	 aria-expanded={isOpen}
+	 aria-controls={`faq-answer-${item.id}`}
+	 aria-label={isOpen ? `Cerrar respuesta: ${item.question}` : `Abrir respuesta: ${item.question}`}
  >
  <span className="flex-1 font-semibold text-lg text-brand-tertiary group-hover:text-brand-primary">
  {item.question}
@@ -134,7 +134,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({
  id={`faq-answer-${item.id}`}
  className="border-t-2 border-brand-tertiary/20 px-4 pb-4 pt-2 md:px-6"
  >
- <p className="leading-relaxed text-gray-700">
+ <p className="leading-relaxed text-brand-tertiary">
  {item.answer}
  </p>
  </div>

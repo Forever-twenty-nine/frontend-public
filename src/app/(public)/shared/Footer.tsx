@@ -38,13 +38,13 @@ const FooterCoursesList: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div className="text-sm text-gray-400">Cargando cursos...</div>;
+    return <div className="text-sm text-brand-tertiary">Cargando cursos...</div>;
   }
   if (error) {
-    return <div className="text-sm text-red-500">{error}</div>;
+    return <div className="text-sm text-red-700">{error}</div>;
   }
   if (!courses.length) {
-    return <div className="text-sm text-gray-400">No hay cursos disponibles</div>;
+    return <div className="text-sm text-brand-tertiary">No hay cursos disponibles</div>;
   }
 
   // Dividir en dos columnas si hay más de 5 cursos
@@ -93,7 +93,7 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
 
   return (
     <footer
-      className={`w-full border-t border-gray-200 bg-brand-tertiary-lighten/10 ${className || ""}`}
+      className={`w-full border-t border-brand-tertiary bg-brand-tertiary-lighten/10 ${className || ""}`}
     >
       <div className="max-w-7xl mx-auto px-4 py-8 md:py-10">
         {/* Main Content */}
@@ -117,7 +117,7 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
                 unoptimized
               />
             </div>
-            <h3 className="text-left text-sm font-bold text-brand-tertiary-light">Descubriendo expertos</h3>
+            <h3 className="text-left text-sm font-bold text-brand-tertiary">Descubriendo expertos</h3>
           </div>
           <div className="w-full md:flex gap-20">
             {/* col-1 */}
@@ -169,11 +169,11 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
           </div>
         </div>
 
-        <div className="space-y-2 text-center border-t border-brand-tertiary-lighten/50 border-solid mt-10 pt-4">
-          <p className="text-xs text-brand-tertiary-light md:text-sm">
+        <div className="space-y-2 text-center border-t border-brand-tertiary border-solid mt-10 pt-4">
+          <p className="text-xs text-brand-tertiary md:text-sm">
             © {new Date().getFullYear()} Cursala. Todos los derechos reservados.
           </p>
-          <p className="flex items-center justify-center gap-1 text-xs text-brand-tertiary-light md:text-sm">
+          <p className="flex items-center justify-center gap-1 text-xs text-brand-tertiary md:text-sm">
             Creado por
             <span className="font-semibold transition-colors">
               FTN Agency

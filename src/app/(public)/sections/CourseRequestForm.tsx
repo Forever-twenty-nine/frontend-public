@@ -35,7 +35,7 @@ export const CourseRequestForm: React.FC = () => {
  <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
  {/* Nombre */}
  <div>
- <label htmlFor="name" className="mb-1 block text-sm font-medium text-gray-700 ">
+ <label htmlFor="name" className="mb-1 block text-sm font-medium text-brand-tertiary ">
  Nombre Completo *
  </label>
  <input
@@ -43,7 +43,7 @@ export const CourseRequestForm: React.FC = () => {
  id="name"
  {...register("name", { required: "Este campo es obligatorio" })}
  placeholder="Tu nombre completo"
- className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 transition focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary :border-blue-400"
+ className="w-full rounded-lg border border-brand-tertiary bg-white px-4 py-2.5 text-brand-tertiary transition focus:border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-secondary"
  disabled={formLoading}
  />
  {errors.name && (
@@ -52,7 +52,7 @@ export const CourseRequestForm: React.FC = () => {
  </div>
  {/* Email */}
  <div>
- <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700 ">
+ <label htmlFor="email" className="mb-1 block text-sm font-medium text-brand-tertiary ">
  Correo Electrónico *
  </label>
  <input
@@ -66,7 +66,7 @@ export const CourseRequestForm: React.FC = () => {
  },
  })}
  placeholder="tu@email.com"
- className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 transition focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary :border-blue-400"
+ className="w-full rounded-lg border border-brand-tertiary bg-white px-4 py-2.5 text-brand-tertiary transition focus:border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-secondary"
  disabled={formLoading}
  />
  {errors.email && (
@@ -75,7 +75,7 @@ export const CourseRequestForm: React.FC = () => {
  </div>
  {/* Teléfono */}
  <div>
- <label htmlFor="phoneNumber" className="mb-1 block text-sm font-medium text-gray-700 ">
+ <label htmlFor="phoneNumber" className="mb-1 block text-sm font-medium text-brand-tertiary ">
  Teléfono
  </label>
  <div className="flex gap-2">
@@ -89,7 +89,7 @@ export const CourseRequestForm: React.FC = () => {
  message: "Código inválido",
  },
  })}
- className="w-20 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-center text-gray-900 transition focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary :border-blue-400"
+ className="w-20 rounded-lg border border-brand-tertiary bg-white px-4 py-2.5 text-center text-brand-tertiary transition focus:border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-secondary"
  disabled={formLoading}
  />
  <input
@@ -103,7 +103,7 @@ export const CourseRequestForm: React.FC = () => {
  message: "Debe tener al menos 10 dígitos",
  },
  })}
- className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 transition focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary :border-blue-400"
+ className="w-full rounded-lg border border-brand-tertiary bg-white px-4 py-2.5 text-brand-tertiary transition focus:border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-secondary"
  disabled={formLoading}
  />
  </div>
@@ -116,14 +116,14 @@ export const CourseRequestForm: React.FC = () => {
  </div>
  {/* Mensaje */}
  <div>
- <label htmlFor="message" className="mb-1 block text-sm font-medium text-gray-700 ">
+ <label htmlFor="message" className="mb-1 block text-sm font-medium text-brand-tertiary ">
  Mensaje
  </label>
  <textarea
  id="message"
  {...register("message", { required: "Este campo es obligatorio" })}
  placeholder="Contanos sobre qué tema te gustaría recibir capacitación. ¡Podemos armarlo para vos!"
- className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 transition focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary :border-blue-400"
+ className="w-full rounded-lg border border-brand-tertiary bg-white px-4 py-2.5 text-brand-tertiary transition focus:border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-secondary"
  rows={4}
  disabled={formLoading}
  />

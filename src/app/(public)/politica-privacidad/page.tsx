@@ -114,7 +114,7 @@ Nos reservamos el derecho de actualizar esta Política de Privacidad en cualquie
  listItems = [];
  }
  elements.push(
- <h2 key={index} className="mt-6 mb-3 text-xl font-bold text-gray-900 first:mt-0">
+ <h2 key={index} className="mt-6 mb-3 text-xl font-bold text-brand-tertiary first:mt-0">
  {trimmedLine}
  </h2>
  );
@@ -140,7 +140,7 @@ Nos reservamos el derecho de actualizar esta Política de Privacidad en cualquie
  if (trimmedLine.startsWith('-')) {
  const itemText = trimmedLine.substring(1).trim();
  listItems.push(
- <li key={index} className="text-sm text-gray-700 pl-2">
+ <li key={index} className="text-sm text-brand-tertiary pl-2">
  {itemText}
  </li>
  );
@@ -155,7 +155,7 @@ Nos reservamos el derecho de actualizar esta Política de Privacidad en cualquie
  listItems = [];
  }
  elements.push(
- <div key={index} className="mt-5 p-3 rounded-lg bg-brand-primary/10 border-l-4 border-brand-primary">
+ <div key={index} className="mt-5 p-3 rounded-lg bg-brand-secondary/10 border-l-4 border-brand-secondary">
  <p className="text-sm font-medium text-brand-tertiary">
  {trimmedLine}
  </p>
@@ -172,7 +172,7 @@ Nos reservamos el derecho de actualizar esta Política de Privacidad en cualquie
  
  // Párrafo normal
  elements.push(
- <p key={index} className="mb-3 text-sm leading-relaxed text-gray-700 ">
+ <p key={index} className="mb-3 text-sm leading-relaxed text-brand-tertiary ">
  {trimmedLine}
  </p>
  );
@@ -207,14 +207,14 @@ Nos reservamos el derecho de actualizar esta Política de Privacidad en cualquie
  <div className="mx-auto max-w-5xl py-8 px-5 sm:px-8">
  {loading ? (
  <div className="flex justify-center py-20">
- <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-brand-primary "></div>
+ <div className="h-12 w-12 animate-spin rounded-full border-4 border-brand-tertiary-lighten border-t-brand-primary "></div>
  </div>
  ) : (
  <div className="rounded-lg bg-white p-5 sm:p-8 shadow-md">
  {privacyPolicy ? (
  <>
  {!isFromBackend && (
- <div className="mb-6 rounded-lg border-l-4 border-brand-primary bg-blue-50 /20 p-4">
+ <div className="mb-6 rounded-lg border-l-4 border-brand-secondary bg-brand-secondary/10 p-4">
  <div className="flex items-start space-x-3">
  <svg
  className="h-6 w-6 shrink-0 text-brand-primary"
@@ -248,7 +248,7 @@ Nos reservamos el derecho de actualizar esta Política de Privacidad en cualquie
  ) : (
  <div className="py-12 text-center">
  <svg
- className="mx-auto h-16 w-16 text-gray-400 "
+ className="mx-auto h-16 w-16 text-brand-primary "
  fill="none"
  stroke="currentColor"
  viewBox="0 0 24 24"
@@ -260,10 +260,10 @@ Nos reservamos el derecho de actualizar esta Política de Privacidad en cualquie
  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
  />
  </svg>
- <h3 className="mt-4 text-xl font-semibold text-gray-900 ">
+ <h3 className="mt-4 text-xl font-semibold text-brand-tertiary ">
  No hay políticas disponibles
  </h3>
- <p className="mt-2 text-gray-600 ">
+ <p className="mt-2 text-brand-tertiary ">
  Las políticas de privacidad se mostrarán aquí una vez que estén disponibles.
  </p>
  </div>
@@ -271,8 +271,8 @@ Nos reservamos el derecho de actualizar esta Política de Privacidad en cualquie
 
  {/* Info adicional */}
  {privacyPolicy && (
- <div className="mt-8 border-t border-gray-200 pt-8">
- <div className="rounded-lg bg-brand-tertiary/10 p-6">
+ <div className="mt-8 border-t border-brand-secondary pt-8">
+ <div className="rounded-lg bg-brand-tertiary/20 p-6">
  <div className="flex items-start space-x-3">
  <svg
  className="h-6 w-6 shrink-0 text-brand-primary"
@@ -291,7 +291,7 @@ Nos reservamos el derecho de actualizar esta Política de Privacidad en cualquie
  <h3 className="text-lg font-semibold text-brand-tertiary">
  ¿Tienes preguntas?
  </h3>
- <p className="mt-1 text-sm text-brand-tertiary-light">
+ <p className="mt-1 text-sm text-brand-tertiary">
  Si tienes alguna pregunta sobre nuestras políticas de
  privacidad o el manejo de tu información personal, no
  dudes en contactarnos.

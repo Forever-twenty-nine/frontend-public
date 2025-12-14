@@ -1,3 +1,5 @@
+  {/* Preconnect para Bunny CDN */}
+  <link rel="preconnect" href="https://cursala.b-cdn.net" crossOrigin="anonymous" />
 import "@/css/style.css";
 import type { Metadata } from "next";
 import RootLayoutClient from "@/components/RootLayoutClient";
@@ -7,10 +9,10 @@ const getCSP = () => {
   const baseCSP = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://static.cloudflareinsights.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self'";
   
   if (process.env.NODE_ENV === 'development') {
-    return `${baseCSP} http://localhost:8080 https://cursala.com.ar https://www.googletagmanager.com https://analytics.google.com https://stats.g.doubleclick.net https://www.facebook.com; frame-src 'self';`;
+    return `${baseCSP} http://localhost:8080 https://cursala.com.ar https://cursala.b-cdn.net https://vz-19135c35-e7f.b-cdn.net https://www.googletagmanager.com https://analytics.google.com https://stats.g.doubleclick.net https://www.facebook.com; frame-src 'self';`;
   }
   
-  return `${baseCSP} https://cursala.com.ar https://www.googletagmanager.com https://analytics.google.com https://stats.g.doubleclick.net https://www.facebook.com; frame-src 'self';`;
+  return `${baseCSP} https://cursala.com.ar https://cursala.b-cdn.net https://vz-19135c35-e7f.b-cdn.net https://www.googletagmanager.com https://analytics.google.com https://stats.g.doubleclick.net https://www.facebook.com; frame-src 'self';`;
 };
 
 // Metadata global por defecto
@@ -78,7 +80,10 @@ export default function RootLayout({
         <meta charSet="utf-8" />
         {/* Content Security Policy básica */}
         <meta httpEquiv="Content-Security-Policy" content={getCSP()} />
-        {/* Preconnect para dominios externos - mejora performance */}
+
+        {/* Preconnect para Google Fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Fuente Titillium Web de Google Fonts */}
         <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet" />
 

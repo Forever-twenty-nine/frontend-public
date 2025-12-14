@@ -2,12 +2,12 @@
 
 @theme {
   /* Colores principales de marca */
-  --color-brand-primary: #0081c2;
-  --color-brand-primary-dark: #00385b;
-  --color-brand-secondary: #fac40e;
-  --color-brand-tertiary: #262626;
-  --color-brand-tertiary-light: #7e7d82;
-  --color-brand-tertiary-lighten: #b0afb5;
+    --color-brand-primary: #0081c2;
+    --color-brand-primary-dark: #00385b;
+    --color-brand-secondary: #e6b800; /* amarillo intermedio, mejor contraste y más vivo */
+    --color-brand-tertiary: #262626;
+    --color-brand-tertiary-light: #444444; /* gris medio oscuro, contraste AA sobre blanco */
+    --color-brand-tertiary-lighten: #666666; /* gris claro, contraste AA sobre blanco */
 
   /* Font Families */
   /* --font-satoshi: Satoshi, sans-serif; */

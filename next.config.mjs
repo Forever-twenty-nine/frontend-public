@@ -1,3 +1,4 @@
+// Bundle Analyzer compatible con ESM
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Skip trailing slash redirect
@@ -14,6 +15,8 @@ const nextConfig = {
   // Optimización para reducir legacy JavaScript
   experimental: {
     optimizePackageImports: ['jsvectormap', 'flatpickr'],
+    legacyBrowsers: false,
+    browsersListForSwc: true,
   },
 
   // Configuración de imágenes
@@ -107,4 +110,11 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+// Exportar config con soporte para bundle analyzer en ESM
+export default (async () => {
+  if (process.env.ANALYZE === 'true') {
+    const { default: withBundleAnalyzer } = await import('@next/bundle-analyzer');
+    return withBundleAnalyzer({ enabled: true })(nextConfig);
+  }
+  return nextConfig;
+})();

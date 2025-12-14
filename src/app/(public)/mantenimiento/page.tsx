@@ -27,11 +27,11 @@ const MaintenancePage: React.FC = () => {
 
  {/* Título principal */}
  <div className="space-y-4">
- <h1 className="text-4xl font-bold text-gray-800 md:text-5xl">
+ <h1 className="text-4xl font-bold text-brand-tertiary md:text-5xl">
  🚧 Actualizaciones en Progreso
  </h1>
 
- <p className="mx-auto max-w-2xl text-xl text-gray-600 md:text-2xl">
+ <p className="mx-auto max-w-2xl text-xl text-brand-tertiary md:text-2xl">
  Estamos mejorando tu experiencia de aprendizaje
  </p>
  </div>
@@ -44,7 +44,7 @@ const MaintenancePage: React.FC = () => {
  <span className="font-semibold">Sistema en mantenimiento</span>
  </div>
 
- <p className="leading-relaxed text-gray-700 ">
+ <p className="leading-relaxed text-brand-tertiary ">
  Nuestro equipo técnico está realizando actualizaciones importantes
  para mejorar el rendimiento y la funcionalidad de la plataforma.
  </p>

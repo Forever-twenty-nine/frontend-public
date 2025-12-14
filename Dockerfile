@@ -23,6 +23,16 @@ FROM base AS builder
 # Copy all deps from deps-dev stage for building
 COPY --from=deps-dev /app/node_modules ./node_modules
 
+# Definir ARGs para variables de build (Next.js las necesita durante npm run build)
+ARG NEXT_PUBLIC_URL_BACK
+ARG NEXT_PUBLIC_URL_BACK_SSR
+ARG NEXT_TELEMETRY_DISABLED
+
+# Convertir ARGs a ENVs para que Next.js las pueda leer durante el build
+ENV NEXT_PUBLIC_URL_BACK=$NEXT_PUBLIC_URL_BACK
+ENV NEXT_PUBLIC_URL_BACK_SSR=$NEXT_PUBLIC_URL_BACK_SSR
+ENV NEXT_TELEMETRY_DISABLED=$NEXT_TELEMETRY_DISABLED
+
 # Copy source and build
 COPY . .
 RUN npm run build

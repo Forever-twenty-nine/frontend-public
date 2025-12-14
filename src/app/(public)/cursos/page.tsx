@@ -8,9 +8,7 @@ import Navbar from "@/app/(public)/shared/Navbar";
 import Footer from "@/app/(public)/shared/Footer";
 import HeroSection from "@/app/(public)/sections/HeroSection";
 import { getPublishedCourses, getImages } from "@/services";
-import { getCoursesWithActivePromotions } from "@/services/promotionalCodes";
 import { createBusinessTraining, IBusinessTraining } from "@/services";
-import PromotionalTooltip from "@/components/ui/overlays/PromotionalTooltip";
 import { generateCourseSlug } from "@/utils/slugify";
 import { triggerNotification, showSuccess, showError } from "@/utils/swal";
 
@@ -143,15 +141,6 @@ const CourseCard: React.FC<{
  className="relative h-48 w-full overflow-hidden"
  data-course-id={course._id}
  >
- {course.hasPromotion && (
- <div className="absolute right-2 top-2 z-10">
- <PromotionalTooltip>
- <span className="cursor-pointer bg-green-600 px-3 py-1 text-xs font-bold text-white shadow-lg transition-colors hover:bg-green-700">
- 🎉 DESCUENTO
- </span>
- </PromotionalTooltip>
- </div>
- )}
  {course.coverUrl && course.coverUrl !== "error" ? (
  <Image
  src={course.coverUrl}
@@ -167,7 +156,7 @@ const CourseCard: React.FC<{
  ) : course.coverUrl === "error" ? (
  <div className="flex flex-col items-center space-y-2">
  <svg
- className="h-12 w-12 text-gray-400"
+ className="h-12 w-12 text-brand-tertiary"
  fill="none"
  stroke="currentColor"
  viewBox="0 0 24 24"
@@ -192,7 +181,7 @@ const CourseCard: React.FC<{
  ) : (
  <div className="text-center">
  <svg
- className="mx-auto h-12 w-12 text-gray-400"
+ className="mx-auto h-12 w-12 text-brand-tertiary"
  fill="none"
  stroke="currentColor"
  viewBox="0 0 24 24"
@@ -398,14 +387,7 @@ const CoursesPage: React.FC = () => {
  .filter(Boolean);
                 // Fetch promotional data (with error handling)
                 let promos: Record<string, boolean> = {};
-                try {
-                    if (ids.length > 0) {
-                        promos = await getCoursesWithActivePromotions(ids);
-                    }
-                } catch (error) {
-                    console.warn('Failed to fetch promotions, continuing without them:', error);
-                    // Continue without promotions - not critical for app functionality
-                }
+                // Eliminada lógica de promociones (PromotionalTooltip)
 
  if (isMounted) {
  setPromotionsMap(promos || {});
@@ -571,7 +553,7 @@ const CoursesPage: React.FC = () => {
  </div>
  <button
  onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
- className="flex cursor-pointer items-center justify-center space-x-2 rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50 :bg-gray-600"
+ className="flex cursor-pointer items-center justify-center space-x-2 rounded-lg border border-brand-tertiary bg-white px-4 py-2 font-medium text-brand-tertiary transition-colors hover:bg-brand-tertiary-lighten/20 :bg-gray-600"
  >
  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
@@ -588,10 +570,10 @@ const CoursesPage: React.FC = () => {
  <svg className="mx-auto h-16 w-16 text-brand-primary " fill="none" stroke="currentColor" viewBox="0 0 24 24">
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
  </svg>
- <h3 className="mt-4 text-xl font-semibold text-gray-900 ">
+ <h3 className="mt-4 text-xl font-semibold text-brand-tertiary ">
  No se encontraron cursos
  </h3>
- <p className="mt-2 text-gray-600 ">
+ <p className="mt-2 text-brand-tertiary ">
  Intenta con otros términos de búsqueda
  </p>
  </div>

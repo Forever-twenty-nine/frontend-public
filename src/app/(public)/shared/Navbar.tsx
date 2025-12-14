@@ -77,14 +77,15 @@ const Navbar: React.FC = () => {
  {navItems.map((item) => (
  <li key={item.href}>
  <button
- onClick={() => handleNavigation(item.href)}
- className={
- isMobile
- ? "block w-full rounded-full cursor-pointer px-4 py-3 text-left text-base font-semibold text-brand-tertiary transition-colors hover:bg-gray-50 hover:text-brand-primary :bg-white/10 :text-brand-primary active:text-brand-secondary"
- : "text-sm font-semibold px-4 py-2 cursor-pointer text-brand-tertiary transition-colors hover:text-primary :text-primary lg:text-base active:text-brand-secondary"
- }
+	 onClick={() => handleNavigation(item.href)}
+	 className={
+		 isMobile
+			 ? "block w-full rounded-full cursor-pointer px-4 py-3 text-left text-base font-semibold text-brand-tertiary transition-colors hover:bg-brand-tertiary-lighten/20 hover:text-brand-primary :bg-white/10 :text-brand-primary active:text-brand-secondary"
+			 : "text-sm font-semibold px-4 py-2 cursor-pointer text-brand-tertiary transition-colors hover:text-primary :text-primary lg:text-base active:text-brand-secondary"
+	 }
+	 aria-label={item.label}
  >
- {item.label}
+	 {item.label}
  </button>
  </li>
  ))}
@@ -120,10 +121,10 @@ const Navbar: React.FC = () => {
  </div>
  </Link>
  <button
- onClick={toggleMobileMenu}
- className="rounded-lg cursor-pointer p-2 text-gray-700 transition-colors hover:bg-gray-100 :bg-gray-800"
- aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
- aria-expanded={mobileMenuOpen}
+	 onClick={toggleMobileMenu}
+	className="rounded-lg cursor-pointer p-2 text-brand-tertiary transition-colors hover:bg-brand-tertiary-lighten/20 :bg-gray-800"
+	 aria-label={mobileMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
+	 aria-expanded={mobileMenuOpen}
  >
  {mobileMenuOpen ? (
  <svg

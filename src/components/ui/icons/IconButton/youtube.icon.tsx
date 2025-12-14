@@ -9,6 +9,7 @@ const YouTubeButton: React.FC<IconButtonProps> = ({ ...props }) => {
       {...props}
       style={{ borderRadius: "10px" }}
       className="flex h-8 w-8 items-center cursor-pointer justify-center text-white transition-all duration-200"
+      aria-label="YouTube"
     >
       <svg
         id="Capa_1"

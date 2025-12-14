@@ -11,6 +11,7 @@ const LinkedInButton: React.FC<IconButtonProps> = ({ ...props }) => {
       {...props}
       style={{ borderRadius: "5px" }}
       className="flex h-8 w-8 items-center cursor-pointer justify-center text-white transition-all duration-200"
+      aria-label="LinkedIn"
     >
       <Image
         src={Linkedin_button}

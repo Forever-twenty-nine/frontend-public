@@ -4,15 +4,12 @@ import React, { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getCoursesOnHome, getImages } from "@/services";
-import { getCoursesWithActivePromotions } from "@/services/promotionalCodes";
-import PromotionalTooltip from "@/components/ui/overlays/PromotionalTooltip";
 import { generateCourseSlug } from "@/utils/slugify";
 
 export interface Course {
     _id: string;
     name: string;
     imageUrl: string;
-    hasPromotion?: boolean;
 }
 
 type PromotionsMap = Record<string, boolean>;
@@ -23,7 +20,6 @@ type PromotionsMap = Record<string, boolean>;
  */
 const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
     const [courses, setCourses] = useState<Course[]>([]);
-    const [promotionsMap, setPromotionsMap] = useState<PromotionsMap>({});
     const [images, setImages] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -48,23 +44,7 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
 
                 if (!isMounted) return;
 
-                // Fetch promotional data (with error handling)
-                let promos: Record<string, boolean> = {};
-                try {
-                    const ids = coursesData.map((c: any) => c?._id || c?.id).filter(Boolean);
-                    if (ids.length > 0) {
-                        promos = await getCoursesWithActivePromotions(ids);
-                    }
-                } catch (error) {
-                    console.warn('Failed to fetch promotions, continuing without them:', error);
-                    // Continue without promotions - not critical for app functionality
-                }
-
-                if (isMounted) {
-                    setPromotionsMap(promos || {});
-                }
-
-                // Fetch images with error handling
+                // Fetch images con error handling
                 const imagePromises = coursesData.map(async (course) => {
                     try {
                         if (course.imageUrl) {
@@ -126,7 +106,7 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
     );
 
     // Course Card Component
-    const CourseCard = ({ course, imageUrl, hasPromotion, priority }: { course: Course; imageUrl: string; hasPromotion: boolean; priority: boolean }) => {
+    const CourseCard = ({ course, imageUrl, priority }: { course: Course; imageUrl: string; priority: boolean }) => {
         const slug = generateCourseSlug(course.name, course._id);
 
         return (
@@ -145,6 +125,7 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
                             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                             priority={priority}
                             loading={priority ? "eager" : "lazy"}
+                            fetchPriority={priority ? "high" : undefined}
                             onError={(e) => {
                                 console.warn(`Error displaying image for ${course.name}`);
                                 e.currentTarget.style.display = "none";
@@ -168,16 +149,6 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
                         </div>
                     )}
 
-                    {/* Promotion Badge */}
-                    {hasPromotion && (
-                        <div className="absolute left-2 top-2 z-10">
-                            <PromotionalTooltip>
-                                <span className="cursor-pointer rounded-full bg-linear-to-r from-green-500 to-green-600 px-3 py-1 text-xs font-bold text-white shadow-lg transition-all hover:from-green-600 hover:to-green-700 hover:shadow-xl">
-                                    🎉 DESCUENTO
-                                </span>
-                            </PromotionalTooltip>
-                        </div>
-                    )}
 
                     {/* Hover Overlay */}
                     <div className="absolute inset-0 bg-linear-to-t from-brand-primary-dark via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -212,36 +183,37 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
         );
     };
 
-    if (error) {
-        return (
-            <section className={`bg-white py-12 md:py-16 ${className || ""}`}>
-                <div className="container mx-auto px-4">
-                    <div className="flex flex-col items-center justify-center rounded-lg bg-red-50 py-16 text-center">
-                        <svg
-                            className="mb-4 h-16 w-16 text-red-500"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
-                        <p className="mb-4 text-lg text-red-600">{error}</p>
-                        <button
-                            onClick={() => window.location.reload()}
-                            className="relative inline-block px-6 py-3 text-base font-semibold mt-4  cursor-pointer text-brand-primary rounded-full transition duration-500 bg-transparent border border-solid border-brand-primary hover: hover:bg-brand-primary/10 hover:ring-[3px] active:bg-brand-tertiary active:text-white active:ring-brand-secondary"
-                        >
-                            Reintentar
-                        </button>
+        if (error) {
+            return (
+                <section className={`bg-white py-12 md:py-16 ${className || ""}`}>
+                    <div className="container mx-auto px-4">
+                        <div className="flex flex-col items-center justify-center rounded-lg bg-red-50 py-16 text-center">
+                            <svg
+                                className="mb-4 h-16 w-16 text-red-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                            <p className="mb-4 text-lg text-red-600">{error}</p>
+                            <button
+                                onClick={() => window.location.reload()}
+                                className="relative inline-block px-6 py-3 text-base font-semibold mt-4  cursor-pointer text-brand-primary rounded-full transition duration-500 bg-transparent border border-solid border-brand-primary hover: hover:bg-brand-primary/10 hover:ring-[3px] active:bg-brand-tertiary active:text-white active:ring-brand-secondary"
+                                aria-label="Reintentar carga de cursos"
+                            >
+                                Reintentar
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </section>
-        );
-    }
+                </section>
+            );
+        }
 
     return (
         <section
@@ -294,7 +266,6 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
                                 key={course._id}
                                 course={course}
                                 imageUrl={images[index]}
-                                hasPromotion={promotionsMap[course._id]}
                                 priority={index < 4}
                             />
                         ))}

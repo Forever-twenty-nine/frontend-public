@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"category":{"$numberInt":"1"},"order":{"$numberInt":"1"}},"name":"category_1_order_1"},{"v":{"$numberInt":"2"},"key":{"isActive":{"$numberInt":"1"}},"name":"isActive_1"}],"uuid":"2d2d11e5c3c348c7a7a7bdaa83bc0ee1","collectionName":"faqs","type":"collection"}

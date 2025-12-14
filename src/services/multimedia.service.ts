@@ -1,15 +1,17 @@
 import axios, { AxiosResponse } from "axios";
 
+// Configuración de Bunny CDN
+const BUNNY_STORAGE_CDN = "https://cursala.b-cdn.net";
+
 export const getImages = async (
   imageFileName: string,
 ): Promise<AxiosResponse<Blob>> => {
-  const encodedFileName = encodeURIComponent(imageFileName);
-  const cacheBreaker = Math.floor(Date.now() / 60000); // Invalida cada minuto
-  const directUrl = `/api/direct?path=/file/${encodedFileName}/image&cb=${cacheBreaker}`;
+  // Construir URL directa de Bunny CDN
+  const bunnyUrl = `${BUNNY_STORAGE_CDN}/images/${imageFileName}`;
 
   try {
-    // Intentar cargar desde Bunny CDN vía backend
-    const resp = await axios.get(directUrl, {
+    // Intentar cargar directamente desde Bunny CDN
+    const resp = await axios.get(bunnyUrl, {
       headers: {
         Accept: "image/jpeg, image/png",
       },
@@ -23,7 +25,7 @@ export const getImages = async (
     return resp;
   } catch (error) {
     // Si Bunny CDN no está disponible, usar placeholder
-    // Esto es normal en desarrollo local
+    console.warn(`⚠️ No se pudo cargar imagen desde Bunny CDN: ${imageFileName}`, error);
     try {
       const placeholderResp = await axios.get("/images/placeholder.couse.png", {
         headers: {
@@ -135,12 +137,11 @@ export const getPublicFile = async (
 export const getUserProfileImage = async (
   imageFileName: string,
 ): Promise<AxiosResponse<Blob>> => {
-  const encodedFileName = encodeURIComponent(imageFileName);
-  const cacheBreaker = Math.floor(Date.now() / 60000);
-  const directUrl = `/api/direct?path=/user/${encodedFileName}/image&cb=${cacheBreaker}`;
+  // Construir URL directa de Bunny CDN para imágenes de perfil
+  const bunnyUrl = `${BUNNY_STORAGE_CDN}/profile-images/${imageFileName}`;
 
   try {
-    const resp = await axios.get(directUrl, {
+    const resp = await axios.get(bunnyUrl, {
       headers: {
         Accept: "image/jpeg, image/png",
       },
@@ -153,10 +154,19 @@ export const getUserProfileImage = async (
 
     return resp;
   } catch (error) {
-    console.error(
-      "Error obteniendo imagen de perfil de usuario desde direct:",
-      error,
-    );
-    throw error;
+    console.warn(`⚠️ No se pudo cargar imagen de perfil desde Bunny CDN: ${imageFileName}`, error);
+    // Usar placeholder de perfil por defecto
+    try {
+      const placeholderResp = await axios.get("/images/placeholder.user.png", {
+        headers: {
+          Accept: "image/jpeg, image/png",
+        },
+        responseType: "blob",
+      });
+      return placeholderResp;
+    } catch (placeholderError) {
+      console.error("Error: No se pudo cargar imagen de perfil ni placeholder:", placeholderError);
+      throw error;
+    }
   }
 };

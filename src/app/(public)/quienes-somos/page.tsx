@@ -39,10 +39,10 @@ const AboutPage: React.FC = () => {
     Ser un referente en formación técnica personalizada, reconocidos por la efectividad de nuestros cursos, la experiencia de nuestros instructores y nuestro compromiso con la mejora continua de las competencias laborales en distintos sectores productivos.
 
  </p>
- <h2 className="mb-1 text-2xl font-bold text-gray-900 md:text-3xl">
+ <h2 className="mb-1 text-2xl font-bold text-brand-tertiary md:text-3xl">
  Valores
  </h2>
- <p className="mb-4 text-base leading-relaxed text-gray-700 md:text-lg text-justify">
+ <p className="mb-4 text-base leading-relaxed text-brand-tertiary md:text-lg text-justify">
 • <strong>Calidad</strong>: Diseñamos cada curso con enfoque práctico, actualizado y orientado a resultados concretos. <br />
 • <strong>Compromiso</strong>: Acompañamos a empresas y personas en su proceso de crecimiento profesional. <br />
 • <strong>Flexibilidad</strong>: Adaptamos los contenidos, formatos y metodologías según las necesidades de cada cliente o participante. <br />

@@ -77,15 +77,15 @@ const CompanyTrainingPage: React.FC = () => {
  />
  </div>
  <div className="flex flex-col justify-center space-y-4">
- <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">
+ <h2 className="text-2xl font-bold text-brand-tertiary md:text-3xl">
  Capacitaciones para Empresas.
  </h2>
- <p className="text-base leading-relaxed text-gray-700 text-justify ">
+ <p className="text-base leading-relaxed text-brand-tertiary text-justify ">
  Ofrecemos programas diseñados para potenciar tanto las habilidades técnicas 
  como las habilidades blandas de tu equipo. Incorporamos herramientas de coaching 
  y desarrollo personal para que tus empleados alcancen su máximo potencial.
  </p>
- <p className="text-base leading-relaxed text-gray-700 text-justify">
+ <p className="text-base leading-relaxed text-brand-tertiary text-justify">
  Diseñamos cursos a medida, adaptados a las necesidades específicas de tu organización. 
  Trabajamos en conjunto para identificar las áreas que requieren refuerzo y elaboramos 
  contenidos relevantes y aplicables al entorno laboral real.
@@ -112,10 +112,10 @@ const CompanyTrainingPage: React.FC = () => {
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
  </svg>
  </div>
- <h3 className="mb-2 text-lg font-semibold text-gray-900 group-hover:font-bold ">
+ <h3 className="mb-2 text-lg font-semibold text-brand-tertiary group-hover:font-bold ">
  Contenido Personalizado
  </h3>
- <p className="text-sm text-gray-600 ">
+ <p className="text-sm text-brand-tertiary ">
  Programas diseñados específicamente para las necesidades de tu empresa.
  </p>
  </div>
@@ -126,8 +126,8 @@ const CompanyTrainingPage: React.FC = () => {
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
  </svg>
  </div>
- <h3 className="mb-2 text-lg font-semibold text-gray-900 group-hover:font-bold ">Enfoque Práctico</h3>
- <p className="text-sm text-gray-600 ">
+ <h3 className="mb-2 text-lg font-semibold text-brand-tertiary group-hover:font-bold ">Enfoque Práctico</h3>
+ <p className="text-sm text-brand-tertiary ">
  Herramientas y conocimientos aplicables de inmediato en el trabajo
  </p>
  </div>
@@ -138,8 +138,8 @@ const CompanyTrainingPage: React.FC = () => {
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
  </svg>
  </div>
- <h3 className="mb-2 text-lg font-semibold text-gray-900 group-hover:font-bold ">Modalidad Flexible</h3>
- <p className="text-sm text-gray-600 ">
+ <h3 className="mb-2 text-lg font-semibold text-brand-tertiary group-hover:font-bold ">Modalidad Flexible</h3>
+ <p className="text-sm text-brand-tertiary ">
  Capacitaciones presenciales o virtuales según tu preferencia
  </p>
  </div>
@@ -164,7 +164,7 @@ const CompanyTrainingPage: React.FC = () => {
  <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
  {/* Nombre */}
  <div>
- <label htmlFor="name" className="mb-1 block text-sm font-medium text-gray-700 ">
+ <label htmlFor="name" className="mb-1 block text-sm font-medium text-brand-tertiary ">
  Nombre Completo *
  </label>
  <input
@@ -173,7 +173,7 @@ const CompanyTrainingPage: React.FC = () => {
  {...register("name", {
  required: "Este campo es obligatorio",
  })}
- className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 "
+ className="w-full rounded-lg border border-brand-tertiary bg-white px-4 py-2.5 text-brand-tertiary transition focus:border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-secondary "
  disabled={loading}
  />
  {errors.name && (
@@ -183,7 +183,7 @@ const CompanyTrainingPage: React.FC = () => {
 
  {/* Email */}
  <div>
- <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700 ">
+ <label htmlFor="email" className="mb-1 block text-sm font-medium text-brand-tertiary ">
  Correo Electrónico *
  </label>
  <input
@@ -196,7 +196,7 @@ const CompanyTrainingPage: React.FC = () => {
  message: "Correo electrónico inválido",
  },
  })}
- className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 "
+ className="w-full rounded-lg border border-brand-tertiary bg-white px-4 py-2.5 text-brand-tertiary transition focus:border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-secondary "
  disabled={loading}
  />
  {errors.email && (
@@ -206,7 +206,7 @@ const CompanyTrainingPage: React.FC = () => {
 
  {/* Teléfono */}
  <div>
- <label htmlFor="phoneNumber" className="mb-1 block text-sm font-medium text-gray-700 ">
+ <label htmlFor="phoneNumber" className="mb-1 block text-sm font-medium text-brand-tertiary ">
  Teléfono
  </label>
  <input
@@ -214,15 +214,15 @@ const CompanyTrainingPage: React.FC = () => {
  id="phoneNumber"
  {...register("phoneNumber")}
  placeholder="11 2345 6789"
- className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 "
+ className="w-full rounded-lg border border-brand-tertiary bg-white px-4 py-2.5 text-brand-tertiary transition focus:border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-secondary "
  disabled={loading}
  />
- <p className="mt-1 text-xs text-gray-500 ">Opcional</p>
+ <p className="mt-1 text-xs text-brand-tertiary ">Opcional</p>
  </div>
 
  {/* Empresa */}
  <div>
- <label htmlFor="company" className="mb-1 block text-sm font-medium text-gray-700 ">
+ <label htmlFor="company" className="mb-1 block text-sm font-medium text-brand-tertiary ">
  Empresa *
  </label>
  <input
@@ -231,7 +231,7 @@ const CompanyTrainingPage: React.FC = () => {
  {...register("company", {
  required: "Este campo es obligatorio",
  })}
- className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+ className="w-full rounded-lg border border-brand-tertiary bg-white px-4 py-2.5 text-brand-tertiary transition focus:border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-secondary"
  disabled={loading}
  />
  {errors.company && (
@@ -241,7 +241,7 @@ const CompanyTrainingPage: React.FC = () => {
 
  {/* Mensaje */}
  <div>
- <label htmlFor="message" className="mb-1 block text-sm font-medium text-gray-700 ">
+ <label htmlFor="message" className="mb-1 block text-sm font-medium text-brand-tertiary ">
  Describe tu necesidad de capacitación *
  </label>
  <textarea
@@ -255,7 +255,7 @@ const CompanyTrainingPage: React.FC = () => {
  })}
  rows={5}
  placeholder="Cuéntanos sobre la capacitación que necesitas: temática, cantidad de personas, modalidad preferida, objetivos..."
- className="w-full resize-none rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 "
+ className="w-full resize-none rounded-lg border border-brand-tertiary bg-white px-4 py-2.5 text-brand-tertiary transition focus:border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-secondary "
  disabled={loading}
  />
  {errors.message && (
