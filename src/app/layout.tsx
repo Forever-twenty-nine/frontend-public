@@ -86,6 +86,15 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Fuente Titillium Web de Google Fonts */}
         <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet" />
+        {/*
+          Si en el futuro se requiere Google Analytics:
+          1. Crear una propiedad en https://analytics.google.com/
+          2. Reemplazar este comentario por el snippet de GA4 con el ID correspondiente (G-XXXXXXXXXX)
+        */}
+
+        {/* Cloudflare Web Analytics */}
+        <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "757eee8aa1ac4e3890e4ed4d28dcbd16"}'></script>
+        {/* End Cloudflare Web Analytics */}
 
       </head>
       <body suppressHydrationWarning={true} className="front">
