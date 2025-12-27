@@ -2,6 +2,8 @@
 
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { createBusinessTraining } from "@/services/formPublicServices";
+import { triggerNotification } from "@/utils/swal";
 
 interface ICourseRequestForm {
  name: string;
@@ -22,12 +24,31 @@ export const CourseRequestForm: React.FC = () => {
 
  const onSubmit: SubmitHandler<ICourseRequestForm> = async (data) => {
  setFormLoading(true);
- // Aquí deberías enviar los datos a tu backend o servicio
- setTimeout(() => {
- setFormLoading(false);
+ 
+ // Preparar datos para el servicio
+ const formData = {
+ name: data.name,
+ email: data.email,
+ phoneNumber: `${data.countryCode}${data.phoneNumber}`,
+ message: data.message,
+ };
+
+ try {
+ await createBusinessTraining(formData);
+ triggerNotification(
+ "¡Solicitud enviada exitosamente! Nos pondremos en contacto pronto.",
+ "success",
+ undefined,
+ );
  reset();
- alert("¡Solicitud enviada!");
- }, 1000);
+ } catch (error) {
+ const errorMessage =
+ (error as any)?.response?.data?.message ||
+ "Error al enviar la solicitud. Por favor, intenta nuevamente.";
+ triggerNotification(errorMessage, "error", undefined);
+ } finally {
+ setFormLoading(false);
+ }
  };
 
  return (

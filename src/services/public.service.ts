@@ -2,7 +2,7 @@ import api from "@/utils/axiosinstance";
 
 export const getPublicCompanyData = async () => {
   try {
-    const resp = await api.get(`/api/fetch?path=/public/company-data`);
+    const resp = await api.get(`/api/fetch?path=/company-specific-data`);
 
     if (resp.status !== 200) {
       throw new Error(`HTTP error! status: ${resp.status}`);
