@@ -8,6 +8,7 @@ import Footer from "@/app/(public)/shared/Footer";
 import { getPublishedCourses, getImages, getPublicFile, getCourseById } from "@/services";
 import { getUserProfileImage } from "@/services/multimedia.service";
 import { extractCourseIdFromSlug } from "@/utils/slugify";
+import { conf } from "@/config/env";
 import { showError, showSuccess } from "@/utils/swal";
 
 interface CourseDetailProps {
@@ -522,11 +523,11 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
 
  {/* Botón de inscripción */}
  <button
- onClick={() => router.push("/ingresar")}
- className="mt-6 w-full rounded-full cursor-pointer  text-brand-tertiary px-6 py-3 font-semibold transition-all duration-500 bg-brand-secondary hover:ring-[3px] hover:ring-[#dcab07] hover:bg-brand-secondary active:bg-brand-tertiary active:text-white"
- >
- Inscribirme
- </button>
+                onClick={() => window.location.href = `${conf.frontendPrivateUrl}/login`}
+                className="mt-6 w-full rounded-full cursor-pointer text-brand-tertiary px-6 py-3 font-semibold transition-all duration-500 bg-brand-secondary hover:ring-[3px] hover:ring-[#dcab07] hover:bg-brand-secondary active:bg-brand-tertiary active:text-white"
+              >
+                Inscribirme
+              </button>
 
  {/* Botón de descarga de programa PDF dentro del card sticky */}
  {course.programUrl && (

@@ -7,39 +7,40 @@ import InstagramButton from "@/components/ui/icons/IconButton/instagram.icon";
 import LinkedInButton from "@/components/ui/icons/IconButton/linkedin.icon";
 import YouTubeButton from "@/components/ui/icons/IconButton/youtube.icon";
 import FacebookButton from "@/components/ui/icons/IconButton/facebook.icon";
+import { conf } from "@/config/env";
 
 /**
  * Navbar público - Navegación principal para usuarios no autenticados
  * Incluye menú responsive con hamburguesa en móvil
  */
 const Navbar: React.FC = () => {
- const router = useRouter();
- const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const router = useRouter();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
- const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
- const handleNavigation = (href: string) => {
- router.push(href);
- setMobileMenuOpen(false);
- };
+  const handleNavigation = (href: string) => {
+    router.push(href);
+    setMobileMenuOpen(false);
+  };
 
- const socialLinks = {
- instagram: () =>
- window.open(
- "https://www.instagram.com/cursala.online?igsh=MXhmOGF4MnprODUxNA==",
- "_blank",
- ),
- linkedin: () =>
- window.open(
- "https://www.linkedin.com/company/cursala/?viewAsMember=true",
- "_blank",
- ),
- youtube: () =>
- window.open(
- "https://www.youtube.com/@cursalaenvivo",
- "_blank",
- ),
- facebook: () =>
+  const socialLinks = {
+    instagram: () =>
+      window.open(
+        "https://www.instagram.com/cursala.online?igsh=MXhmOGF4MnprODUxNA==",
+        "_blank",
+      ),
+    linkedin: () =>
+      window.open(
+        "https://www.linkedin.com/company/cursala/?viewAsMember=true",
+        "_blank",
+      ),
+    youtube: () =>
+      window.open(
+        "https://www.youtube.com/@cursalaenvivo",
+        "_blank",
+      ),
+    facebook: () =>
  window.open(
  "https://www.facebook.com/Cursala.online",
  "_blank",
@@ -172,14 +173,14 @@ const Navbar: React.FC = () => {
  <FacebookButton onClick={socialLinks.facebook} />
  </div>
  <Link
- href="/proximamente"
+ href={`${conf.frontendPrivateUrl}/register`}
  className="relative block text-center px-4 py-3 text-md mb-3 font-semibold text-brand-tertiary rounded-full transition duration-500 bg-brand-secondary hover:ring-[3px] hover:ring-[#dcab07] hover:bg-brand-secondary active:bg-brand-tertiary active:text-white"
  onClick={() => setMobileMenuOpen(false)}
  >
  Registrarse
  </Link>
  <Link
- href="/proximamente"
+ href={`${conf.frontendPrivateUrl}/login`}
  className="relative block text-center px-4 py-3 text-md font-semibold text-brand-primary rounded-full transition duration-500 bg-transparent border border-solid border-brand-primary hover: hover:bg-brand-primary/10 hover:ring-2 active:bg-brand-secondary active:text-brand-tertiary"
  onClick={() => setMobileMenuOpen(false)}
  >
@@ -225,13 +226,13 @@ const Navbar: React.FC = () => {
  </div>
  <div className="flex items-center justify-center gap-2">
  <Link
- href="/proximamente"
+ href={`${conf.frontendPrivateUrl}/register`}
  className="relative inline-block px-4 py-2 text-sm font-semibold text-brand-tertiary rounded-full transition duration-500 bg-brand-secondary hover:ring-[3px] hover:ring-[#dcab07] hover:bg-brand-secondary active:bg-brand-tertiary active:text-white "
  >
  Registrarse
  </Link>
  <Link
- href="/proximamente"
+ href={`${conf.frontendPrivateUrl}/login`}
  className="relative inline-block px-4 py-2 text-sm font-semibold text-brand-primary-dark rounded-full transition duration-500 bg-transparent border border-solid border-brand-primary hover:bg-brand-primary hover:text-white hover:ring-[3px] active:bg-brand-tertiary active:text-white active:ring-brand-secondary "
  >
  Ingresar

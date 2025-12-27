@@ -6,8 +6,14 @@ const BUNNY_STORAGE_CDN = "https://cursala.b-cdn.net";
 export const getImages = async (
   imageFileName: string,
 ): Promise<AxiosResponse<Blob>> => {
-  // Construir URL directa de Bunny CDN
-  const bunnyUrl = `${BUNNY_STORAGE_CDN}/images/${imageFileName}`;
+  // Si ya es una URL completa, usarla directamente
+  let bunnyUrl: string;
+  if (imageFileName.startsWith('http://') || imageFileName.startsWith('https://')) {
+    bunnyUrl = imageFileName;
+  } else {
+    // Construir URL directa de Bunny CDN (mismo path que frontend-private)
+    bunnyUrl = `${BUNNY_STORAGE_CDN}/course-images/${imageFileName}`;
+  }
 
   try {
     // Intentar cargar directamente desde Bunny CDN
