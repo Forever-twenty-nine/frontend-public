@@ -76,22 +76,22 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
  }
  }
 
- // Cargar foto del profesor si existe
- if (courseDetail.mainTeacherInfo?.profilePhotoUrl) {
- try {
- const photoResponse = await getUserProfileImage(
- courseDetail.mainTeacherInfo.profilePhotoUrl,
- );
- if (photoResponse?.data) {
- const objectURL = URL.createObjectURL(photoResponse.data);
- objectUrls.current.push(objectURL);
- setTeacherPhotoUrl(objectURL);
- }
- } catch (error) {
- // Foto no disponible, se mostrará placeholder
- setTeacherPhotoUrl(null);
- }
- }
+// Cargar foto del profesor si existe
+if (courseDetail.mainTeacherInfo?.profilePhotoUrl) {
+try {
+const photoResponse = await getUserProfileImage(
+courseDetail.mainTeacherInfo.profilePhotoUrl,
+);
+if (photoResponse?.data) {
+const objectURL = URL.createObjectURL(photoResponse.data);
+objectUrls.current.push(objectURL);
+setTeacherPhotoUrl(objectURL);
+}
+} catch (error) {
+// Foto no disponible, se mostrará placeholder
+setTeacherPhotoUrl(null);
+}
+}
  } else {
  setNotFound(true);
  }

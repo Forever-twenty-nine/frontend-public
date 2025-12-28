@@ -143,25 +143,28 @@ export const getPublicFile = async (
 export const getUserProfileImage = async (
   imageFileName: string,
 ): Promise<AxiosResponse<Blob>> => {
-  // Construir URL directa de Bunny CDN para imágenes de perfil
-  const bunnyUrl = `${BUNNY_STORAGE_CDN}/profile-images/${encodeURIComponent(imageFileName)}`;
+  // Si ya es una URL completa, usarla directamente
+  if (imageFileName.startsWith('http://') || imageFileName.startsWith('https://')) {
+    try {
+      const resp = await axios.get(imageFileName, {
+        headers: {
+          Accept: "image/jpeg, image/png",
+        },
+        responseType: "blob",
+        validateStatus: (status) => status === 200 || status === 201,
+      });
 
-  try {
-    const resp = await axios.get(bunnyUrl, {
-      headers: {
-        Accept: "image/jpeg, image/png",
-      },
-      responseType: "blob",
-    });
-
-    if (![200, 201].includes(resp.status)) {
-      throw new Error(`HTTP error! status: ${resp.status}`);
+      if ([200, 201].includes(resp.status)) {
+        return resp;
+      }
+    } catch (error) {
+      console.warn(`⚠️ No se pudo cargar imagen de perfil desde URL completa: ${imageFileName}`, error);
+      // Continuar con el flujo normal para intentar otras opciones
     }
+  }
 
-    return resp;
-  } catch (error) {
-    console.warn(`⚠️ No se pudo cargar imagen de perfil desde Bunny CDN: ${imageFileName}`, error);
-    // Usar placeholder de perfil por defecto
+  // Si el nombre del archivo está vacío o es null, usar placeholder
+  if (!imageFileName || imageFileName.trim() === '') {
     try {
       const placeholderResp = await axios.get("/images/placeholder.user.png", {
         headers: {
@@ -171,8 +174,82 @@ export const getUserProfileImage = async (
       });
       return placeholderResp;
     } catch (placeholderError) {
-      console.error("Error: No se pudo cargar imagen de perfil ni placeholder:", placeholderError);
-      throw error;
+      console.error("Error: No se pudo cargar placeholder:", placeholderError);
+      throw placeholderError;
     }
+  }
+
+  // Intentar primero con el nombre original (puede que ya tenga el prefijo o que el archivo exista sin él)
+  const tryLoadImage = async (fileName: string): Promise<AxiosResponse<Blob> | null> => {
+    try {
+      const bunnyUrl = `${BUNNY_STORAGE_CDN}/profile-images/${encodeURIComponent(fileName)}`;
+      const resp = await axios.get(bunnyUrl, {
+        headers: {
+          Accept: "image/jpeg, image/png",
+        },
+        responseType: "blob",
+        validateStatus: (status) => status === 200 || status === 201,
+      });
+
+      if ([200, 201].includes(resp.status)) {
+        return resp;
+      }
+      return null;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  // Intentar primero con el nombre original
+  let resp = await tryLoadImage(imageFileName);
+  if (resp) {
+    return resp;
+  }
+
+  // Si el nombre original no tiene el prefijo "profile-", intentar agregándolo
+  if (!imageFileName.startsWith('profile-')) {
+    const withPrefix = `profile-${imageFileName}`;
+    resp = await tryLoadImage(withPrefix);
+    if (resp) {
+      return resp;
+    }
+  }
+
+  // Si ambos intentos fallan, intentar desde el backend como fallback
+  try {
+    // Normalizar el nombre para intentar desde el backend
+    let backendFileName = imageFileName;
+    if (!backendFileName.startsWith('profile-')) {
+      backendFileName = `profile-${backendFileName}`;
+    }
+    
+    const backendUrl = `/api/direct?path=/file/profile-images/${encodeURIComponent(backendFileName)}/publicdownload`;
+    const backendResp = await axios.get(backendUrl, {
+      headers: {
+        Accept: "image/jpeg, image/png",
+      },
+      responseType: "blob",
+      validateStatus: (status) => status === 200 || status === 201,
+    });
+
+    if ([200, 201].includes(backendResp.status)) {
+      return backendResp;
+    }
+  } catch (backendError) {
+    // Continuar con placeholder
+  }
+
+  // Si todo falla, usar placeholder
+  try {
+    const placeholderResp = await axios.get("/images/placeholder.user.png", {
+      headers: {
+        Accept: "image/jpeg, image/png",
+      },
+      responseType: "blob",
+    });
+    return placeholderResp;
+  } catch (placeholderError) {
+    console.error("Error: No se pudo cargar imagen de perfil ni placeholder:", placeholderError);
+    throw new Error(`No se pudo cargar la imagen de perfil: ${imageFileName}`);
   }
 };
