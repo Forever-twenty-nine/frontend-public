@@ -175,7 +175,7 @@ export const showNotification = (
       animation: slideInRight 0.3s ease-out;
     `;
 
-    notification.innerHTML = `<strong>${getIcon(type)} ${type.toUpperCase()}</strong><br>${message}`;
+    notification.innerHTML = `<strong>${getIcon(type)}</strong> ${message}`;
 
     // Agregar animación CSS si no existe
     if (!document.getElementById('notification-animations')) {
