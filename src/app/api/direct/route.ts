@@ -55,10 +55,7 @@ async function forwardRequest(
 
     // Construir la URL del backend
     // Este es un route handler de Next.js que corre en el servidor
-    // Usa la dirección interna de Docker para comunicarse con el backend
-    // Comunicación interna via Docker network (no mezclar HTTP/HTTPS)
-    // Usar URL_BACK_SSR para llamadas del servidor (Docker), URL_BACK para cliente
-    const baseUrl = process.env.NEXT_PUBLIC_URL_BACK_SSR || process.env.NEXT_PUBLIC_URL_BACK || 'http://localhost:8080/api/v1';
+    const baseUrl = process.env.NEXT_PUBLIC_URL_BACK || 'http://localhost:8080/api/v1';
     const targetUrl = `${baseUrl}/direct?path=${encodeURIComponent(path)}`;
 
     // Limpiar headers problemáticos

@@ -15,9 +15,7 @@ export async function GET(request: NextRequest) {
   try {
     // Construir la URL del backend
     // Este route handler corre en el servidor de Next.js
-    // Usa la dirección interna de Docker para comunicarse con el backend
-    // Usar URL_BACK_SSR para llamadas del servidor (Docker), URL_BACK para cliente
-    const backendUrl = process.env.NEXT_PUBLIC_URL_BACK_SSR || process.env.NEXT_PUBLIC_URL_BACK || "http://localhost:8080/api/v1";
+    const backendUrl = process.env.NEXT_PUBLIC_URL_BACK || "http://localhost:8080/api/v1";
     const targetUrl = `${backendUrl}${path}`;
 
     // Preparar headers básicos

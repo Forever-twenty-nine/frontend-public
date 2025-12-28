@@ -41,210 +41,209 @@ const Navbar: React.FC = () => {
         "_blank",
       ),
     facebook: () =>
- window.open(
- "https://www.facebook.com/Cursala.online",
- "_blank",
- ),
- };
+      window.open(
+        "https://www.facebook.com/Cursala.online",
+        "_blank",
+      ),
+  };
 
- const Navigation = ({ isMobile = false }: { isMobile?: boolean }) => {
- const mobileNavItems = [
- { href: "/cursos", label: "Cursos" },
- { href: "/capacitaciones-empresas", label: "Capacitaciones Empresas" },
- { href: "/quiero-capacitar", label: "Quiero Capacitar" },
- { href: "/preguntas", label: "Preguntas" },
- ];
+  const Navigation = ({ isMobile = false }: { isMobile?: boolean }) => {
+    const mobileNavItems = [
+      { href: "/cursos", label: "Cursos" },
+      { href: "/capacitaciones-empresas", label: "Capacitaciones Empresas" },
+      { href: "/quiero-capacitar", label: "Quiero Capacitar" },
+      { href: "/preguntas", label: "Preguntas" },
+    ];
 
- const desktopNavItems = [
- { href: "/cursos", label: "Cursos" },
- { href: "/capacitaciones-empresas", label: "Capacitaciones Empresas" },
- { href: "/quiero-capacitar", label: "Quiero Capacitar" },
- { href: "/preguntas", label: "Preguntas" },
- ];
+    const desktopNavItems = [
+      { href: "/cursos", label: "Cursos" },
+      { href: "/capacitaciones-empresas", label: "Capacitaciones Empresas" },
+      { href: "/quiero-capacitar", label: "Quiero Capacitar" },
+      { href: "/preguntas", label: "Preguntas" },
+    ];
 
- const navItems = isMobile ? mobileNavItems : desktopNavItems;
+    const navItems = isMobile ? mobileNavItems : desktopNavItems;
 
 
 
- return (
- <nav className={isMobile ? "w-full" : "flex-1"}>
- <ul
- className={`flex ${
- isMobile
- ? "flex-col space-y-1"
- : "flex-row items-center justify-center gap-1 "
- }`}
- >
- {navItems.map((item) => (
- <li key={item.href}>
- <button
-	 onClick={() => handleNavigation(item.href)}
-	 className={
-		 isMobile
-			 ? "block w-full rounded-full cursor-pointer px-4 py-3 text-left text-base font-semibold text-brand-tertiary transition-colors hover:bg-brand-tertiary-lighten/20 hover:text-brand-primary :bg-white/10 :text-brand-primary active:text-brand-secondary"
-			 : "text-sm font-semibold px-4 py-2 cursor-pointer text-brand-tertiary transition-colors hover:text-primary :text-primary lg:text-base active:text-brand-secondary"
-	 }
-	 aria-label={item.label}
- >
-	 {item.label}
- </button>
- </li>
- ))}
- </ul>
- </nav>
- );
- };
+    return (
+      <nav className={isMobile ? "w-full" : "flex-1"}>
+        <ul
+          className={`flex ${isMobile
+              ? "flex-col space-y-1"
+              : "flex-row items-center justify-center gap-1 "
+            }`}
+        >
+          {navItems.map((item) => (
+            <li key={item.href}>
+              <button
+                onClick={() => handleNavigation(item.href)}
+                className={
+                  isMobile
+                    ? "block w-full rounded-full cursor-pointer px-4 py-3 text-left text-base font-semibold text-brand-tertiary transition-colors hover:bg-brand-tertiary-lighten/20 hover:text-brand-primary :bg-white/10 :text-brand-primary active:text-brand-secondary"
+                    : "text-sm font-semibold px-4 py-2 cursor-pointer text-brand-tertiary transition-colors hover:text-primary :text-primary lg:text-base active:text-brand-secondary"
+                }
+                aria-label={item.label}
+              >
+                {item.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    );
+  };
 
- return (
- <>
- {/* Mobile Navbar */}
- <nav className="sticky top-0 z-50 bg-white shadow-md md:hidden">
- <div className="flex items-center justify-between px-4 py-3">
- <Link href="/" className="shrink-0">
- {/* Logo para modo claro */}
- <div style={{ position: 'relative', width: '160px', height: '32px' }}>
- <Image
- src="/logo/cursala.svg"
- alt="Logo Cursala"
- fill
- loading="eager"
- unoptimized
- />
- </div>
- {/* Logo para modo oscuro */}
- <div style={{ position: 'relative', width: '160px', height: '32px' }} className="hidden">
- <Image
- src="/logo/cursala-negativo.svg"
- alt="Logo Cursala"
- fill
- unoptimized
- />
- </div>
- </Link>
- <button
-	 onClick={toggleMobileMenu}
-	className="rounded-lg cursor-pointer p-2 text-brand-tertiary transition-colors hover:bg-brand-tertiary-lighten/20 :bg-gray-800"
-	 aria-label={mobileMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
-	 aria-expanded={mobileMenuOpen}
- >
- {mobileMenuOpen ? (
- <svg
- className="h-6 w-6"
- fill="none"
- stroke="currentColor"
- viewBox="0 0 24 24"
- >
- <path
- strokeLinecap="round"
- strokeLinejoin="round"
- strokeWidth={2}
- d="M6 18L18 6M6 6l12 12"
- />
- </svg>
- ) : (
- <svg
- className="h-6 w-6"
- fill="none"
- stroke="currentColor"
- viewBox="0 0 24 24"
- >
- <path
- strokeLinecap="round"
- strokeLinejoin="round"
- strokeWidth={2}
- d="M4 6h16M4 12h16M4 18h16"
- />
- </svg>
- )}
- </button>
- </div>
+  return (
+    <>
+      {/* Mobile Navbar */}
+      <nav className="sticky top-0 z-50 bg-white shadow-md md:hidden">
+        <div className="flex items-center justify-between px-4 py-3">
+          <Link href="/" className="shrink-0">
+            {/* Logo para modo claro */}
+            <div style={{ position: 'relative', width: '160px', height: '32px' }}>
+              <Image
+                src="/logo/cursala.svg"
+                alt="Logo Cursala"
+                fill
+                loading="eager"
+                unoptimized
+              />
+            </div>
+            {/* Logo para modo oscuro */}
+            <div style={{ position: 'relative', width: '160px', height: '32px' }} className="hidden">
+              <Image
+                src="/logo/cursala-negativo.svg"
+                alt="Logo Cursala"
+                fill
+                unoptimized
+              />
+            </div>
+          </Link>
+          <button
+            onClick={toggleMobileMenu}
+            className="rounded-lg cursor-pointer p-2 text-brand-tertiary transition-colors hover:bg-brand-tertiary-lighten/20 :bg-gray-800"
+            aria-label={mobileMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
+            aria-expanded={mobileMenuOpen}
+          >
+            {mobileMenuOpen ? (
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            )}
+          </button>
+        </div>
 
- {/* Mobile Menu */}
- {mobileMenuOpen && (
- <div className="border-t border-gray-200 bg-white ">
- <div className="px-2 py-3">
- <Navigation isMobile={true} />
- </div>
- <div className="border-t border-gray-200 px-4 py-4 ">
-<div className="flex justify-center items-center gap-3 mb-5">
- <InstagramButton onClick={socialLinks.instagram} />
- <LinkedInButton onClick={socialLinks.linkedin} />
- <YouTubeButton onClick={socialLinks.youtube} />
- <FacebookButton onClick={socialLinks.facebook} />
- </div>
- <Link
- href={`${conf.frontendPrivateUrl}/register`}
- className="relative block text-center px-4 py-3 text-md mb-3 font-semibold text-brand-tertiary rounded-full transition duration-500 bg-brand-secondary hover:ring-[3px] hover:ring-[#dcab07] hover:bg-brand-secondary active:bg-brand-tertiary active:text-white"
- onClick={() => setMobileMenuOpen(false)}
- >
- Registrarse
- </Link>
- <Link
- href={`${conf.frontendPrivateUrl}/login`}
- className="relative block text-center px-4 py-3 text-md font-semibold text-brand-primary rounded-full transition duration-500 bg-transparent border border-solid border-brand-primary hover: hover:bg-brand-primary/10 hover:ring-2 active:bg-brand-secondary active:text-brand-tertiary"
- onClick={() => setMobileMenuOpen(false)}
- >
- Ingresar
- </Link>
- </div>
- </div>
- )}
- </nav>
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="border-t border-gray-200 bg-white ">
+            <div className="px-2 py-3">
+              <Navigation isMobile={true} />
+            </div>
+            <div className="border-t border-gray-200 px-4 py-4 ">
+              <div className="flex justify-center items-center gap-3 mb-5">
+                <InstagramButton onClick={socialLinks.instagram} />
+                <LinkedInButton onClick={socialLinks.linkedin} />
+                <YouTubeButton onClick={socialLinks.youtube} />
+                <FacebookButton onClick={socialLinks.facebook} />
+              </div>
+              <Link
+                href="/register"
+                className="relative block text-center px-4 py-3 text-md mb-3 font-semibold text-brand-tertiary rounded-full transition duration-500 bg-brand-secondary hover:ring-[3px] hover:ring-[#dcab07] hover:bg-brand-secondary active:bg-brand-tertiary active:text-white"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Registrarse
+              </Link>
+              <Link
+                href="/login"
+                className="relative block text-center px-4 py-3 text-md font-semibold text-brand-primary rounded-full transition duration-500 bg-transparent border border-solid border-brand-primary hover: hover:bg-brand-primary/10 hover:ring-2 active:bg-brand-secondary active:text-brand-tertiary"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Ingresar
+              </Link>
+            </div>
+          </div>
+        )}
+      </nav>
 
- {/* Desktop Navbar */}
- <nav className="sticky top-0 z-50 hidden border-b border-gray-200 bg-white shadow-xs md:block">
- <div className="max-w-7xl mx-auto px-4">
- <div className="flex h-16 items-center justify-between lg:h-20">
- <Link href="/" className="shrink-0">
- {/* Logo para modo claro */}
- <div style={{ position: 'relative', width: '160px', height: '32px' }}>
- <Image
- src="/logo/cursala.svg"
- alt="Logo Cursala"
- fill
- loading="eager"
- unoptimized
- />
- </div>
- {/* Logo para modo oscuro */}
- <div style={{ position: 'relative', width: '200px', height: '40px' }} className="hidden">
- <Image
- src="/logo/cursala-negativo.svg"
- alt="Logo Cursala"
- fill
- unoptimized
- />
- </div>
- </Link>
- <div className="flex justify-start ml-12 w-full gap-4">
- <Navigation />
- <div className="flex items-center gap-2">
- <InstagramButton onClick={socialLinks.instagram} />
- <LinkedInButton onClick={socialLinks.linkedin} />
- <YouTubeButton onClick={socialLinks.youtube} />
- <FacebookButton onClick={socialLinks.facebook} />
- </div>
- <div className="flex items-center justify-center gap-2">
- <Link
- href={`${conf.frontendPrivateUrl}/register`}
- className="relative inline-block px-4 py-2 text-sm font-semibold text-brand-tertiary rounded-full transition duration-500 bg-brand-secondary hover:ring-[3px] hover:ring-[#dcab07] hover:bg-brand-secondary active:bg-brand-tertiary active:text-white "
- >
- Registrarse
- </Link>
- <Link
- href={`${conf.frontendPrivateUrl}/login`}
- className="relative inline-block px-4 py-2 text-sm font-semibold text-brand-primary-dark rounded-full transition duration-500 bg-transparent border border-solid border-brand-primary hover:bg-brand-primary hover:text-white hover:ring-[3px] active:bg-brand-tertiary active:text-white active:ring-brand-secondary "
- >
- Ingresar
- </Link>
- </div>
- </div>
- 
- </div>
- </div>
- </nav>
- </>
- );
+      {/* Desktop Navbar */}
+      <nav className="sticky top-0 z-50 hidden border-b border-gray-200 bg-white shadow-xs md:block">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex h-16 items-center justify-between lg:h-20">
+            <Link href="/" className="shrink-0">
+              {/* Logo para modo claro */}
+              <div style={{ position: 'relative', width: '160px', height: '32px' }}>
+                <Image
+                  src="/logo/cursala.svg"
+                  alt="Logo Cursala"
+                  fill
+                  loading="eager"
+                  unoptimized
+                />
+              </div>
+              {/* Logo para modo oscuro */}
+              <div style={{ position: 'relative', width: '200px', height: '40px' }} className="hidden">
+                <Image
+                  src="/logo/cursala-negativo.svg"
+                  alt="Logo Cursala"
+                  fill
+                  unoptimized
+                />
+              </div>
+            </Link>
+            <div className="flex justify-start ml-12 w-full gap-4">
+              <Navigation />
+              <div className="flex items-center gap-2">
+                <InstagramButton onClick={socialLinks.instagram} />
+                <LinkedInButton onClick={socialLinks.linkedin} />
+                <YouTubeButton onClick={socialLinks.youtube} />
+                <FacebookButton onClick={socialLinks.facebook} />
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <Link
+                  href="/register"
+                  className="relative inline-block px-4 py-2 text-sm font-semibold text-brand-tertiary rounded-full transition duration-500 bg-brand-secondary hover:ring-[3px] hover:ring-[#dcab07] hover:bg-brand-secondary active:bg-brand-tertiary active:text-white "
+                >
+                  Registrarse
+                </Link>
+                <Link
+                  href="/login"
+                  className="relative inline-block px-4 py-2 text-sm font-semibold text-brand-primary-dark rounded-full transition duration-500 bg-transparent border border-solid border-brand-primary hover:bg-brand-primary hover:text-white hover:ring-[3px] active:bg-brand-tertiary active:text-white active:ring-brand-secondary "
+                >
+                  Ingresar
+                </Link>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </nav>
+    </>
+  );
 };
 
 export default Navbar;
