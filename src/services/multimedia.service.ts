@@ -144,7 +144,7 @@ export const getUserProfileImage = async (
   imageFileName: string,
 ): Promise<AxiosResponse<Blob>> => {
   // Construir URL directa de Bunny CDN para imágenes de perfil
-  const bunnyUrl = `${BUNNY_STORAGE_CDN}/profile-images/${imageFileName}`;
+  const bunnyUrl = `${BUNNY_STORAGE_CDN}/profile-images/${encodeURIComponent(imageFileName)}`;
 
   try {
     const resp = await axios.get(bunnyUrl, {
