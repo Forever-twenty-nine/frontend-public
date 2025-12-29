@@ -1,8 +1,8 @@
-# Multi-stage Dockerfile for frontend-cursala - Optimized for faster builds
-# Build triggered: 2025-11-25
+# Multi-stage Dockerfile for frontend-cursala - Production Build
+# Optimized for faster builds and security
 
 FROM node:24-alpine AS base
-LABEL environment="preview"
+LABEL environment="production"
 WORKDIR /app
 
 # Install common build tools (needed for native dependencies like sharp)
@@ -23,10 +23,10 @@ FROM base AS builder
 # Copy all deps from deps-dev stage for building
 COPY --from=deps-dev /app/node_modules ./node_modules
 
-# Definir ARGs para variables de build (Next.js las necesita durante npm run build)
-ARG NEXT_PUBLIC_URL_BACK
-ARG NEXT_PUBLIC_FRONTEND_PRIVATE_URL
-ARG NEXT_TELEMETRY_DISABLED
+# Build-time variables (opcionales, se pueden sobrescribir en runtime con docker-compose)
+ARG NEXT_PUBLIC_URL_BACK=""
+ARG NEXT_PUBLIC_FRONTEND_PRIVATE_URL=""
+ARG NEXT_TELEMETRY_DISABLED=1
 
 # Convertir ARGs a ENVs para que Next.js las pueda leer durante el build
 ENV NEXT_PUBLIC_URL_BACK=$NEXT_PUBLIC_URL_BACK
@@ -50,9 +50,6 @@ COPY --from=deps-prod /app/node_modules ./node_modules
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
-
-# Create the static directory that docker-compose expects to mount
-RUN mkdir -p /app/dist/src/static
 
 # Add a non-root user for security
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup

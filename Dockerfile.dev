@@ -1,0 +1,30 @@
+# Dockerfile for local development environment
+# Uses .env.local for configuration
+
+FROM node:24-alpine
+
+WORKDIR /app
+
+# Install common build tools (needed for native dependencies like sharp)
+RUN apk add --no-cache python3 make g++ libc6-compat
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including devDependencies for development)
+RUN npm ci --legacy-peer-deps && npm cache clean --force
+
+# Copy source code
+COPY . .
+
+# Copy environment variables from .env.local
+COPY .env.local .env.local
+
+EXPOSE 3002
+
+# Set development environment
+ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Run development server with hot reload
+CMD ["npm", "run", "dev"]
