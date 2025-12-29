@@ -178,6 +178,15 @@ setTeacherPhotoUrl(null);
  if (!course?.programUrl) return;
 
  try {
+ // Si es una URL completa de Bunny CDN, abrir directamente en nueva pestaña
+ // El navegador permitirá descargar/ver el PDF sin problemas de CORS
+ if (course.programUrl.startsWith('http://') || course.programUrl.startsWith('https://')) {
+ window.open(course.programUrl, '_blank');
+ showSuccess("Programa abierto en nueva pestaña");
+ return;
+ }
+
+ // Si es un archivo legacy, usar el método anterior con el backend
  const response = await getPublicFile(course.programUrl);
  const blob = response.data;
  const url = URL.createObjectURL(blob);

@@ -117,6 +117,29 @@ export const getSupportMaterial = async (
 export const getPublicFile = async (
   fileName: string,
 ): Promise<AxiosResponse<Blob>> => {
+  // Si ya es una URL completa (de Bunny CDN), usarla directamente
+  if (fileName.startsWith('http://') || fileName.startsWith('https://')) {
+    try {
+      const resp = await axios.get(fileName, {
+        headers: {
+          Accept: "*/*",
+          "Content-Disposition": "attachment",
+        },
+        responseType: "blob",
+      });
+
+      if (![200, 201].includes(resp.status)) {
+        throw new Error(`HTTP error! status: ${resp.status}`);
+      }
+
+      return resp;
+    } catch (error) {
+      console.error("Error obteniendo archivo público desde Bunny CDN:", error);
+      throw error;
+    }
+  }
+
+  // Si es un nombre de archivo legacy, usar el endpoint /api/direct
   const encodedFileName = encodeURIComponent(fileName);
   const directUrl = `/api/direct?path=/file/${encodedFileName}/publicdownload`;
 
