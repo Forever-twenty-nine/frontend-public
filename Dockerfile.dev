@@ -17,9 +17,6 @@ RUN npm ci --legacy-peer-deps && npm cache clean --force
 # Copy source code
 COPY . .
 
-# Copy environment variables from .env.local
-COPY .env.local .env.local
-
 EXPOSE 3002
 
 # Set development environment
