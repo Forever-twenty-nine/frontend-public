@@ -149,7 +149,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({
  <div className="mt-8 text-center md:mt-10">
  <Link
  href="/preguntas"
- className="inline-flex items-center gap-2 rounded-full bg-brand-primary-dark px-6 py-3 font-semibold text-white shadow-2xl border-2 border-brand-primary transition-all duration-500 hover:bg-black hover:text-white hover:ring-[3px] hover:ring-brand-primary group active:bg-brand-tertiary active:text-white focus:outline-none focus:ring-4 focus:ring-brand-primary "
+ className="inline-flex items-center gap-2 rounded-full bg-brand-primary-dark px-6 py-3 font-semibold text-white shadow-2xl transition-all duration-500 hover:bg-black hover:text-white hover:ring-[4px] hover:ring-brand-primary group active:bg-brand-tertiary active:text-white focus:outline-none focus:ring-4 focus:ring-brand-primary "
  >
  <span className="text-white font-bold">Ver todas las preguntas</span>
  <svg

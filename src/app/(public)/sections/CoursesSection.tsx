@@ -112,7 +112,7 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
         return (
             <Link
                 href={`/detalle-curso/${slug}`}
-                className="group relative flex flex-col overflow-hidden rounded-lg border border-solid border-brand-tertiary-lighten/60 bg-white transition-all duration-300 hover:shadow-xl hover:shadow-brand-tertiary/20 "
+                className="group relative flex flex-col overflow-hidden rounded-lg border border-solid border-brand-tertiary-lighten/40 bg-white transition-all duration-300 hover:shadow-xl hover:shadow-brand-tertiary/20 "
             >
                 {/* Image Container */}
                 <div className="relative aspect-4/3 w-full overflow-hidden bg-gray-200">
@@ -277,7 +277,7 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
                     <div className="mt-8 flex justify-center md:mt-12">
                         <Link
                             href="/cursos"
-                            className="group inline-flex items-center gap-2 rounded-full bg-black px-6 py-3 text-base font-bold text-white shadow-2xl border-2 border-white transition-all duration-500 hover:bg-brand-primary-dark hover:text-white hover:ring-[3px] hover:ring-brand-primary active:bg-brand-tertiary active:text-white active:ring-brand-secondary focus:outline-none focus:ring-4 focus:ring-brand-primary"
+                            className="group inline-flex items-center gap-2 rounded-full bg-brand-tertiary px-6 py-3 text-base font-bold text-white shadow-2xl  transition-all duration-500 hover:bg-brand-primary-dark hover:text-white hover:ring-[4px] hover:ring-brand-primary active:bg-brand-tertiary active:text-white active:ring-brand-secondary focus:outline-none focus:ring-4 focus:ring-brand-primary"
                         >
                             Ver Todos los Cursos
                             <svg
