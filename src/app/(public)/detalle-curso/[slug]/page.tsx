@@ -378,11 +378,11 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h3 className="text-xl font-semibold text-gray-900">
+                            <h3 className="text-xl font-semibold text-gray-900"> 
                               {name}
                             </h3>
                             {desc && (
-                              <p className="mt-2 text-gray-700 break-all overflow-wrap-anywhere">
+                              <p className="mt-2 text-gray-700  overflow-wrap-anywhere">
                                 {desc}
                               </p>
                             )}

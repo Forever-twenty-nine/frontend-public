@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+  const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev);
 
   const handleNavigation = (href: string) => {
     router.push(href);
@@ -94,6 +94,42 @@ const Navbar: React.FC = () => {
     );
   };
 
+  // Refs para detectar clic fuera del menú móvil y el botón toggle
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const toggleButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const handleClickOutside = (event: Event) => {
+      const target = event.target as Node;
+      // si el click/touch viene del botón toggle, no cerrar aquí (evita racy toggle)
+      if (toggleButtonRef.current && toggleButtonRef.current.contains(target)) return;
+      if (menuRef.current && !menuRef.current.contains(target)) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [mobileMenuOpen]);
+
+  // Desactivar scroll del body cuando el menú móvil está abierto
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [mobileMenuOpen]);
+
   return (
     <>
       {/* Mobile Navbar */}
@@ -111,18 +147,25 @@ const Navbar: React.FC = () => {
               />
             </div>
             {/* Logo para modo oscuro */}
-            <div style={{ position: 'relative', width: '160px', height: '32px' }} className="hidden">
-              <Image
-                src="/logo/cursala-negativo.svg"
-                alt="Logo Cursala"
-                fill
-                unoptimized
-              />
-            </div>
-          </Link>
+              <div style={{ position: 'relative', width: '160px', height: '32px' }} className="hidden">
+                <Image
+                  src="/logo/cursala-negativo.svg"
+                  alt="Logo Cursala"
+                  fill
+                  unoptimized
+                />
+              </div>
+            </Link>
           <button
+            ref={toggleButtonRef}
             onClick={toggleMobileMenu}
-            className="rounded-lg cursor-pointer p-2 text-brand-tertiary transition-colors hover:bg-brand-tertiary-lighten/20 :bg-gray-800"
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            className={
+              `rounded-lg cursor-pointer p-2 transition-colors hover:bg-brand-tertiary-lighten/20 :bg-gray-800 z-50 ${
+                mobileMenuOpen ? "text-brand-primary" : "text-brand-tertiary"
+              }`
+            }
             aria-label={mobileMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
             aria-expanded={mobileMenuOpen}
           >
@@ -160,7 +203,7 @@ const Navbar: React.FC = () => {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="border-t border-gray-200 bg-white ">
+          <div ref={menuRef} className="relative z-40 border-t border-gray-200 bg-white ">
             <div className="px-2 py-3">
               <Navigation isMobile={true} />
             </div>
