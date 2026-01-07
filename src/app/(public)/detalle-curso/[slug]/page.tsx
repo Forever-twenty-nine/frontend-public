@@ -56,7 +56,11 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
         if (foundCourse) {
           // Obtener los detalles completos del curso usando el ID completo
           const courseDetailResponse = await getCourseById(foundCourse._id);
-          const courseDetail = (courseDetailResponse as any)?.data || courseDetailResponse;
+          let courseDetail = (courseDetailResponse as any)?.data || courseDetailResponse;
+          // Normalizar caso donde el backend envía { courseData: { ... } }
+          if (courseDetail && (courseDetail as any).courseData) {
+            courseDetail = (courseDetail as any).courseData;
+          }
           setCourse(courseDetail);
 
           // Eliminada lógica de promociones (PromotionalTooltip)
@@ -83,15 +87,24 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
             for (let i = 0; i < courseDetail.teachers.length; i++) {
               const teacher = courseDetail.teachers[i];
               if (teacher?.profilePhotoUrl) {
-                try {
-                  const photoResponse = await getUserProfileImage(teacher.profilePhotoUrl);
-                  if (photoResponse?.data) {
-                    const objectURL = URL.createObjectURL(photoResponse.data);
-                    objectUrls.current.push(objectURL);
-                    newPhotoUrls[i] = objectURL;
+                const url = teacher.profilePhotoUrl;
+                if (typeof url === 'string' && (url.startsWith('http://') || url.startsWith('https://'))) {
+                  // URL pública en CDN: usar directamente
+                  newPhotoUrls[i] = url;
+                } else {
+                  // Caso legacy: pedir al backend y crear objectURL
+                  try {
+                    const photoResponse = await getUserProfileImage(url);
+                    if (photoResponse?.data) {
+                      const objectURL = URL.createObjectURL(photoResponse.data);
+                      objectUrls.current.push(objectURL);
+                      newPhotoUrls[i] = objectURL;
+                    } else {
+                      newPhotoUrls[i] = null;
+                    }
+                  } catch (error) {
+                    newPhotoUrls[i] = null;
                   }
-                } catch (error) {
-                  newPhotoUrls[i] = null;
                 }
               }
             }
@@ -325,100 +338,61 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
               {/* Información de los profesores */}
               {course.teachers && course.teachers.length > 0 && (
                 <div className="rounded-lg bg-white p-8 border border-solid border-brand-tertiary-lighten/40">
-                  <h2 className="mb-6 text-2xl font-bold text-gray-900">
+                  <h2 className="mb-8 text-2xl font-bold text-gray-900">
                     Profesores
                   </h2>
-                  <div className="space-y-6">
-                    {course.teachers.map((teacher: any, index: number) => (
-                      <div key={index} className="flex items-start gap-4">
-                        <div style={{ width: 80, height: 80, position: 'relative' }} className="flex items-center justify-center rounded-full bg-brand-primary overflow-hidden flex-shrink-0">
-                          {teacherPhotoUrls[index] ? (
-                            <Image
-                              src={teacherPhotoUrls[index] || ''}
-                              alt={teacher.firstName && teacher.lastName ? `${teacher.firstName} ${teacher.lastName}` : 'Profesor'}
-                              fill
-                              style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                              className="rounded-full"
-                            />
-                          ) : (
-                            <svg
-                              className="h-10 w-10 text-white"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  <div className="space-y-10">
+                    {course.teachers.map((teacher: any, index: number) => {
+                      const name = teacher?.firstName && teacher?.lastName
+                        ? `${teacher.firstName} ${teacher.lastName}`
+                        : teacher?.name || teacher?.fullName || `Profesor ${index + 1}`;
+
+                      const desc = teacher?.professionalDescription || teacher?.description || null;
+
+                      // Priorizar la URL directa del teacher sobre el estado procesado
+                      const photoSrc = teacher?.profilePhotoUrl || teacherPhotoUrls[index] || teacher?.photoUrl || '';
+
+                      return (
+                        <div key={index} className="flex items-start flex-col md:flex-row gap-4">
+                          <div className="flex items-center justify-center rounded-full bg-brand-primary overflow-hidden shrink-0 h-16 w-16">
+                            {photoSrc ? (
+                              <img
+                                alt={name}
+                                className="h-full w-full object-cover"
+                                src={photoSrc}
                               />
-                            </svg>
-                          )}
+                            ) : (
+                              <svg
+                                className="h-10 w-10 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                />
+                              </svg>
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="text-xl font-semibold text-gray-900">
+                              {name}
+                            </h3>
+                            {desc && (
+                              <p className="mt-2 text-gray-700 break-all overflow-wrap-anywhere">
+                                {desc}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                        <div className="flex-1">
-                          <h3 className="text-xl font-semibold text-gray-900">
-                            {teacher.firstName && teacher.lastName
-                              ? `${teacher.firstName} ${teacher.lastName}`
-                              : 'Nombre del profesor'}
-                          </h3>
-                          {teacher.professionalDescription && (
-                            <p className="mt-2 text-gray-700 text-justify">
-                              {teacher.professionalDescription}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}
-
-
-              {/* Mock estático Profesores  */}
-              <div className="rounded-lg bg-white p-8 border border-solid border-brand-tertiary-lighten/40">
-                <h2 className="mb-8 text-2xl font-bold text-gray-900">
-                  Profesores
-                </h2>
-                <div className="space-y-10">
-                  
-                  {/* Profesor 1 */}
-                  <div className="flex items-start flex-col md:flex-row gap-4">
-                    <div className="flex items-center justify-center rounded-full bg-brand-primary overflow-hidden flex-shrink-0">
-                      {/* Foto  */}
-                      <img alt="" className="rounded-full h-16 w-16" src="blob:https://www.cursala.com.ar/deb334ee-b077-4b8e-841c-89d65de36b7b" />
-                    </div>
-                    {/* Nombre y descripción */}
-                    <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-gray-900">
-                        Juan Pérez
-                      </h3>
-                      <p className="mt-2 text-gray-700 ">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque id, saepe quis quos eveniet esse corrupti possimus eum ex porro fugit sed praesentium sapiente veniam, ratione eius exercitationem minima non!
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Profesor 2 */}
-                  <div className="flex items-start flex-col md:flex-row gap-4">
-                    <div className="flex items-center justify-center rounded-full bg-brand-primary overflow-hidden flex-shrink-0">
-                      {/* Foto  */}
-                      <img alt="" className="rounded-full h-16 w-16" src="blob:https://www.cursala.com.ar/deb334ee-b077-4b8e-841c-89d65de36b7b" />
-                    </div>
-                    {/* Nombre y descripción */}
-                    <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-gray-900">
-                        Juan Pérez
-                      </h3>
-                      <p className="mt-2 text-gray-700">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque id, saepe quis quos eveniet esse corrupti possimus eum ex porro fugit sed praesentium sapiente veniam, ratione eius exercitationem minima non!
-                      </p>
-                    </div>
-                  </div>
-
-
-                </div>
-              </div>
 
 
             </div>
