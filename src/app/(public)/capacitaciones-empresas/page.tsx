@@ -19,16 +19,21 @@ const CompanyTrainingPage: React.FC = () => {
  handleSubmit,
  formState: { errors },
  reset,
- } = useForm<IIWANTOTRAIN>();
+ } = useForm<IIWANTOTRAIN & { countryCode?: string }>();
 
- const onSubmit: SubmitHandler<IIWANTOTRAIN> = async (data) => {
- setLoading(true);
-
- const formData = {
- ...data,
- phonePrefix: "54",
- phoneNumber: data.phoneNumber || "",
- };
+	const onSubmit: SubmitHandler<IIWANTOTRAIN & { countryCode?: string }> = async (data) => {
+		setLoading(true);
+        
+		const countryCodeRaw = data.countryCode ?? data.phonePrefix ?? "54";
+		const normalizedCountry = countryCodeRaw.startsWith('+')
+			? countryCodeRaw.slice(1).replace(/\D/g, '')
+			: String(countryCodeRaw).replace(/\D/g, '');
+		const normalizedPhone = data.phoneNumber ? data.phoneNumber.replace(/\D/g, '') : '';
+		const formData = {
+			...data,
+			phonePrefix: normalizedCountry,
+			phoneNumber: normalizedPhone,
+		};
 
  try {
  await requestACourse(formData);
@@ -209,15 +214,51 @@ const CompanyTrainingPage: React.FC = () => {
  <label htmlFor="phoneNumber" className="mb-1 block text-sm font-medium text-brand-tertiary ">
  Teléfono
  </label>
- <input
- type="tel"
- id="phoneNumber"
- {...register("phoneNumber")}
- placeholder="11 2345 6789"
- className="w-full rounded-lg border border-brand-tertiary bg-white px-4 py-2.5 text-brand-tertiary transition focus:border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-secondary "
- disabled={loading}
- />
- <p className="mt-1 text-xs text-brand-tertiary ">Opcional</p>
+	<div className="flex gap-2">
+		<input
+			type="text"
+			placeholder="+54"
+			inputMode="numeric"
+			pattern="\+?[0-9]*"
+			{...register("countryCode", {
+				required: "Requerido",
+				pattern: {
+					value: /^\+?[0-9]{1,4}$/, 
+					message: "Código inválido",
+				},
+			})}
+			className="w-20 rounded-lg border border-brand-tertiary bg-white px-4 py-2.5 text-center text-brand-tertiary transition focus:border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-secondary"
+			disabled={loading}
+			onInput={(e) => {
+				const v = e.currentTarget.value;
+				if (v.startsWith('+')) {
+					e.currentTarget.value = '+' + v.slice(1).replace(/\D/g, '');
+				} else {
+					e.currentTarget.value = v.replace(/\D/g, '');
+				}
+			}}
+		/>
+		<input
+			type="tel"
+			id="phoneNumber"
+			inputMode="numeric"
+			pattern="[0-9]*"
+			placeholder="11 2345 6789"
+			{...register("phoneNumber", {
+				validate: (v) => !v || v.replace(/\D/g, '').length >= 10 || "Debe tener al menos 10 dígitos",
+			})}
+			className="w-full rounded-lg border border-brand-tertiary bg-white px-4 py-2.5 text-brand-tertiary transition focus:border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-secondary"
+			disabled={loading}
+			onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/\D/g, ''); }}
+		/>
+	</div>
+	<p className="mt-1 text-xs text-brand-tertiary ">Opcional</p>
+	{errors.countryCode && (
+		<p className="mt-1 text-sm text-red-600 ">{errors.countryCode.message}</p>
+	)}
+	{errors.phoneNumber && (
+		<p className="mt-1 text-sm text-red-600 ">{errors.phoneNumber.message}</p>
+	)}
  </div>
 
  {/* Empresa */}

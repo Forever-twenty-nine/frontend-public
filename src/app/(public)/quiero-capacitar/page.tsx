@@ -18,16 +18,21 @@ const IWantToTrainPage: React.FC = () => {
  handleSubmit,
  formState: { errors },
  reset,
- } = useForm<IIWANTOTRAIN>();
+	} = useForm<IIWANTOTRAIN & { countryCode?: string }>();
 
- const onSubmit: SubmitHandler<IIWANTOTRAIN> = async (data) => {
+ const onSubmit: SubmitHandler<IIWANTOTRAIN & { countryCode?: string }> = async (data) => {
  setLoading(true);
- 
+
  // Preparar datos con valores por defecto para campos opcionales
+ const countryCodeRaw = data.countryCode ?? data.phonePrefix ?? "54";
+ const normalizedCountry = countryCodeRaw
+  	? (String(countryCodeRaw).startsWith('+') ? String(countryCodeRaw).slice(1).replace(/\D/g, '') : String(countryCodeRaw).replace(/\D/g, ''))
+  	: "54";
+ const normalizedPhone = data.phoneNumber ? data.phoneNumber.replace(/\D/g, '') : '';
  const formData = {
  ...data,
- phonePrefix: "54", // Argentina por defecto
- phoneNumber: data.phoneNumber || "",
+ phonePrefix: normalizedCountry, // solo dígitos
+ phoneNumber: normalizedPhone,
  };
 
  try {
@@ -66,7 +71,7 @@ const IWantToTrainPage: React.FC = () => {
  
  {/* Content Section */}
  <div className="mb-12 grid gap-8 lg:grid-cols-2 lg:gap-12">
- <div className="relative h-64 overflow-hidden rounded-lg shadow-xl md:h-80 lg:h-full min-h-[350px]">
+ <div className="relative h-64 overflow-hidden rounded-lg shadow-xl md:h-80 lg:h-full min-h-87.5">
  <Image
  src="/images/frontend/cursala-quiero-capacitar.jpg"
  alt="Únete como instructor"
@@ -149,15 +154,51 @@ const IWantToTrainPage: React.FC = () => {
  <label htmlFor="phoneNumber" className="mb-1 block text-sm font-medium text-gray-700 ">
  Teléfono
  </label>
+ <div className="flex gap-2">
+ <input
+ type="text"
+ placeholder="+54"
+ inputMode="numeric"
+ pattern="\+?[0-9]*"
+ {...register("countryCode", {
+ required: "Requerido",
+ pattern: {
+ value: /^\+?[0-9]{1,4}$/, 
+ message: "Código inválido",
+ },
+ })}
+ className="w-20 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-center text-gray-900 transition focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary :border-blue-400"
+ disabled={loading}
+ onInput={(e) => {
+ const v = e.currentTarget.value;
+ if (v.startsWith('+')) {
+ e.currentTarget.value = '+' + v.slice(1).replace(/\D/g, '');
+ } else {
+ e.currentTarget.value = v.replace(/\D/g, '');
+ }
+ }}
+ />
  <input
  type="tel"
  id="phoneNumber"
- {...register("phoneNumber")}
+ inputMode="numeric"
+ pattern="[0-9]*"
+ {...register("phoneNumber", {
+ validate: (v) => !v || v.replace(/\D/g, '').length >= 10 || "Debe tener al menos 10 dígitos",
+ })}
  placeholder="11 2345 6789"
  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 transition focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary :border-blue-400"
  disabled={loading}
+ onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/\D/g, ''); }}
  />
+ </div>
  <p className="mt-1 text-xs text-gray-500 ">Opcional - Formato: código de área + número</p>
+ {errors.countryCode && (
+ <p className="mt-1 text-sm text-red-600 ">{errors.countryCode.message}</p>
+ )}
+ {errors.phoneNumber && (
+ <p className="mt-1 text-sm text-red-600 ">{errors.phoneNumber.message}</p>
+ )}
  </div>
 
  {/* Empresa */}
