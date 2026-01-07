@@ -261,15 +261,20 @@ const CoursesPage: React.FC = () => {
  );
 
  // Manejo del envío del formulario
- const onSubmitCourseRequest: SubmitHandler<ICourseRequestForm> = async (data) => {
- setFormLoading(true);
+    const onSubmitCourseRequest: SubmitHandler<ICourseRequestForm> = async (data) => {
+        setFormLoading(true);
 
- const businessTrainingData: IBusinessTraining = {
- name: data.name,
- email: data.email,
- message: data.message,
- phoneNumber: `${data.countryCode}${data.phoneNumber}`,
- };
+        const normalizedCountry = data.countryCode?.startsWith('+')
+            ? data.countryCode
+            : `+${data.countryCode.replace(/\D/g, '')}`;
+        const normalizedPhone = data.phoneNumber.replace(/\D/g, '');
+
+        const businessTrainingData: IBusinessTraining = {
+            name: data.name.trim(),
+            email: data.email.trim(),
+            message: data.message.trim(),
+            phoneNumber: `${normalizedCountry}${normalizedPhone}`,
+        };
 
  try {
  await createBusinessTraining(businessTrainingData);
@@ -666,37 +671,43 @@ const CoursesPage: React.FC = () => {
  Teléfono
  </label>
  <div className="flex gap-2">
- <input
- type="text"
- placeholder="+54"
- {...register("countryCode", {
- required: "Requerido",
- pattern: {
- value: /^[0-9]{1,4}$/,
- message: "Código inválido",
- },
- })}
- className="w-20 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-center text-gray-900 transition focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary :border-blue-400"
- disabled={formLoading}
- />
- <input
- type="tel"
- id="phoneNumber"
- placeholder="11 2345 6789"
- {...register("phoneNumber", {
- required: "El teléfono es obligatorio",
- minLength: {
- value: 10,
- message: "Mínimo 10 dígitos",
- },
- pattern: {
- value: /^[0-9]{10,15}$/,
- message: "Solo números",
- },
- })}
- className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 transition focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary :border-blue-400"
- disabled={formLoading}
- />
+                                                <input
+                                                    type="text"
+                                                    placeholder="+54"
+                                                    inputMode="numeric"
+                                                    pattern="\+?[0-9]*"
+                                                    {...register("countryCode", {
+                                                        required: "Requerido",
+                                                        pattern: {
+                                                            value: /^\+?[0-9]{1,4}$/,
+                                                            message: "Código inválido",
+                                                        },
+                                                    })}
+                                                    className="w-20 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-center text-gray-900 transition focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary :border-blue-400"
+                                                    disabled={formLoading}
+                                                    onInput={(e) => {
+                                                        const v = e.currentTarget.value;
+                                                        if (v.startsWith('+')) {
+                                                            e.currentTarget.value = '+' + v.slice(1).replace(/\D/g, '');
+                                                        } else {
+                                                            e.currentTarget.value = v.replace(/\D/g, '');
+                                                        }
+                                                    }}
+                                                />
+                                                <input
+                                                    type="tel"
+                                                    id="phoneNumber"
+                                                    inputMode="numeric"
+                                                    pattern="[0-9]*"
+                                                    placeholder="11 2345 6789"
+                                                    {...register("phoneNumber", {
+                                                        required: "El teléfono es obligatorio",
+                                                        validate: (v) => v.replace(/\D/g, '').length >= 10 || "Mínimo 10 dígitos",
+                                                    })}
+                                                    className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 transition focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary :border-blue-400"
+                                                    disabled={formLoading}
+                                                    onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/\D/g, ''); }}
+                                                />
  </div>
  {(errors.countryCode || errors.phoneNumber) && (
  <p className="mt-1 text-sm text-red-600 ">
