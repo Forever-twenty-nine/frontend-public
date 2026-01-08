@@ -331,7 +331,7 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
                   Descripción del Curso
                 </h2>
                 <p className="whitespace-pre-line text-gray-700 leading-relaxed text-justify">
-                  {course.description}
+                  {course.longDescription || course.description}
                 </p>
               </div>
 

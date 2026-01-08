@@ -10,6 +10,9 @@ export interface Course {
     _id: string;
     name: string;
     imageUrl: string;
+    // Puede venir como número, string '0', o existir la bandera isFree
+    price?: number | string;
+    isFree?: boolean;
 }
 
 type PromotionsMap = Record<string, boolean>;
@@ -148,6 +151,27 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
                             </svg>
                         </div>
                     )}
+
+                    {/* Badge 'Gratis' si el curso es gratuito */}
+                    {(() => {
+                        const isFree =
+                            course.isFree === true ||
+                            course.price === 0 ||
+                            course.price === "0" ||
+                            (typeof course.price === "string" && course.price.toLowerCase() === "free");
+
+                        return (
+                            isFree && (
+                                <span
+                                    aria-label="Curso gratis"
+                                    className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold text-white shadow-md"
+                                    style={{ backgroundColor: "var(--color-brand-secondary)" }}
+                                >
+                                    Gratis
+                                </span>
+                            )
+                        );
+                    })()}
 
 
                     {/* Hover Overlay */}
