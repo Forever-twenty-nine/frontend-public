@@ -53,7 +53,7 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
         // Buscar el curso por el ID corto (últimos 8 caracteres del _id)
         const foundCourse = coursesData.find((c: any) => c._id.slice(-8) === courseId);
 
-        if (foundCourse) {
+          if (foundCourse) {
           // Obtener los detalles completos del curso usando el ID completo
           const courseDetailResponse = await getCourseById(foundCourse._id);
           let courseDetail = (courseDetailResponse as any)?.data || courseDetailResponse;
@@ -61,7 +61,8 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
           if (courseDetail && (courseDetail as any).courseData) {
             courseDetail = (courseDetail as any).courseData;
           }
-          setCourse(courseDetail);
+          const processedCourse = { ...courseDetail, hasPromotionalCode: courseDetail.hasPromotionalCode ?? false };
+          setCourse(processedCourse);
 
           // Eliminada lógica de promociones (PromotionalTooltip)
 
@@ -237,6 +238,12 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
 
   const statusInfo = getCourseStatus();
 
+  const isFree =
+    course?.isFree === true ||
+    course?.price === 0 ||
+    course?.price === "0" ||
+    (typeof course?.price === "string" && course.price.toLowerCase() === "free");
+
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
@@ -270,34 +277,44 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
             <div className="flex flex-col items-center gap-8 md:flex-row">
               {/* Imagen del curso */}
               <div className="w-full md:w-1/3">
-                {courseImageUrl ? (
-                  <div className="overflow-hidden rounded-xl">
-                    <Image
-                      src={courseImageUrl}
-                      alt={course.name}
-                      width={400}
-                      height={300}
-                      className="h-auto w-full object-cover"
-                      priority
-                    />
-                  </div>
-                ) : (
-                  <div className="flex aspect-video items-center justify-center rounded-lg bg-white/10">
-                    <svg
-                      className="h-16 w-16 text-white/50"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                <div className="relative">
+                  {courseImageUrl ? (
+                    <div className="overflow-hidden rounded-xl">
+                      <Image
+                        src={courseImageUrl}
+                        alt={course.name}
+                        width={400}
+                        height={300}
+                        className="h-auto w-full object-cover"
+                        priority
                       />
-                    </svg>
-                  </div>
-                )}
+                    </div>
+                  ) : (
+                    <div className="flex aspect-video items-center justify-center rounded-lg bg-white/10">
+                      <svg
+                        className="h-16 w-16 text-white/50"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </div>
+                  )}
+
+                  {course.hasPromotionalCode && (
+                    <div className={`absolute top-3 ${isFree ? 'right-3' : 'left-3'} z-20`}>
+                      <div className="bg-yellow-400 text-black px-3 py-1 rounded-md shadow-md text-xs font-semibold leading-tight max-w-30">
+                        <div className="whitespace-pre-line text-[11px]">CÓDIGO{`\n`}PROMOCIONAL</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Info del curso */}
@@ -305,7 +322,7 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
                 <h1 className="mb-4 text-3xl font-bold md:text-4xl text-brand-tertiary">
                   {course.name}
                 </h1>
-                <div className="mb-4 inline-block text-brand-tertiary">
+                <div className="mb-4 inline-block text-brand-tertiary items-center gap-3">
                   <span
                     className={`rounded-full px-4 py-2 text-sm font-semibold ${statusInfo.className}`}
                   >
@@ -382,7 +399,7 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
                               {name}
                             </h3>
                             {desc && (
-                              <p className="mt-2 text-gray-700  overflow-wrap-anywhere">
+                              <p className="mt-2 text-gray-700 ">
                                 {desc}
                               </p>
                             )}

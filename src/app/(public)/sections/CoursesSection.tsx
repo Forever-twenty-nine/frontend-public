@@ -13,6 +13,7 @@ export interface Course {
     // Puede venir como número, string '0', o existir la bandera isFree
     price?: number | string;
     isFree?: boolean;
+    hasPromotionalCode?: boolean;
 }
 
 type PromotionsMap = Record<string, boolean>;
@@ -68,7 +69,9 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
                 const loadedImages = await Promise.all(imagePromises);
 
                 if (isMounted) {
-                    setCourses(coursesData);
+                    // Mapear flag promocional si viene desde el backend
+                    const mapped = coursesData.map((c: any) => ({ ...c, hasPromotionalCode: c.hasPromotionalCode ?? false }));
+                    setCourses(mapped);
                     setImages(loadedImages);
                 }
             } catch (error) {
@@ -112,6 +115,13 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
     const CourseCard = ({ course, imageUrl, priority }: { course: Course; imageUrl: string; priority: boolean }) => {
         const slug = generateCourseSlug(course.name, course._id);
 
+        // Determinar si es gratis (reutilizado para posicionamiento de badges)
+        const isFree =
+            course.isFree === true ||
+            course.price === 0 ||
+            course.price === "0" ||
+            (typeof course.price === "string" && course.price.toLowerCase() === "free");
+
         return (
             <Link
                 href={`/detalle-curso/${slug}`}
@@ -136,42 +146,30 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
                         />
                     ) : (
                         <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-gray-200 to-gray-300 text-gray-500">
-                            <svg
-                                className="h-16 w-16"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={1.5}
-                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                />
-                            </svg>
+                            <div className="text-center">
+                                <div className="mb-2 text-sm font-medium text-gray-500">Imagen no disponible</div>
+                                <div className="h-10 w-10 rounded bg-gray-300" />
+                            </div>
                         </div>
                     )}
 
-                    {/* Badge 'Gratis' si el curso es gratuito */}
-                    {(() => {
-                        const isFree =
-                            course.isFree === true ||
-                            course.price === 0 ||
-                            course.price === "0" ||
-                            (typeof course.price === "string" && course.price.toLowerCase() === "free");
+                    {/* Promotional badge */}
+                        {course.hasPromotionalCode && ( 
+                            <span className={`absolute ${isFree ? 'right-3 top-3' : 'left-3 top-3'} inline-flex items-center gap-1 rounded-md bg-yellow-400 px-2 py-1 text-[11px] font-semibold text-black shadow-md max-w-27.5`}>
+                                <span className="leading-tight whitespace-pre-line">CÓDIGO{`\n`}PROMOCIONAL</span> 
+                            </span> 
+                        )}
 
-                        return (
-                            isFree && (
-                                <span
-                                    aria-label="Curso gratis"
-                                    className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold text-white shadow-md"
-                                    style={{ backgroundColor: "var(--color-brand-secondary)" }}
-                                >
-                                    Gratis
-                                </span>
-                            )
-                        );
-                    })()}
+                    {/* Badge 'Gratis' si el curso es gratuito */}
+                    {isFree && (
+                        <span
+                            aria-label="Curso gratis"
+                            className="absolute left-3 top-3 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold text-white shadow-md"
+                            style={{ backgroundColor: "var(--color-brand-secondary)" }}
+                        >
+                            Gratis
+                        </span>
+                    )}
 
 
                     {/* Hover Overlay */}
@@ -301,7 +299,7 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
                     <div className="mt-8 flex justify-center md:mt-12">
                         <Link
                             href="/cursos"
-                            className="group inline-flex items-center gap-2 rounded-full bg-brand-tertiary px-6 py-3 text-base font-bold text-white shadow-2xl  transition-all duration-500 hover:bg-brand-primary-dark hover:text-white hover:ring-[4px] hover:ring-brand-primary active:bg-brand-tertiary active:text-white active:ring-brand-secondary focus:outline-none focus:ring-4 focus:ring-brand-primary"
+                            className="group inline-flex items-center gap-2 rounded-full bg-brand-tertiary px-6 py-3 text-base font-bold text-white shadow-2xl  transition-all duration-500 hover:bg-brand-primary-dark hover:text-white hover:ring-4 hover:ring-brand-primary active:bg-brand-tertiary active:text-white active:ring-brand-secondary focus:outline-none focus:ring-4 focus:ring-brand-primary"
                         >
                             Ver Todos los Cursos
                             <svg

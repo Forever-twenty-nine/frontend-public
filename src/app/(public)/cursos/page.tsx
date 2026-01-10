@@ -51,9 +51,10 @@ export interface Course {
  professionalDescription?: string | null;
  profilePhotoUrl?: string | null;
  };
+ hasPromotionalCode?: boolean;
 }
 
-type PromotionsMap = Record<string, boolean>;
+// PromotionsMap removed: `hasPromotionalCode` now viene en la respuesta del API
 
 const getCourseStatus = (course: Course) => {
  // Verificar si tenemos fechas válidas
@@ -127,9 +128,9 @@ const getCourseStatus = (course: Course) => {
 };
 
 const CourseCard: React.FC<{
- course: Course & { hasPromotion?: boolean };
- onClick: () => void;
- onRetryImage?: () => void;
+    course: Course;
+    onClick: () => void;
+    onRetryImage?: () => void;
 }> = ({ course, onClick, onRetryImage }) => {
  const statusInfo = getCourseStatus(course);
  return (
@@ -138,9 +139,22 @@ const CourseCard: React.FC<{
  onClick={onClick}
  >
  <div
- className="relative h-48 w-full overflow-hidden"
- data-course-id={course._id}
- >
+        className="relative h-48 w-full overflow-hidden"
+        data-course-id={course._id}
+    >
+        {course.hasPromotionalCode && (
+            <div className="absolute top-0 left-0 z-10 overflow-visible">
+                <svg viewBox="0 0 120 120" className="h-20 w-20 text-yellow-400" aria-hidden>
+                    <polygon points="0,0 120,0 0,120" className="fill-current" />
+                    <g transform="rotate(-45 44 44)">
+                        <text x="44" y="36" fill="#000" fontWeight="800" fontSize="16" textAnchor="middle" style={{letterSpacing:0.2}}>
+                            <tspan x="44" dy="0">CÓDIGO</tspan>
+                            <tspan x="44" dy="16">PROMOCIONAL</tspan>
+                        </text>
+                    </g>
+                </svg>
+            </div>
+        )}
  {course.coverUrl && course.coverUrl !== "error" ? (
  <Image
  src={course.coverUrl}
@@ -233,7 +247,7 @@ const CourseCard: React.FC<{
 const CoursesPage: React.FC = () => {
  const router = useRouter();
  const [courses, setCourses] = useState<Course[]>([]);
- const [promotionsMap, setPromotionsMap] = useState<PromotionsMap>({});
+ // eliminada variable promotionsMap; el flag promocional viene con cada curso
  const [loading, setLoading] = useState(true);
  const [error, setError] = useState<string | null>(null);
  const [searchQuery, setSearchQuery] = useState("");
@@ -385,18 +399,14 @@ const CoursesPage: React.FC = () => {
  classCount: course.classCount || 0,
  loading: false,
  coverUrl: undefined,
+ hasPromotionalCode: course.hasPromotionalCode ?? false,
  }));
 
  const ids = coursesData
  .map((c: any) => c?._id || c?.id)
  .filter(Boolean);
-                // Fetch promotional data (with error handling)
-                let promos: Record<string, boolean> = {};
-                // Eliminada lógica de promociones (PromotionalTooltip)
-
- if (isMounted) {
- setPromotionsMap(promos || {});
- setCourses(coursesWithoutImages);
+                                if (isMounted) {
+                                    setCourses(coursesWithoutImages);
  setError(null);
  setLoading(false);
 
@@ -584,21 +594,18 @@ const CoursesPage: React.FC = () => {
  </div>
  ) : (
  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
- {filteredCourses.map((course) => (
- <CourseCard
- key={course._id}
- course={{
- ...course,
- hasPromotion: Boolean(promotionsMap[course._id]),
- }}
- onClick={() => {
- // Redirigir a la página de detalle público del curso usando slug
- const slug = generateCourseSlug(course.name, course._id);
- router.push(`/detalle-curso/${slug}`);
- }}
- onRetryImage={() => handleRetryImage(course._id)}
- />
- ))}
+                                {filteredCourses.map((course) => (
+                                    <CourseCard
+                                        key={course._id}
+                                        course={course}
+                                        onClick={() => {
+                                            // Redirigir a la página de detalle público del curso usando slug
+                                            const slug = generateCourseSlug(course.name, course._id);
+                                            router.push(`/detalle-curso/${slug}`);
+                                        }}
+                                        onRetryImage={() => handleRetryImage(course._id)}
+                                    />
+                                ))}
  </div>
  )}
  </div>
