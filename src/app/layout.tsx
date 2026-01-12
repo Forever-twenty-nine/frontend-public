@@ -7,12 +7,12 @@ import RootLayoutClient from "@/components/RootLayoutClient";
 // Función para generar CSP condicional
 const getCSP = () => {
   const baseCSP = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://static.cloudflareinsights.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://cloudflareinsights.com https://cloudflareinsights.com/cdn-cgi/rum";
-  
-  if (process.env.NODE_ENV === 'development') {
-    return `${baseCSP} http://localhost:8080 https://cursala.com.ar https://cursala.b-cdn.net https://vz-19135c35-e7f.b-cdn.net https://www.googletagmanager.com https://analytics.google.com https://stats.g.doubleclick.net https://www.facebook.com; frame-src 'self';`;
-  }
-  
-  return `${baseCSP} https://cursala.com.ar https://cursala.b-cdn.net https://vz-19135c35-e7f.b-cdn.net https://www.googletagmanager.com https://analytics.google.com https://stats.g.doubleclick.net https://www.facebook.com; frame-src 'self';`;
+
+  // Permitir hosts adicionales para `connect-src` configurados vía variable de entorno
+  // Ejemplo: NEXT_PUBLIC_CSP_CONNECT_SRC="http://localhost:8080 https://api.example.com"
+  const extraConnect = process.env.NEXT_PUBLIC_CSP_CONNECT_SRC ? ` ${process.env.NEXT_PUBLIC_CSP_CONNECT_SRC}` : '';
+
+  return `${baseCSP}${extraConnect}; frame-src 'self';`;
 };
 
 // Metadata global por defecto

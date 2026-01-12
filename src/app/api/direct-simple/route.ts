@@ -13,9 +13,12 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Construir la URL del backend
-    // Este route handler corre en el servidor de Next.js
-    const backendUrl = process.env.NEXT_PUBLIC_URL_BACK || "http://localhost:8080/api/v1";
+    // Construir la URL del backend (debe ser inyectada por Docker Compose)
+    const backendUrl = process.env.NEXT_PUBLIC_URL_BACK;
+    if (!backendUrl) {
+      console.error('NEXT_PUBLIC_URL_BACK no configurada en el entorno');
+      return NextResponse.json({ error: 'Backend URL no configurada' }, { status: 500 });
+    }
     const targetUrl = `${backendUrl}${path}`;
 
     // Preparar headers básicos

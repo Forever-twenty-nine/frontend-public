@@ -4,12 +4,15 @@
 
 export const conf = {
   // URL del backend público para operaciones generales
-  urlBack: typeof window === 'undefined' 
-    ? process.env.NEXT_PUBLIC_URL_BACK 
-    : (window as any).__ENV?.NEXT_PUBLIC_URL_BACK || process.env.NEXT_PUBLIC_URL_BACK || 'https://cursala.com.ar/api/v1',
+  // Se espera que `NEXT_PUBLIC_URL_BACK` sea inyectada por Docker Compose
+  // No hacer fallback hardcodeado: dejar en string vacío si no está presente
+  urlBack: typeof window === 'undefined'
+    ? process.env.NEXT_PUBLIC_URL_BACK || ''
+    : (window as any).__ENV?.NEXT_PUBLIC_URL_BACK || process.env.NEXT_PUBLIC_URL_BACK || '',
 
   // URL del frontend privado (para redirecciones a login/register)
+  // Se espera que `NEXT_PUBLIC_FRONTEND_PRIVATE_URL` sea inyectada por Docker Compose
   frontendPrivateUrl: typeof window === 'undefined'
-    ? process.env.NEXT_PUBLIC_FRONTEND_PRIVATE_URL
-    : (window as any).__ENV?.NEXT_PUBLIC_FRONTEND_PRIVATE_URL || process.env.NEXT_PUBLIC_FRONTEND_PRIVATE_URL || 'https://app.cursala.com.ar',
+    ? process.env.NEXT_PUBLIC_FRONTEND_PRIVATE_URL || ''
+    : (window as any).__ENV?.NEXT_PUBLIC_FRONTEND_PRIVATE_URL || process.env.NEXT_PUBLIC_FRONTEND_PRIVATE_URL || '',
 };

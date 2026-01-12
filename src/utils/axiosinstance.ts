@@ -1,9 +1,11 @@
 import axios from "axios";
 
 // Usar la URL base configurable via env (Next.js: NEXT_PUBLIC_API_BASE_URL)
-// Fallback a http://localhost:8080 para desarrollo local
+// Por defecto usar ruta relativa (same-origin) para que nginx pueda proxyear
+// En desarrollo se puede configurar `NEXT_PUBLIC_API_BASE_URL=http://localhost:8080`
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080",
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL ?? "",
+  withCredentials: true, // permitir envío/recepción de cookies cross-site cuando corresponda
 });
 
 // NOTA: Este axios instance NO agrega automáticamente tokens de autenticación
