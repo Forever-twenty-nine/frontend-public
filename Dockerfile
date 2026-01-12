@@ -24,8 +24,8 @@ FROM base AS builder
 COPY --from=deps-dev /app/node_modules ./node_modules
 
 # Build-time variables (opcionales, se pueden sobrescribir en runtime con docker-compose)
-ARG NEXT_PUBLIC_URL_BACK=""
-ARG NEXT_PUBLIC_FRONTEND_PRIVATE_URL=""
+ARG NEXT_PUBLIC_URL_BACK="https://cursala.com.ar/api/v1"
+ARG NEXT_PUBLIC_FRONTEND_PRIVATE_URL="https://app.cursala.com.ar"
 ARG NEXT_TELEMETRY_DISABLED=1
 
 # Convertir ARGs a ENVs para que Next.js las pueda leer durante el build
