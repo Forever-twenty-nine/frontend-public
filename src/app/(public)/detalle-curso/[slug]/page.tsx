@@ -188,10 +188,12 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
   const formatDate = (dateString: string) => {
     if (!dateString) return "N/D";
     const date = new Date(dateString);
+    // Usar UTC para evitar problemas con zona horaria
     return date.toLocaleDateString("es-ES", {
       day: "numeric",
       month: "long",
       year: "numeric",
+      timeZone: "UTC",
     });
   };
 
@@ -244,6 +246,8 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
     course?.price === 0 ||
     course?.price === "0" ||
     (typeof course?.price === "string" && course.price.toLowerCase() === "free");
+
+  const isWorkshop = course?.isWorkshop === true;
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -346,7 +350,7 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
               {/* Descripción completa */}
               <div className="mb-8 rounded-lg bg-white p-8 border border-solid border-brand-tertiary-lighten/40">
                 <h2 className="mb-4 text-2xl font-bold text-gray-900 ">
-                  Descripción del Curso
+                  Descripción del {isWorkshop ? "Workshop" : "Curso"}
                 </h2>
                 <p className="whitespace-pre-line text-gray-700 leading-relaxed text-justify">
                   {course.longDescription || course.description}
@@ -421,7 +425,7 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
               <div className="sticky top-4 rounded-lg bg-linear-to-bl from-brand-tertiary-light to-brand-tertiary p-8 border border-solid border-brand-tertiary-lighten/40">
 
                 <h3 className="mb-4 text-xl font-bold text-white">
-                  Detalles del Curso
+                  Detalles del {isWorkshop ? "Workshop" : "Curso"}
                 </h3>
 
                 <div className="space-y-4">
