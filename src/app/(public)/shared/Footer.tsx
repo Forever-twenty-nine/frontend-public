@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { getCoursesOnHome } from "@/services";
+import { getCoursesOnHome } from "@/services/course.service";
 import { generateCourseSlug } from "@/utils/slugify";
 
 // Lista dinámica de cursos para el Footer

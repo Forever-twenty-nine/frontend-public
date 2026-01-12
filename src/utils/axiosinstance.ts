@@ -1,6 +1,10 @@
 import axios from "axios";
 
-const api = axios.create();
+// Usar la URL base configurable via env (Next.js: NEXT_PUBLIC_API_BASE_URL)
+// Fallback a http://localhost:8080 para desarrollo local
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080",
+});
 
 // NOTA: Este axios instance NO agrega automáticamente tokens de autenticación
 // Los servicios que requieran autenticación deben manejarla explícitamente

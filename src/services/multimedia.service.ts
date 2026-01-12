@@ -47,104 +47,20 @@ export const getImages = async (
   }
 };
 
-export const getStreamVideo = async (
-  videoFileName: string,
-  range: string,
-): Promise<Response> => {
-  const encodedFileName = encodeURIComponent(videoFileName);
-  const directUrl = `/api/direct?path=/file/${encodedFileName}/video`;
-
-  // Verificar si hay token de autenticación disponible
-  const token = localStorage.getItem("token");
-  if (!token) {
-    throw new Error("Se requiere autenticación para acceder a este contenido");
-  }
-
-  try {
-    const response = await fetch(directUrl, {
-      method: "GET",
-      headers: {
-        Accept: "video/*",
-        Authorization: `Bearer ${token}`,
-        Range: range,
-      },
-    });
-
-    if (![200, 206].includes(response.status)) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return response;
-  } catch (error) {
-    console.error("Error obteniendo video desde direct:", error);
-    throw error;
-  }
-};
-
-export const getSupportMaterial = async (
-  supportMaterial: string,
-): Promise<AxiosResponse<Blob>> => {
-  const encodedFileName = encodeURIComponent(supportMaterial);
-
-  // Verificar si hay token de autenticación disponible
-  const token = localStorage.getItem("token");
-  if (!token) {
-    throw new Error("Se requiere autenticación para descargar este material");
-  }
-
-  const directUrl = `/api/direct?path=/file/${encodedFileName}/download&auth=${encodeURIComponent(token)}`;
-
-  try {
-    const resp = await axios.get(directUrl, {
-      headers: {
-        Accept: "*/*",
-        "Content-Disposition": "attachment",
-      },
-      responseType: "blob",
-    });
-
-    if (![200, 201].includes(resp.status)) {
-      throw new Error(`HTTP error! status: ${resp.status}`);
-    }
-
-    return resp;
-  } catch (error) {
-    console.error("Error obteniendo material de soporte desde direct:", error);
-    throw error;
-  }
-};
 
 export const getPublicFile = async (
   fileName: string,
 ): Promise<AxiosResponse<Blob>> => {
-  // Si ya es una URL completa (de Bunny CDN), usarla directamente
+  // Soportar principalmente URLs completas hacia Bunny CDN; si no es URL, construir ruta CDN
+  let bunnyUrl: string;
   if (fileName.startsWith('http://') || fileName.startsWith('https://')) {
-    try {
-      const resp = await axios.get(fileName, {
-        headers: {
-          Accept: "*/*",
-          "Content-Disposition": "attachment",
-        },
-        responseType: "blob",
-      });
-
-      if (![200, 201].includes(resp.status)) {
-        throw new Error(`HTTP error! status: ${resp.status}`);
-      }
-
-      return resp;
-    } catch (error) {
-      console.error("Error obteniendo archivo público desde Bunny CDN:", error);
-      throw error;
-    }
+    bunnyUrl = fileName;
+  } else {
+    bunnyUrl = `${BUNNY_STORAGE_CDN}/${fileName}`;
   }
 
-  // Si es un nombre de archivo legacy, usar el endpoint /api/direct
-  const encodedFileName = encodeURIComponent(fileName);
-  const directUrl = `/api/direct?path=/file/${encodedFileName}/publicdownload`;
-
   try {
-    const resp = await axios.get(directUrl, {
+    const resp = await axios.get(bunnyUrl, {
       headers: {
         Accept: "*/*",
         "Content-Disposition": "attachment",
@@ -158,7 +74,7 @@ export const getPublicFile = async (
 
     return resp;
   } catch (error) {
-    console.error("Error obteniendo archivo público desde direct:", error);
+    console.error("Error obteniendo archivo público desde Bunny CDN:", error);
     throw error;
   }
 };
@@ -228,7 +144,6 @@ export const getUserProfileImage = async (
   if (resp) {
     return resp;
   }
-
   // Si el nombre original no tiene el prefijo "profile-", intentar agregándolo
   if (!imageFileName.startsWith('profile-')) {
     const withPrefix = `profile-${imageFileName}`;
@@ -236,30 +151,6 @@ export const getUserProfileImage = async (
     if (resp) {
       return resp;
     }
-  }
-
-  // Si ambos intentos fallan, intentar desde el backend como fallback
-  try {
-    // Normalizar el nombre para intentar desde el backend
-    let backendFileName = imageFileName;
-    if (!backendFileName.startsWith('profile-')) {
-      backendFileName = `profile-${backendFileName}`;
-    }
-    
-    const backendUrl = `/api/direct?path=/file/profile-images/${encodeURIComponent(backendFileName)}/publicdownload`;
-    const backendResp = await axios.get(backendUrl, {
-      headers: {
-        Accept: "image/jpeg, image/png",
-      },
-      responseType: "blob",
-      validateStatus: (status) => status === 200 || status === 201,
-    });
-
-    if ([200, 201].includes(backendResp.status)) {
-      return backendResp;
-    }
-  } catch (backendError) {
-    // Continuar con placeholder
   }
 
   // Si todo falla, usar placeholder

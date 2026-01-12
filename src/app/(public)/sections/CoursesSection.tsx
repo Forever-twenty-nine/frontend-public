@@ -3,7 +3,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getCoursesOnHome, getImages } from "@/services";
+import { getCoursesOnHome } from "@/services/course.service";
+import { getImages } from "@/services/multimedia.service";
 import { generateCourseSlug } from "@/utils/slugify";
 
 export interface Course {

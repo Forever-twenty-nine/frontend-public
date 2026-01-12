@@ -11,7 +11,6 @@ export interface IFAQ {
   updatedAt?: string;
 }
 
-// Legacy interfaces for backward compatibility (if needed)
 export interface IFaqItem {
   id: string;
   question: string;
@@ -26,57 +25,37 @@ export interface IFaqResponse {
 }
 
 /**
- * Get all FAQs
- * @param activeOnly Whether to retrieve only active FAQs
- * @returns Promise with FAQs array
+ * Cache para las preguntas frecuentes
  */
-export const getAllFAQs = async (activeOnly: boolean = false) => {
-  const response = await api.get(`/api/fetch?path=/faqs?activeOnly=${activeOnly}`);
-  return response.data;
-};
+let cachedFaqItems: IFaqItem[] | null = null;
+
 
 /**
- * Get FAQs by category
- * @param category FAQ category
- * @param activeOnly Whether to retrieve only active FAQs
- * @returns Promise with FAQs array
+ * Obtiene todas las preguntas frecuentes.
+ * @returns Promesa con el array de preguntas frecuentes
  */
-export const getFAQsByCategory = async (category: string, activeOnly: boolean = false) => {
-  const response = await api.get(`/api/fetch?path=/faqs/category/${encodeURIComponent(category)}?activeOnly=${activeOnly}`);
-  return response.data;
-};
-
-/**
- * Get FAQ by ID
- * @param id FAQ ID
- * @returns Promise with FAQ object
- */
-export const getFAQById = async (id: string) => {
-  const response = await api.get(`/api/fetch?path=/faqs/${id}`);
-  return response.data;
-};
-
-/**
- * Get all unique categories
- * @returns Promise with categories array
- */
-export const getFAQCategories = async () => {
-  const response = await api.get('/api/fetch?path=/faqs/categories');
-  return response.data;
-};
-
-// Legacy functions for backward compatibility
 export const getFaqItems = async (): Promise<IFaqResponse> => {
+  // Devuelve cache si existe
+  if (cachedFaqItems) {
+    return {
+      success: true,
+      data: cachedFaqItems,
+      message: 'Preguntas frecuentes (cache)'
+    };
+  }
+
   try {
-    const response = await getAllFAQs(true); // Get only active FAQs
+    const response = await getAllFAQs();
     const data = response.data || [];
-    
+
     const convertedData: IFaqItem[] = data.map((faq: IFAQ) => ({
       id: faq._id || '',
       question: faq.question,
       answer: faq.answer,
       category: faq.category
     }));
+
+    cachedFaqItems = convertedData;
 
     return {
       success: true,
@@ -92,59 +71,16 @@ export const getFaqItems = async (): Promise<IFaqResponse> => {
   }
 };
 
-export const getFaqByCategory = async (category: string): Promise<IFaqResponse> => {
-  try {
-    const response = await getFAQsByCategory(category, true);
-    const data = response.data || [];
-    
-    const convertedData: IFaqItem[] = data.map((faq: IFAQ) => ({
-      id: faq._id || '',
-      question: faq.question,
-      answer: faq.answer,
-      category: faq.category
-    }));
 
-    return {
-      success: true,
-      data: convertedData,
-      message: response.message || `Preguntas frecuentes de la categoría "${category}" obtenidas exitosamente`
-    };
-  } catch (error) {
-    return {
-      success: false,
-      data: [],
-      message: `Error al obtener las preguntas frecuentes de la categoría "${category}"`
-    };
-  }
+/**
+ * Constante que obtiene todas las preguntas frecuentes desde la API.
+ */
+const getAllFAQs = async () => {
+  const response = await api.get(`/api/v1/faqs`);
+  return response.data;
 };
 
-export const searchFaq = async (query: string): Promise<IFaqResponse> => {
-  try {
-    const response = await getAllFAQs(true);
-    const allFaqs = response.data || [];
-    
-    const filteredData = allFaqs.filter((faq: IFAQ) =>
-      faq.question.toLowerCase().includes(query.toLowerCase()) ||
-      faq.answer.toLowerCase().includes(query.toLowerCase())
-    );
-
-    const convertedData: IFaqItem[] = filteredData.map((faq: IFAQ) => ({
-      id: faq._id || '',
-      question: faq.question,
-      answer: faq.answer,
-      category: faq.category
-    }));
-
-    return {
-      success: true,
-      data: convertedData,
-      message: `Búsqueda de FAQ completada para: "${query}"`
-    };
-  } catch (error) {
-    return {
-      success: false,
-      data: [],
-      message: `Error en la búsqueda de FAQ para: "${query}"`
-    };
-  }
+export const clearFaqCache = () => {
+  cachedFaqItems = null;
 };
+

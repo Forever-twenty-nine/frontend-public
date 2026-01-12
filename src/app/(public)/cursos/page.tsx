@@ -7,8 +7,9 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import Navbar from "@/app/(public)/shared/Navbar";
 import Footer from "@/app/(public)/shared/Footer";
 import HeroSection from "@/app/(public)/sections/HeroSection";
-import { getPublishedCourses, getImages } from "@/services";
-import { createBusinessTraining, IBusinessTraining } from "@/services";
+import { getPublishedCourses } from "@/services/course.service";
+import { getImages } from "@/services/multimedia.service";
+import { createBusinessTraining, IBusinessTraining } from "@/services/formPublicServices";
 import { generateCourseSlug } from "@/utils/slugify";
 import { triggerNotification, showSuccess, showError } from "@/utils/swal";
 
