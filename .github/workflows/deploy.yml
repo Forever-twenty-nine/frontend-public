@@ -42,3 +42,4 @@ jobs:
             NEXT_PUBLIC_URL_BACK=https://cursala.com.ar/api/v1
             NEXT_PUBLIC_FRONTEND_PRIVATE_URL=https://app.cursala.com.ar
             NEXT_TELEMETRY_DISABLED=1
+            NEXT_PUBLIC_CSP_CONNECT_SRC=https://cursala.com.ar https://cursala.b-cdn.net https://vz-19135c35-e7f.b-cdn.net https://www.googletagmanager.com https://analytics.google.com https://stats.g.doubleclick.net https://www.facebook.com

@@ -22,5 +22,8 @@
   ],
   "tailwindCSS.validate": true,
   "tailwindCSS.showPixelEquivalents": true,
-  "tailwindCSS.emmetCompletions": true
+  "tailwindCSS.emmetCompletions": true,
+  "chat.tools.terminal.autoApprove": {
+    "short": true
+  }
 }
