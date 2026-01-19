@@ -167,22 +167,22 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
         .toUpperCase();
       return {
         label: `INSCRIPCIÓN ${month}`,
-        className: "bg-gray-600 text-white",
+        className: "bg-gray-600 text-white hover:ring-[3px]  hover:ring-brand-tertiary transition-all duration-500",
       };
     }
 
     if (currentDate >= registrationOpenDate) {
       if (currentDate >= courseStartDate) {
-        return { label: "EN CURSO", className: "bg-brand-primary text-white" };
+        return { label: "EN CURSO", className: "bg-brand-primary text-white hover:ring-[3px]  hover:ring-brand-primary-dark transition-all duration-500 " };
       } else {
         return {
           label: "INSCRIPCIÓN ABIERTA",
-          className: "bg-brand-secondary text-brand-tertiary",
+          className: "bg-brand-secondary text-brand-tertiary hover:ring-[3px]  hover:ring-[#c29604] transition-all duration-500",
         };
       }
     }
 
-    return { label: "PRÓXIMAMENTE", className: "bg-brand-tertiary text-white" };
+    return { label: "PRÓXIMAMENTE", className: "bg-brand-tertiary text-white hover:ring-[3px]  hover:ring-black transition-all duration-500" };
   };
 
   const formatDate = (dateString: string) => {
