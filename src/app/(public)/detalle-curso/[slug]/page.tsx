@@ -328,11 +328,11 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
                   {course.name}
                 </h1>
                 <div className="mb-4 inline-block text-brand-tertiary items-center gap-3">
-                  <span
+                  <a href="#tobutton"
                     className={`rounded-full px-4 py-2 text-sm font-semibold ${statusInfo.className}`}
                   >
                     {statusInfo.label}
-                  </span>
+                  </a>
                 </div>
                 <p className="mb-6 mt-4 text-lg leading-relaxed text-brand-tertiary text-justify">
                   {course.description}
@@ -343,10 +343,10 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
         </section>
 
         {/* Contenido principal */}
-        <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 py-12 pt-0 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             {/* Columna principal */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 pt-20 lg:pt-20">
               {/* Descripción completa */}
               <div className="mb-8 rounded-lg bg-white p-8 border border-solid border-brand-tertiary-lighten/40">
                 <h2 className="mb-4 text-2xl font-bold text-gray-900 ">
@@ -420,9 +420,9 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
             </div>
 
             {/* Sidebar */}
-            <div className="lg:col-span-1">
+            <div id="tobutton" className="lg:col-span-1 pt-20 lg:pt-20">
               {/* Card de detalles */}
-              <div className="sticky top-4 rounded-lg bg-linear-to-bl from-brand-tertiary-light to-brand-tertiary p-8 border border-solid border-brand-tertiary-lighten/40">
+              <div  className="sticky top-4 rounded-lg bg-linear-to-bl from-brand-tertiary-light to-brand-tertiary p-8 border border-solid border-brand-tertiary-lighten/40">
 
                 <h3 className="mb-4 text-xl font-bold text-white">
                   Detalles del {isWorkshop ? "Workshop" : "Curso"}
@@ -581,6 +581,7 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
 
                 {/* Botón de inscripción */}
                 <button
+                  
                   onClick={() => window.location.href = `${conf.frontendPrivateUrl}/login`}
                   className="mt-6 w-full rounded-full cursor-pointer text-brand-tertiary px-6 py-3 font-semibold transition-all duration-500 bg-brand-secondary hover:ring-[3px] hover:ring-[#dcab07] hover:bg-brand-secondary active:bg-brand-tertiary active:text-white"
                 >
@@ -592,10 +593,10 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
                   <div className="mt-6">
                     <button
                       onClick={handleDownloadProgram}
-                      className="active:bg-brand-tertiary active:text-white active:ring-[#f2f2f2] bg-[#dad6d6] cursor-pointer duration-500 flex font-semibold gap-1 hover:bg-brand-primary-dark hover:border-brand-primary hover:ring-[#8f8f8f] transition-all hover:ring-[3px] items-center justify-center mt-6 px-6 py-3 rounded-full text-brand-tertiary  w-full"
+                      className="active:bg-brand-tertiary active:text-white active:ring-[#f2f2f2] bg-[#dad6d6] cursor-pointer duration-500 flex font-semibold gap-1 hover:bg-brand-primary-dark hover:border-brand-primary hover:ring-[#8f8f8f] transition-all hover:ring-[3px] hover:text-white items-center justify-center mt-6 px-6 py-3 rounded-full text-brand-tertiary  w-full"
                     >
                       <svg
-                        className="h-5 w-5"
+                        className="h-5 w-5 pt-1"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
