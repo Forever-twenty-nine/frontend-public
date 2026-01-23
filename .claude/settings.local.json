@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(dir /s /b \"c:\\\\repositorios\\\\cursala\\\\cursala-public\\\\frontend-public\\\\src\\\\types\")",
-      "Bash(dir /s /b \"c:\\\\repositorios\\\\cursala\\\\cursala-public\\\\frontend-public\\\\src\\\\models\")"
-    ]
-  }
-}
