@@ -582,7 +582,7 @@ const CourseDetailPage: React.FC<CourseDetailProps> = ({ params }) => {
                 {/* Botón de inscripción */}
                 <button
                   
-                  onClick={() => window.location.href = `${conf.frontendPrivateUrl}/login`}
+                  onClick={() => window.location.href = `${conf.frontendPrivateUrl}/register?courseId=${course._id}`}
                   className="mt-6 w-full rounded-full cursor-pointer text-brand-tertiary px-6 py-3 font-semibold transition-all duration-500 bg-brand-secondary hover:ring-[3px] hover:ring-[#dcab07] hover:bg-brand-secondary active:bg-brand-tertiary active:text-white"
                 >
                   Inscribirme
