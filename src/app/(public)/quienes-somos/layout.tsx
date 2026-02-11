@@ -7,7 +7,7 @@ export const metadata: Metadata = {
  openGraph: {
  title: "Quiénes Somos - Capacitación Profesional | Cursala",
  description: "Equipo interdisciplinario dedicado a capacitar con enfoque práctico. Brindamos herramientas concretas para mejorar el desempeño laboral.",
- url: "https://cursala.com/quienes-somos",
+ url: "https://cursala.com.ar/quienes-somos",
  type: "website",
  images: [
  {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
  images: ["/images/companyTraining.png"],
  },
  alternates: {
- canonical: "https://cursala.com/quienes-somos",
+ canonical: "https://cursala.com.ar/quienes-somos",
  },
 };
 

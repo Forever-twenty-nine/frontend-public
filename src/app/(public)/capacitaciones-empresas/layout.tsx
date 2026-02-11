@@ -7,7 +7,7 @@ export const metadata: Metadata = {
  openGraph: {
  title: "Capacitaciones para Empresas - Formación a Medida | Cursala",
  description: "Capacitaciones corporativas diseñadas a medida para empresas del sector industrial. Formación práctica y personalizada.",
- url: "https://cursala.com/capacitaciones-empresas",
+ url: "https://cursala.com.ar/capacitaciones-empresas",
  type: "website",
  images: [
  {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
  images: ["/images/companyTraining.png"],
  },
  alternates: {
- canonical: "https://cursala.com/capacitaciones-empresas",
+ canonical: "https://cursala.com.ar/capacitaciones-empresas",
  },
 };
 

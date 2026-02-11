@@ -7,7 +7,7 @@ export const metadata: Metadata = {
  openGraph: {
  title: "Política de Privacidad | Cursala",
  description: "Política de privacidad de Cursala. Conoce cómo protegemos tu información personal.",
- url: "https://cursala.com/politica-privacidad",
+ url: "https://cursala.com.ar/politica-privacidad",
  type: "website",
  },
  twitter: {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
  description: "Política de privacidad de Cursala",
  },
  alternates: {
- canonical: "https://cursala.com/politica-privacidad",
+ canonical: "https://cursala.com.ar/politica-privacidad",
  },
  robots: {
  index: true,

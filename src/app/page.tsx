@@ -36,7 +36,7 @@ function HomePageInternal() {
   useEffect(() => {
     const shouldRedirect = searchParams.get('register') === 'true';
     if (shouldRedirect) {
-      router.push('/registrarse');
+      router.push('/register');
     }
   }, [searchParams, router]);
 

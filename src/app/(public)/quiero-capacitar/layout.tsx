@@ -7,7 +7,7 @@ export const metadata: Metadata = {
  openGraph: {
  title: "Quiero Capacitar - Sé Instructor en Cursala",
  description: "¿Eres profesional y quieres compartir tu conocimiento? Únete a Cursala como instructor y ofrece tus cursos.",
- url: "https://cursala.com/quiero-capacitar",
+ url: "https://cursala.com.ar/quiero-capacitar",
  type: "website",
  images: [
  {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
  images: ["/logo-cursala.png"],
  },
  alternates: {
- canonical: "https://cursala.com/quiero-capacitar",
+ canonical: "https://cursala.com.ar/quiero-capacitar",
  },
 };
 

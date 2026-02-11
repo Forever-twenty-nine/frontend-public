@@ -7,7 +7,7 @@ export const metadata: Metadata = {
  openGraph: {
  title: "Términos y Condiciones de Servicio | Cursala",
  description: "Términos y condiciones de uso de la plataforma Cursala.",
- url: "https://cursala.com/terminos-servicio",
+ url: "https://cursala.com.ar/terminos-servicio",
  type: "website",
  },
  twitter: {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
  description: "Términos y condiciones de uso de la plataforma Cursala",
  },
  alternates: {
- canonical: "https://cursala.com/terminos-servicio",
+ canonical: "https://cursala.com.ar/terminos-servicio",
  },
  robots: {
  index: true,

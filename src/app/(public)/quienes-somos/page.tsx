@@ -16,7 +16,7 @@ const AboutPage: React.FC = () => {
  subtitle="Capacitación profesional con enfoque práctico"
  description="Forma parte de una comunidad educativa que potencia el aprendizaje."
  buttonText="Registrarte"
- buttonHref="/registrarse"
+ buttonHref="/register"
  backgroundImage=""
  />
 

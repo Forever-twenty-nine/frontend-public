@@ -17,7 +17,7 @@ const getCSP = () => {
 
 // Metadata global por defecto
 export const metadata: Metadata = {
-  metadataBase: new URL('https://cursala.com'),
+  metadataBase: new URL('https://cursala.com.ar'),
   title: {
     default: 'Cursala - Plataforma de Cursos Online',
     template: '%s | Cursala'
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'es_ES',
-    url: 'https://cursala.com',
+    url: 'https://cursala.com.ar',
     siteName: 'Cursala',
     title: 'Cursala - Plataforma de Cursos Online',
     description: 'Aprende nuevas habilidades con nuestros cursos especializados',
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     apple: '/logo-cursala.png',
   },
   alternates: {
-    canonical: 'https://cursala.com',
+    canonical: 'https://cursala.com.ar',
   },
 };
 

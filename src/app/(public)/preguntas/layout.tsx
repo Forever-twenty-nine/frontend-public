@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: "Preguntas Frecuentes - FAQ | Cursala",
         description: "Encuentra respuestas a las preguntas más frecuentes sobre nuestros cursos, inscripciones, modalidades de pago y certificaciones.",
-        url: "https://cursala.com/preguntas",
+        url: "https://cursala.com.ar/preguntas",
         type: "website",
         images: [
             {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         images: ["/logo-cursala.png"],
     },
     alternates: {
-        canonical: "https://cursala.com/preguntas",
+        canonical: "https://cursala.com.ar/preguntas",
     },
 };
 

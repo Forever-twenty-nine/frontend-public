@@ -7,7 +7,7 @@ export const metadata: Metadata = {
  openGraph: {
  title: "Cursos Online - Capacitaciones Profesionales | Cursala",
  description: "Explora nuestra amplia variedad de cursos online especializados. Formación profesional con certificación y modalidades flexibles.",
- url: "https://cursala.com/cursos",
+ url: "https://cursala.com.ar/cursos",
  type: "website",
  images: [
  {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
  images: ["/logo-cursala.png"],
  },
  alternates: {
- canonical: "https://cursala.com/cursos",
+ canonical: "https://cursala.com.ar/cursos",
  },
 };
 

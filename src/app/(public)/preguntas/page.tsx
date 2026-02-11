@@ -133,7 +133,7 @@ const AllFAQsPage: React.FC = () => {
                 subtitle="Encuentra respuestas a tus dudas"
                 description="Explora nuestra plataforma y accede a los cursos disponibles."
                 buttonText="Comenzar ahora"
-                buttonHref="#registrarse"
+                buttonHref="/register"
                 backgroundImage="/images/sections/hero/preguntas.jpg"
             />
             <main className="grow bg-white ">

@@ -135,19 +135,19 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
               </h2>
               <ul>
                 <li className="mb-2">
-                  <a href="/capacitaciones-empresas" className="hover:text-brand-primary active:text-brand-secondary">Capacitaciones para Empresas</a>
+                  <Link href="/capacitaciones-empresas" className="hover:text-brand-primary active:text-brand-secondary">Capacitaciones para Empresas</Link>
                 </li>
                 <li className="mb-2">
-                  <a href="/quiero-capacitar" className="hover:text-brand-primary active:text-brand-secondary">Quiero Capacitar</a>
+                  <Link href="/quiero-capacitar" className="hover:text-brand-primary active:text-brand-secondary">Quiero Capacitar</Link>
                 </li>
                 <li className="mb-2">
-                  <a href="/registrarse" className="hover:text-brand-primary active:text-brand-secondary">Quiero Formarme</a>
+                  <Link href="/register" className="hover:text-brand-primary active:text-brand-secondary">Quiero Formarme</Link>
                 </li>
                 <li className="mb-2">
-                  <a href="/preguntas" className="hover:text-brand-primary active:text-brand-secondary">Preguntas Frecuentes</a>
+                  <Link href="/preguntas" className="hover:text-brand-primary active:text-brand-secondary">Preguntas Frecuentes</Link>
                 </li>
                 <li className="mb-2">
-                  <a href="/quienes-somos" className="hover:text-brand-primary active:text-brand-secondary">Sobre Nosotros</a>
+                  <Link href="/quienes-somos" className="hover:text-brand-primary active:text-brand-secondary">Sobre Nosotros</Link>
                 </li>
               </ul>
             </div>
@@ -159,10 +159,10 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
               </h2>
               <ul>
                 <li className="mb-2">
-                  <a href="/politica-privacidad" className="hover:text-brand-primary active:text-brand-secondary">Políticas de privacidad</a>
+                  <Link href="/politica-privacidad" className="hover:text-brand-primary active:text-brand-secondary">Políticas de privacidad</Link>
                 </li>
                 <li className="mb-2">
-                  <a href="/terminos-servicio" className="hover:text-brand-primary active:text-brand-secondary">Términos y Condiciones</a>
+                  <Link href="/terminos-servicio" className="hover:text-brand-primary active:text-brand-secondary">Términos y Condiciones</Link>
                 </li>
               </ul>
             </div>
