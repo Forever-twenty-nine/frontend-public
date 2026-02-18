@@ -45,8 +45,8 @@ const CourseDetailClient: React.FC<CourseDetailClientProps> = ({ params }) => {
       try {
         setLoading(true);
         setNotFound(false);
-        // Aumentamos el size para asegurar que encontramos el curso
-        const response = await getPublishedCourses(1, 1000);
+        // El backend restringe el tamaño máximo a 100
+        const response = await getPublishedCourses(1, 100);
         const raw = Array.isArray((response as any)?.data)
           ? (response as any).data
           : (response as any)?.data?.items || [];

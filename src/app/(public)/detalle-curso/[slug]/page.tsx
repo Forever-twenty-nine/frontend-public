@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
   const apiUrl = baseUrl.startsWith('http') ? baseUrl : `https://cursala.com.ar${baseUrl}`;
 
   try {
-    // Intentar buscar el curso. Usamos fetch directo para evitar problemas de instancia en el servidor
-    const response = await fetch(`${apiUrl}/api/v1/courses/public?page=1&size=1000`, { 
+    // El backend restringe el tamaño máximo a 100
+    const response = await fetch(`${apiUrl}/api/v1/courses/public?page=1&size=100`, { 
       next: { revalidate: 3600 } 
     });
     
