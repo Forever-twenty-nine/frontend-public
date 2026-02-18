@@ -53,12 +53,16 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
       return {
         title: `${title} | Cursala`,
         description,
+        alternates: {
+          canonical: `https://cursala.com.ar/detalle-curso/${slug}`,
+        },
         openGraph: {
           title: `${title} | Cursala`,
           description,
           type: 'website',
           url: `https://cursala.com.ar/detalle-curso/${slug}`,
           siteName: 'Cursala',
+          locale: 'es_AR',
           images: [
             {
               url: imageUrl,
@@ -73,6 +77,11 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
           title: `${title} | Cursala`,
           description,
           images: [imageUrl],
+        },
+        other: {
+          'image': imageUrl,
+          'medium': 'multimedia',
+          'url': `https://cursala.com.ar/detalle-curso/${slug}`,
         },
       };
     }
