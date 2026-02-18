@@ -48,10 +48,12 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
         } else {
           imageUrl = `${BUNNY_STORAGE_CDN}/course-images/${encodeURIComponent(foundCourse.imageUrl)}`;
         }
+        // Añadir un timestamp para evitar cache de plataformas
+        imageUrl += `?v=${new Date().getTime()}`;
       }
 
       return {
-        title: `${title} | Cursala`,
+        title: title, // Removido "| Cursala" porque el template de layout.tsx lo agrega
         description,
         alternates: {
           canonical: `https://cursala.com.ar/detalle-curso/${slug}`,
