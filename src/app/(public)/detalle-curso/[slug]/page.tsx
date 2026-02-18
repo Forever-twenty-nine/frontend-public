@@ -20,9 +20,9 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
   const apiUrl = baseUrl.startsWith('http') ? baseUrl : `https://cursala.com.ar${baseUrl}`;
 
   try {
-    // El backend restringe el tamaño máximo a 100
+    // Reducimos el revalidate a 0 para que los cambios se vean al instante mientras testeas
     const response = await fetch(`${apiUrl}/api/v1/courses/public?page=1&size=100`, { 
-      next: { revalidate: 3600 } 
+      next: { revalidate: 0 } 
     });
     
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
