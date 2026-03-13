@@ -2,59 +2,49 @@
 
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { createBusinessTraining } from "@/services/formPublicServices";
-import { triggerNotification } from "@/utils/swal";
+import { createBusinessTraining, IBusinessTraining } from "@/services/formPublicServices";
+import { showSuccess, showError } from "@/utils/swal";
 
 interface ICourseRequestForm {
-	name: string;
-	email: string;
-	phoneNumber: string;
-	countryCode: string;
-	message: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  countryCode: string;
+  message: string;
 }
 
 export const CourseRequestForm: React.FC = () => {
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-		reset,
-	} = useForm<ICourseRequestForm>();
-	const [formLoading, setFormLoading] = React.useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ICourseRequestForm>();
+  const [formLoading, setFormLoading] = React.useState(false);
 
-	const onSubmit: SubmitHandler<ICourseRequestForm> = async (data) => {
-		setFormLoading(true);
+  const onSubmit: SubmitHandler<ICourseRequestForm> = async (data) => {
+    setFormLoading(true);
 
-		// Preparar datos para el servicio
-		const normalizedCountry = data.countryCode?.startsWith('+')
-			? data.countryCode
-			: `+${data.countryCode.replace(/\D/g, '')}`;
-		const normalizedPhone = data.phoneNumber.replace(/\D/g, '');
+    const businessTrainingData: IBusinessTraining = {
+      name: data.name,
+      email: data.email,
+      message: data.message,
+      phoneNumber: `${data.countryCode}${data.phoneNumber}`,
+    };
 
-		const formData = {
-			name: data.name.trim(),
-			email: data.email.trim(),
-			phoneNumber: `${normalizedCountry}${normalizedPhone}`,
-			message: data.message.trim(),
-		};
-
-		try {
-			await createBusinessTraining(formData);
-			triggerNotification(
-				"¡Solicitud enviada exitosamente! Nos pondremos en contacto pronto.",
-				"success",
-				undefined,
-			);
-			reset();
-		} catch (error) {
-			const errorMessage =
-				(error as any)?.response?.data?.message ||
-				"Error al enviar la solicitud. Por favor, intenta nuevamente.";
-			triggerNotification(errorMessage, "error", undefined);
-		} finally {
-			setFormLoading(false);
-		}
-	};
+    try {
+      await createBusinessTraining(businessTrainingData);
+      showSuccess("¡Solicitud enviada correctamente! Nos comunicaremos contigo pronto.");
+      reset();
+    } catch (error) {
+      const errorMessage =
+        (error as any)?.response?.data?.message ||
+        "Error al enviar la solicitud. Por favor, intenta nuevamente.";
+      showError(errorMessage);
+    } finally {
+      setFormLoading(false);
+    }
+  };
 
 	return (
 		<div className="rounded-lg bg-white p-6 shadow-2xl shadow-brand-primary-dark/40 md:p-8">
