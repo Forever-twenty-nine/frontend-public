@@ -2,33 +2,49 @@
 
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { createBusinessTraining, IBusinessTraining } from "@/services/formPublicServices";
+import { showSuccess, showError } from "@/utils/swal";
 
 interface ICourseRequestForm {
- name: string;
- email: string;
- phoneNumber: string;
- countryCode: string;
- message: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  countryCode: string;
+  message: string;
 }
 
 export const CourseRequestForm: React.FC = () => {
- const {
- register,
- handleSubmit,
- formState: { errors },
- reset,
- } = useForm<ICourseRequestForm>();
- const [formLoading, setFormLoading] = React.useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ICourseRequestForm>();
+  const [formLoading, setFormLoading] = React.useState(false);
 
- const onSubmit: SubmitHandler<ICourseRequestForm> = async (data) => {
- setFormLoading(true);
- // Aquí deberías enviar los datos a tu backend o servicio
- setTimeout(() => {
- setFormLoading(false);
- reset();
- alert("¡Solicitud enviada!");
- }, 1000);
- };
+  const onSubmit: SubmitHandler<ICourseRequestForm> = async (data) => {
+    setFormLoading(true);
+
+    const businessTrainingData: IBusinessTraining = {
+      name: data.name,
+      email: data.email,
+      message: data.message,
+      phoneNumber: `${data.countryCode}${data.phoneNumber}`,
+    };
+
+    try {
+      await createBusinessTraining(businessTrainingData);
+      showSuccess("¡Solicitud enviada correctamente! Nos comunicaremos contigo pronto.");
+      reset();
+    } catch (error) {
+      const errorMessage =
+        (error as any)?.response?.data?.message ||
+        "Error al enviar la solicitud. Por favor, intenta nuevamente.";
+      showError(errorMessage);
+    } finally {
+      setFormLoading(false);
+    }
+  };
 
  return (
  <div className="rounded-lg bg-white p-6 shadow-2xl shadow-brand-primary-dark/40 md:p-8">
