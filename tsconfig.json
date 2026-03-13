@@ -36,6 +36,21 @@
       ],
       "@videos/*": [
         "./videos/*"
+      ],
+      "@models/*": [
+        "./src/lib/models/*"
+      ],
+      "@repositories/*": [
+        "./src/lib/repositories/*"
+      ],
+      "@services/*": [
+        "./src/lib/services/*"
+      ],
+      "@utils/*": [
+        "./src/lib/utils/*"
+      ],
+      "@dto/*": [
+        "./src/lib/dto/*"
       ]
     },
     "target": "ES2017"

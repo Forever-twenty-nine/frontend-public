@@ -23,16 +23,19 @@ FROM base AS builder
 # Copy all deps from deps-dev stage for building
 COPY --from=deps-dev /app/node_modules ./node_modules
 
-# Build-time variables (opcionales, se pueden sobrescribir en runtime con docker-compose)
-ARG NEXT_PUBLIC_URL_BACK="https://cursala.com.ar/api/v1"
+ARG NEXT_PUBLIC_API_BASE_URL="/api"
+ARG NEXT_PUBLIC_FRONTEND_URL="https://cursala.com.ar"
 ARG NEXT_PUBLIC_FRONTEND_PRIVATE_URL="https://app.cursala.com.ar"
+ARG MONGODB_URI="mongodb+srv://cursala:cursala@cursaladb.cg6qkei.mongodb.net/cursala?appName=cursaladb"
 ARG NEXT_TELEMETRY_DISABLED=1
 ARG NEXT_PUBLIC_CSP_CONNECT_SRC="https://cursala.com.ar https://cursala.b-cdn.net https://vz-19135c35-e7f.b-cdn.net https://www.googletagmanager.com https://analytics.google.com https://stats.g.doubleclick.net https://www.facebook.com"
 
 
 # Convertir ARGs a ENVs para que Next.js las pueda leer durante el build
-ENV NEXT_PUBLIC_URL_BACK=$NEXT_PUBLIC_URL_BACK
+ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
+ENV NEXT_PUBLIC_FRONTEND_URL=$NEXT_PUBLIC_FRONTEND_URL
 ENV NEXT_PUBLIC_FRONTEND_PRIVATE_URL=$NEXT_PUBLIC_FRONTEND_PRIVATE_URL
+ENV MONGODB_URI=$MONGODB_URI
 ENV NEXT_TELEMETRY_DISABLED=$NEXT_TELEMETRY_DISABLED
 ENV NEXT_PUBLIC_CSP_CONNECT_SRC=$NEXT_PUBLIC_CSP_CONNECT_SRC
 

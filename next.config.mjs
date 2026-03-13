@@ -15,8 +15,6 @@ const nextConfig = {
   // Optimización para reducir legacy JavaScript
   experimental: {
     optimizePackageImports: ['jsvectormap', 'flatpickr'],
-    legacyBrowsers: false,
-    browsersListForSwc: true,
   },
 
   // Configuración de imágenes
@@ -36,6 +34,15 @@ const nextConfig = {
   // Configuración de headers para caché optimizada
   async headers() {
     return [
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: "connect-src 'self' https://cursala.b-cdn.net",
+          },
+        ],
+      },
       {
         source: '/logo/:path*',
         headers: [

@@ -1,0 +1,14 @@
+import courseRepository from "./course.repository";
+import IWantToTrainRepository from "./iwanttotrain.repository";
+import RequestACourseRepository from "./requestACourse.repository";
+import BusinessTrainingRepository from "./businessTraining.repository";
+import FAQRepository from "./faq.repository";
+import CompanySpecificDataRepository from "./companySpecificData.repository";
+
+export { courseRepository };
+export const iWantToTrainRepository = new IWantToTrainRepository();
+export const requestACourseRepository = new RequestACourseRepository();
+// BusinessTrainingRepository has no constructor; instantiate without args
+export const businessTrainingRepository = new BusinessTrainingRepository();
+export const faqRepository = new FAQRepository();
+export const companySpecificDataRepository = new CompanySpecificDataRepository();
