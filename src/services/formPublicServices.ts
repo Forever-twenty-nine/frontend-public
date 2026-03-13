@@ -3,13 +3,13 @@ import { IIWANTOTRAIN } from "@/types";
 
 export const createIWantToTrain = async (data: IIWANTOTRAIN): Promise<void> => {
   try {
-    const resp = await api.post(`/api/fetch?path=/iwanttotrain/createIWantToTrain`, data, {
+    const resp = await api.post(`/iwanttotrain/createIWantToTrain`, data, {
       headers: {
         "Content-Type": "application/json",
       },
     });
 
-    if (resp.status !== 200) {
+    if (resp.status !== 200 && resp.status !== 201) {
       throw new Error(`HTTP error! status: ${resp.status}`);
     }
   } catch (error) {
@@ -20,13 +20,13 @@ export const createIWantToTrain = async (data: IIWANTOTRAIN): Promise<void> => {
 
 export const requestACourse = async (data: IIWANTOTRAIN): Promise<void> => {
   try {
-    const resp = await api.post(`/api/fetch?path=/requestACourse/createRequestACourse`, data, {
+    const resp = await api.post(`/requestACourse/createRequestACourse`, data, {
       headers: {
         "Content-Type": "application/json",
       },
     });
 
-    if (resp.status !== 200) {
+    if (resp.status !== 200 && resp.status !== 201) {
       throw new Error(`HTTP error! status: ${resp.status}`);
     }
   } catch (error) {
@@ -46,7 +46,7 @@ export const createBusinessTraining = async (
 ): Promise<void> => {
   try {
     const resp = await api.post(
-      `/api/fetch?path=/businessTraining/createBusinessTraining`,
+      `/businessTraining/createBusinessTraining`,
       data,
       {
         headers: {
@@ -55,7 +55,7 @@ export const createBusinessTraining = async (
       },
     );
 
-    if (resp.status !== 200) {
+    if (resp.status !== 200 && resp.status !== 201) {
       throw new Error(`HTTP error! status: ${resp.status}`);
     }
   } catch (error) {

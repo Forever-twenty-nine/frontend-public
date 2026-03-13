@@ -76,7 +76,7 @@ export const getFaqItems = async (): Promise<IFaqResponse> => {
  * Constante que obtiene todas las preguntas frecuentes desde la API.
  */
 const getAllFAQs = async () => {
-  const response = await api.get(`/api/v1/faqs`);
+  const response = await api.get(`/faqs`);
   return response.data;
 };
 

@@ -19,7 +19,7 @@ export const getPublishedCourses = async (
       });
     }
 
-    const resp = await api.get(`/api/v1/courses/public`, {
+    const resp = await api.get(`/courses/public`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -43,7 +43,7 @@ export const getPublishedCourses = async (
  */
 export const getCourseById = async (id: string) => {
   try {
-    const resp = await api.get(`/api/v1/courses/public/${id}`, {
+    const resp = await api.get(`/courses/public/${id}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -66,7 +66,7 @@ export const getCourseById = async (id: string) => {
  */
 export const getCoursesOnHome = async () => {
   try {
-    const resp = await api.get(`/api/v1/courses/home`, {
+    const resp = await api.get(`/courses/home`, {
       headers: {
         "Content-Type": "application/json",
       },
