@@ -50,30 +50,32 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
     const course = await courseLibService.findOnePublic(String(foundCourse._id));
 
     if (course) {
-      const title = course.name;
-      const description = course.description?.replace(/<[^>]*>?/gm, '').slice(0, 160) || 'Aprende nuevas habilidades con nuestros cursos especializados en Cursala.';
+      const fullTitle = `${course.name} | Cursos Online en Cursala`;
+      const description = course.description?.replace(/<[^>]*>?/gm, '').slice(0, 160) || 'Mejora tus habilidades profesionales con nuestros cursos certificados en Cursala. Aprende a tu ritmo con expertos del sector.';
       
       const BUNNY_STORAGE_CDN = "https://cursala.b-cdn.net";
       let imageUrl = DEFAULT_OG_IMAGE;
 
       if (course?.imageUrl) {
-        if (course.imageUrl.startsWith('http')) {
-          imageUrl = course.imageUrl;
+        const cleanImagePath = String(course.imageUrl).trim();
+        if (cleanImagePath.startsWith('http')) {
+          imageUrl = cleanImagePath;
         } else {
-          imageUrl = `${BUNNY_STORAGE_CDN}/course-images/${encodeURIComponent(course.imageUrl)}`;
+          imageUrl = `${BUNNY_STORAGE_CDN}/course-images/${encodeURIComponent(cleanImagePath)}`;
         }
       }
 
-      const pageUrl = `https://cursala.com.ar/detalle-curso/${slug}`;
+      const siteUrl = "https://cursala.com.ar";
+      const pageUrl = `${siteUrl}/detalle-curso/${slug}`;
 
       return {
-        title: title,
+        title: fullTitle,
         description,
         alternates: {
           canonical: pageUrl,
         },
         openGraph: {
-          title: `${title} | Cursala`,
+          title: fullTitle,
           description,
           type: 'website',
           url: pageUrl,
@@ -84,24 +86,18 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
               url: imageUrl,
               width: 1200,
               height: 630,
-              alt: title,
-              type: 'image/jpeg',
+              alt: `Curso de ${course.name} en Cursala`,
             },
           ],
         },
         twitter: {
           card: 'summary_large_image',
-          title: `${title} | Cursala`,
+          title: fullTitle,
           description,
           images: [imageUrl],
         },
-        facebook: {
-          appId: 'your-fb-app-id-here', // Opcional pero recomendado para evitar advertencias
-        },
         other: {
-          'image': imageUrl,
-          'itemprop:image': imageUrl,
-          'fb:app_id': 'your-fb-app-id-here', // ID de aplicación de Facebook para analíticas
+          'fb:app_id': 'your-fb-app-id-here', 
         },
       };
     }
