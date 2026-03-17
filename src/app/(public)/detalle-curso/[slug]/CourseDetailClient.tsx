@@ -56,7 +56,7 @@ const CourseDetailClient: React.FC<CourseDetailClientProps> = ({ params }) => {
         const foundCourse = coursesData.find((c: any) => c._id.slice(-8) === courseId);
 
           if (foundCourse) {
-          // Obtener los detalles completos del curso usando el ID completo
+          // Obtener los detalles completos del curso usando el ID COMPLETO (original _id)
           const courseDetailResponse = await getCourseById(foundCourse._id);
           let courseDetail = (courseDetailResponse as any)?.data || courseDetailResponse;
           // Normalizar caso donde el backend envía { courseData: { ... } }
@@ -66,18 +66,12 @@ const CourseDetailClient: React.FC<CourseDetailClientProps> = ({ params }) => {
           const processedCourse = { ...courseDetail, hasPromotionalCode: courseDetail.hasPromotionalCode ?? false };
           setCourse(processedCourse);
 
-          // Cargar imagen del curso
+          // Cargar imagen del curso (Directamente desde CDN para evitar problemas de CORS/Blob)
           if (courseDetail.imageUrl) {
-            try {
-              const imgResponse = await getImages(courseDetail.imageUrl);
-              if (imgResponse?.data) {
-                const objectURL = URL.createObjectURL(imgResponse.data);
-                objectUrls.current.push(objectURL);
-                setCourseImageUrl(objectURL);
-              }
-            } catch (error) {
-              setCourseImageUrl(null);
-            }
+            const finalImageUrl = courseDetail.imageUrl.startsWith("http")
+              ? courseDetail.imageUrl
+              : `https://cursala.b-cdn.net/course-images/${courseDetail.imageUrl}`;
+            setCourseImageUrl(finalImageUrl);
           }
 
           // Cargar fotos de todos los profesores
@@ -273,13 +267,13 @@ const CourseDetailClient: React.FC<CourseDetailClientProps> = ({ params }) => {
                 <div className="relative">
                   {courseImageUrl ? (
                     <div className="overflow-hidden rounded-xl">
-                      <Image
+                      <img
                         src={courseImageUrl}
                         alt={course.name}
-                        width={400}
-                        height={300}
                         className="h-auto w-full object-cover"
-                        priority
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "/images/placeholder.couse.png";
+                        }}
                       />
                     </div>
                   ) : (
