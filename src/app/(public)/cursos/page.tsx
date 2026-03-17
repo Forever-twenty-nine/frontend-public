@@ -131,9 +131,16 @@ const getCourseStatus = (course: Course) => {
 const CourseCard: React.FC<{
     course: Course;
     onClick: () => void;
-    onRetryImage?: () => void;
-}> = ({ course, onClick, onRetryImage }) => {
+}> = ({ course, onClick }) => {
  const statusInfo = getCourseStatus(course);
+ 
+ // Construir URL de la imagen (mismo patrón que en Home / CoursesSection)
+ const imageUrl = course.imageUrl?.startsWith("http") 
+     ? course.imageUrl 
+     : course.imageUrl 
+         ? `https://cursala.b-cdn.net/course-images/${course.imageUrl}`
+         : "/images/placeholder.couse.png";
+
  return (
  <div
  className="group flex transform cursor-pointer flex-col overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-xl "
@@ -141,7 +148,6 @@ const CourseCard: React.FC<{
  >
  <div
         className="relative h-48 w-full overflow-hidden"
-        data-course-id={course._id}
     >
         {course.hasPromotionalCode && (
             <div className="absolute top-0 left-0 z-10 overflow-visible">
@@ -156,63 +162,15 @@ const CourseCard: React.FC<{
                 </svg>
             </div>
         )}
- {course.coverUrl && course.coverUrl !== "error" ? (
- <Image
- src={course.coverUrl}
- alt={course.name}
- fill
- className="object-cover transition-transform duration-300 group-hover:scale-110"
- loading="lazy"
- />
- ) : (
- <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-gray-100 to-gray-200">
- {course.loading ? (
- <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-tertiary-lighten border-t-brand-primary"></div>
- ) : course.coverUrl === "error" ? (
- <div className="flex flex-col items-center space-y-2">
- <svg
- className="h-12 w-12 text-brand-tertiary"
- fill="none"
- stroke="currentColor"
- viewBox="0 0 24 24"
- >
- <path
- strokeLinecap="round"
- strokeLinejoin="round"
- strokeWidth={2}
- d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
- />
- </svg>
- <button
- onClick={(e) => {
- e.stopPropagation();
- onRetryImage?.();
- }}
- className="text-xs text-brand-primary underline"
- >
- Reintentar
- </button>
- </div>
- ) : (
- <div className="text-center">
- <svg
- className="mx-auto h-12 w-12 text-brand-tertiary"
- fill="none"
- stroke="currentColor"
- viewBox="0 0 24 24"
- >
- <path
- strokeLinecap="round"
- strokeLinejoin="round"
- strokeWidth={2}
- d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
- />
- </svg>
- <p className="mt-2 text-xs text-gray-500">Cargando...</p>
- </div>
- )}
- </div>
- )}
+        <img
+            src={imageUrl}
+            alt={course.name}
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+            loading="lazy"
+            onError={(e) => {
+                (e.target as HTMLImageElement).src = "/images/placeholder.couse.png";
+            }}
+        />
  <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-3">
  <span className={`inline-block -ml-3 px-3 py-1 text-xs font-semibold ${statusInfo.className}`}>
  {statusInfo.label}
@@ -256,7 +214,7 @@ const CoursesPage: React.FC = () => {
  const [formLoading, setFormLoading] = useState(false);
 
  const objectUrls = useRef<string[]>([]);
- const observerRef = useRef<IntersectionObserver | null>(null);
+ // observerRef y efectos de scroll eliminados porque ahora usamos carga directa por URL
 
  // Formulario de solicitud de curso
  const {
@@ -305,74 +263,6 @@ const CoursesPage: React.FC = () => {
  }
  };
 
- const loadCourseImage = useCallback(
- async (course: Course, retryCount = 0) => {
- if (course.coverUrl || course.loading) return null;
- const maxRetries = 2;
- try {
- updateCourseProperty(course._id, { loading: true });
- const response = await getImages(course.imageUrl);
- if (response?.data) {
- const objectURL = URL.createObjectURL(response.data);
- objectUrls.current.push(objectURL);
- updateCourseProperty(course._id, {
- coverUrl: objectURL,
- loading: false,
- });
- } else {
- throw new Error("No image data received");
- }
- } catch (error) {
- if (retryCount < maxRetries) {
- setTimeout(
- () => {
- updateCourseProperty(course._id, { loading: false });
- loadCourseImage(course, retryCount + 1);
- },
- 1000 * (retryCount + 1),
- );
- } else {
- // Imagen no disponible después de reintentos
- updateCourseProperty(course._id, {
- loading: false,
- coverUrl: "error",
- });
- }
- }
- },
- [updateCourseProperty],
- );
-
- useEffect(() => {
- if (!loading && courses.length > 0) {
- if (observerRef.current) observerRef.current.disconnect();
- observerRef.current = new IntersectionObserver(
- (entries) => {
- entries.forEach((entry) => {
- if (entry.isIntersecting) {
- const courseId = entry.target.getAttribute("data-course-id");
- if (courseId) {
- const course = courses.find((c) => c._id === courseId);
- if (
- course &&
- (!course.coverUrl || course.coverUrl === "error") &&
- !course.loading
- ) {
- loadCourseImage(course);
- }
- }
- }
- });
- },
- { rootMargin: "100px" },
- );
- document
- .querySelectorAll("[data-course-id]")
- .forEach((el) => observerRef.current?.observe(el));
- }
- return () => observerRef.current?.disconnect();
- }, [courses, loading, loadCourseImage]);
-
  useEffect(() => {
  let isMounted = true;
  setLoading(true);
@@ -381,11 +271,30 @@ const CoursesPage: React.FC = () => {
  try {
  const response = await getPublishedCourses();
  
- // La respuesta tiene estructura: { status, message, data: { items: [], total: N } }
- const coursesData: any[] = (response as any)?.data?.items || [];
+ // LOG PARA DEPURACIÓN: Ver la respuesta exacta del servidor
+ console.log("Respuesta de getPublishedCourses:", response);
+
+ // La respuesta puede venir en varios formatos:
+ // 1. { success: true, data: items, total, message }  (API interna)
+ // 2. { status, message, data: { items, total } }     (Si lo devolviera otro servicio)
+ // 3. [...] (Array directo)
+ 
+ let coursesData: any[] = [];
+ if (Array.isArray(response)) {
+     coursesData = response;
+ } else if (response && typeof response === 'object') {
+     const resp = response as any;
+     coursesData = resp.data?.items || resp.data || resp.items || [];
+ }
+ 
+ if (isMounted) {
+     console.log("Cursos procesados:", coursesData.length);
+ }
 
  const coursesWithoutImages = coursesData.map((course: any) => ({
  ...course,
+ _id: course._id || course.id, // Normalizar ID
+ name: course.name || "Curso sin nombre",
  longDescription: course.longDescription || "",
  days: course.days || [],
  time: course.time || "",
@@ -403,24 +312,10 @@ const CoursesPage: React.FC = () => {
  hasPromotionalCode: course.hasPromotionalCode ?? false,
  }));
 
- const ids = coursesData
- .map((c: any) => c?._id || c?.id)
- .filter(Boolean);
-                                if (isMounted) {
-                                    setCourses(coursesWithoutImages);
- setError(null);
- setLoading(false);
-
- const priorityCourses = coursesWithoutImages.slice(0, 6);
- setTimeout(() => {
  if (isMounted) {
- priorityCourses.forEach((course: Course) => {
- if (course.imageUrl) {
- loadCourseImage(course);
- }
- });
- }
- }, 100);
+     setCourses(coursesWithoutImages);
+     setError(null);
+     setLoading(false);
  }
  } catch (error) {
  if (isMounted) {
@@ -437,7 +332,7 @@ const CoursesPage: React.FC = () => {
  return () => {
  isMounted = false;
  };
- }, [loadCourseImage]);
+ }, []);
 
  useEffect(() => {
  return () => {
@@ -445,17 +340,6 @@ const CoursesPage: React.FC = () => {
  objectUrls.current = [];
  };
  }, []);
-
- const handleRetryImage = useCallback(
- (courseId: string) => {
- const course = courses.find((c) => c._id === courseId);
- if (course) {
- updateCourseProperty(courseId, { coverUrl: undefined });
- loadCourseImage(course);
- }
- },
- [courses, loadCourseImage, updateCourseProperty],
- );
 
  const filteredCourses = courses
  .filter((course) =>
@@ -587,10 +471,10 @@ const CoursesPage: React.FC = () => {
  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
  </svg>
  <h3 className="mt-4 text-xl font-semibold text-brand-tertiary ">
- No se encontraron cursos
+ No se han encontrado cursos con esos términos.
  </h3>
  <p className="mt-2 text-brand-tertiary ">
- Intenta con otros términos de búsqueda
+ Intenta ajustando tu búsqueda o explora nuestras categorías.
  </p>
  </div>
  ) : (
@@ -604,7 +488,6 @@ const CoursesPage: React.FC = () => {
                                             const slug = generateCourseSlug(course.name, course._id);
                                             router.push(`/detalle-curso/${slug}`);
                                         }}
-                                        onRetryImage={() => handleRetryImage(course._id)}
                                     />
                                 ))}
  </div>
@@ -613,7 +496,7 @@ const CoursesPage: React.FC = () => {
  </main>
 
  {/* Sección de solicitud de curso personalizado */}
- <section id="" className="bg-linear-to-b from-brand-primary/10 to-brand-primary/40 py-12 md:py-16">
+ <section id="request-course-section" className="bg-linear-to-b from-brand-primary/10 to-brand-primary/40 py-12 md:py-16">
  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
  <div className="mx-auto max-w-3xl">
  {/* Encabezado */}
@@ -660,7 +543,7 @@ const CoursesPage: React.FC = () => {
  {...register("email", {
  required: "Este campo es obligatorio",
  pattern: {
- value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+ value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
  message: "Correo electrónico inválido",
  },
  })}
@@ -717,10 +600,11 @@ const CoursesPage: React.FC = () => {
                                                     onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/\D/g, ''); }}
                                                 />
  </div>
- {(errors.countryCode || errors.phoneNumber) && (
- <p className="mt-1 text-sm text-red-600 ">
- {errors.countryCode?.message || errors.phoneNumber?.message}
- </p>
+ {errors.countryCode && (
+ <p className="mt-1 text-sm text-red-600 ">{errors.countryCode.message}</p>
+ )}
+ {errors.phoneNumber && (
+ <p className="mt-1 text-sm text-red-600 ">{errors.phoneNumber.message}</p>
  )}
  </div>
 

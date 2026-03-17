@@ -30,13 +30,11 @@ export const getImages = async (
 
     return resp;
   } catch (error) {
-    // Si Bunny CDN no está disponible, usar placeholder
+    // Si Bunny CDN no está disponible, intentar cargar el placeholder desde la raíz pública del frontend
     console.warn(`⚠️ No se pudo cargar imagen desde Bunny CDN: ${imageFileName}`, error);
     try {
-      const placeholderResp = await axios.get("/images/placeholder.couse.png", {
-        headers: {
-          Accept: "image/jpeg, image/png",
-        },
+      const placeholderUrl = "/images/placeholder.couse.png";
+      const placeholderResp = await axios.get(placeholderUrl, {
         responseType: "blob",
       });
       return placeholderResp;

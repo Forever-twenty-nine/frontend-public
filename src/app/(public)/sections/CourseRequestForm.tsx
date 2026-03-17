@@ -78,7 +78,7 @@ export const CourseRequestForm: React.FC = () => {
 						{...register("email", {
 							required: "Este campo es obligatorio",
 							pattern: {
-								value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+								value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
 								message: "Correo electrónico inválido",
 							},
 						})}
