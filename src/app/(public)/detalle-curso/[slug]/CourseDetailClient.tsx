@@ -274,7 +274,7 @@ const CourseDetailClient: React.FC<CourseDetailClientProps> = ({ params }) => {
                         height={400}
                         className="h-auto w-full object-cover"
                         priority
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
+                        unoptimized={courseImageUrl.includes("bunny") || courseImageUrl.startsWith("http")}
                       />
                     </div>
                   ) : (

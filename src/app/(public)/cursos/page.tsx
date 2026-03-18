@@ -162,14 +162,13 @@ const CourseCard: React.FC<{
                 </svg>
             </div>
         )}
-        <img
+        <Image
             src={imageUrl}
             alt={course.name}
+            fill
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-            loading="lazy"
-            onError={(e) => {
-                (e.target as HTMLImageElement).src = "/images/placeholder.couse.png";
-            }}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            unoptimized={imageUrl.includes("bunny") || imageUrl.startsWith("http")}
         />
  <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-3">
  <span className={`inline-block -ml-3 px-3 py-1 text-xs font-semibold ${statusInfo.className}`}>

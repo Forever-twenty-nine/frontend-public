@@ -29,7 +29,8 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'cursala.b-cdn.net',
-        pathname: '/course-images/**',
+        port: '',
+        pathname: '/**',
       },
     ],
     localPatterns: [
