@@ -171,7 +171,7 @@ const Footer: React.FC<{ className?: string }> = ({ className }) => {
 
         <div className="space-y-2 text-center border-t border-brand-tertiary border-solid mt-10 pt-4">
           <p className="text-xs text-brand-tertiary md:text-sm">
-            © {new Date().getFullYear()} Cursala. Todos los derechos reservados.
+            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> Cursala. Todos los derechos reservados.
           </p>
           <p className="flex items-center justify-center gap-1 text-xs text-brand-tertiary md:text-sm">
             Creado por

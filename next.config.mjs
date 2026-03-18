@@ -52,7 +52,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "connect-src 'self' https://cursala.b-cdn.net",
+            value: "connect-src 'self' https://cursala.b-cdn.net https://cloudflareinsights.com https://static.cloudflareinsights.com",
           },
         ],
       },
