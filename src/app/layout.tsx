@@ -3,10 +3,19 @@
 import "@/css/style.css";
 import type { Metadata } from "next";
 import RootLayoutClient from "@/components/RootLayoutClient";
+import { Titillium_Web } from 'next/font/google';
+
+// Optimización de fuentes: Usar next/font/google para eliminar CLS y mejorar performance
+const titillium = Titillium_Web({
+  subsets: ['latin'],
+  weight: ['300', '400', '600', '700'],
+  display: 'swap',
+  variable: '--font-titillium',
+});
 
 // Función para generar CSP condicional
 const getCSP = () => {
-  const baseCSP = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://static.cloudflareinsights.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://cloudflareinsights.com https://cloudflareinsights.com/cdn-cgi/rum";
+  const baseCSP = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://static.cloudflareinsights.com https://connect.facebook.net; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https: blob:; connect-src 'self' https://cloudflareinsights.com https://cloudflareinsights.com/cdn-cgi/rum";
 
   // Permitir hosts adicionales para `connect-src` configurados vía variable de entorno
   // Ejemplo: NEXT_PUBLIC_CSP_CONNECT_SRC="http://localhost:8080 https://api.example.com"
@@ -75,22 +84,14 @@ export default function RootLayout({
   children: React.ReactNode; 
 }>) {
   return (
-    <html lang="es" className="scroll-smooth" data-scroll-behavior="smooth">  
+    <html lang="es" className={`scroll-smooth ${titillium.variable}`} data-scroll-behavior="smooth">  
       <head>
         <meta charSet="utf-8" />
         {/* Content Security Policy básica */}
         <meta httpEquiv="Content-Security-Policy" content={getCSP()} />
 
-        {/* Preconnect para Google Fonts */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Fuente Titillium Web de Google Fonts */}
-        <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet" />
-        {/*
-          Si en el futuro se requiere Google Analytics:
-          1. Crear una propiedad en https://analytics.google.com/
-          2. Reemplazar este comentario por el snippet de GA4 con el ID correspondiente (G-XXXXXXXXXX)
-        */}
+        {/* Preconnect para Bunny CDN */}
+        <link rel="preconnect" href="https://cursala.b-cdn.net" crossOrigin="anonymous" />
 
         {/* Cloudflare Web Analytics */}
         {process.env.NODE_ENV !== 'development' && (

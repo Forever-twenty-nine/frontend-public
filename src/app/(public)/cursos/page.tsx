@@ -210,10 +210,22 @@ const CoursesPage: React.FC = () => {
  const [loading, setLoading] = useState(true);
  const [error, setError] = useState<string | null>(null);
  const [searchQuery, setSearchQuery] = useState("");
+ const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
  const [formLoading, setFormLoading] = useState(false);
 
  const objectUrls = useRef<string[]>([]);
+
+  // Implementación de debounce para la búsqueda
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
  // observerRef y efectos de scroll eliminados porque ahora usamos carga directa por URL
 
  // Formulario de solicitud de curso
@@ -341,15 +353,17 @@ const CoursesPage: React.FC = () => {
  };
  }, []);
 
- const filteredCourses = courses
- .filter((course) =>
- course.name.toLowerCase().includes(searchQuery.toLowerCase()),
- )
- .sort((a, b) =>
- sortOrder === "asc"
- ? a.name.localeCompare(b.name)
- : b.name.localeCompare(a.name),
- );
+  const filteredCourses = React.useMemo(() => {
+    return courses
+      .filter((course) =>
+        course.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()),
+      )
+      .sort((a, b) =>
+        sortOrder === "asc"
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name),
+      );
+  }, [courses, debouncedSearchQuery, sortOrder]);
 
  if (loading) {
  return (

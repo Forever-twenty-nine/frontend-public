@@ -14,12 +14,24 @@ const nextConfig = {
 
   // Optimización para reducir legacy JavaScript
   experimental: {
-    optimizePackageImports: ['jsvectormap', 'flatpickr'],
+    optimizePackageImports: [
+      'jsvectormap',
+      'flatpickr',
+      'lucide-react',
+      'react-icons'
+    ],
   },
 
   // Configuración de imágenes
   images: {
     qualities: [75, 90],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cursala.b-cdn.net',
+        pathname: '/course-images/**',
+      },
+    ],
     localPatterns: [
       {
         pathname: '/api/direct',

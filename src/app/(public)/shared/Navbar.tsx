@@ -25,26 +25,10 @@ const Navbar: React.FC = () => {
   };
 
   const socialLinks = {
-    instagram: () =>
-      window.open(
-        "https://www.instagram.com/cursala.online?igsh=MXhmOGF4MnprODUxNA==",
-        "_blank",
-      ),
-    linkedin: () =>
-      window.open(
-        "https://www.linkedin.com/company/cursala/?viewAsMember=true",
-        "_blank",
-      ),
-    youtube: () =>
-      window.open(
-        "https://www.youtube.com/@cursalaenvivo",
-        "_blank",
-      ),
-    facebook: () =>
-      window.open(
-        "https://www.facebook.com/Cursala.online",
-        "_blank",
-      ),
+    instagram: "https://www.instagram.com/cursala.online?igsh=MXhmOGF4MnprODUxNA==",
+    linkedin: "https://www.linkedin.com/company/cursala/?viewAsMember=true",
+    youtube: "https://www.youtube.com/@cursalaenvivo",
+    facebook: "https://www.facebook.com/Cursala.online",
   };
 
   const Navigation = ({ isMobile = false }: { isMobile?: boolean }) => {
@@ -209,10 +193,18 @@ const Navbar: React.FC = () => {
             </div>
             <div className="border-t border-gray-200 px-4 py-4 ">
               <div className="flex justify-center items-center gap-3 mb-5">
-                <InstagramButton onClick={socialLinks.instagram} />
-                <LinkedInButton onClick={socialLinks.linkedin} />
-                <YouTubeButton onClick={socialLinks.youtube} />
-                <FacebookButton onClick={socialLinks.facebook} />
+                <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <InstagramButton as="div" />
+                </a>
+                <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                  <LinkedInButton as="div" />
+                </a>
+                <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                  <YouTubeButton as="div" />
+                </a>
+                <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                  <FacebookButton as="div" />
+                </a>
               </div>
               <Link
                 href="/register"
@@ -261,10 +253,18 @@ const Navbar: React.FC = () => {
             <div className="flex justify-start ml-12 w-full gap-4">
               <Navigation />
               <div className="flex items-center gap-2">
-                <InstagramButton onClick={socialLinks.instagram} />
-                <LinkedInButton onClick={socialLinks.linkedin} />
-                <YouTubeButton onClick={socialLinks.youtube} />
-                <FacebookButton onClick={socialLinks.facebook} />
+                <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <InstagramButton as="div" />
+                </a>
+                <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                  <LinkedInButton as="div" />
+                </a>
+                <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                  <YouTubeButton as="div" />
+                </a>
+                <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                  <FacebookButton as="div" />
+                </a>
               </div>
               <div className="flex items-center justify-center gap-2">
                 <Link

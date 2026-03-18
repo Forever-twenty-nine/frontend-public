@@ -267,13 +267,14 @@ const CourseDetailClient: React.FC<CourseDetailClientProps> = ({ params }) => {
                 <div className="relative">
                   {courseImageUrl ? (
                     <div className="overflow-hidden rounded-xl">
-                      <img
+                      <Image
                         src={courseImageUrl}
                         alt={course.name}
+                        width={600}
+                        height={400}
                         className="h-auto w-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/images/placeholder.couse.png";
-                        }}
+                        priority
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
                       />
                     </div>
                   ) : (

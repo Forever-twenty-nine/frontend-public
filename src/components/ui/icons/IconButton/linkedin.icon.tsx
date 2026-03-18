@@ -3,11 +3,14 @@ import { ButtonHTMLAttributes } from "react";
 import Image from "next/image";
 import Linkedin_button from "@/img/svg/redes-10.svg";
 
-interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
+interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement | HTMLDivElement> {
+  as?: "button" | "div";
+}
 
-const LinkedInButton: React.FC<IconButtonProps> = ({ ...props }) => {
+const LinkedInButton: React.FC<IconButtonProps> = ({ as = "button", ...props }) => {
+  const Component = as;
   return (
-    <button
+    <Component
       {...props}
       style={{ borderRadius: "5px" }}
       className="flex h-8 w-8 items-center cursor-pointer justify-center text-white transition-all duration-200"
@@ -20,7 +23,7 @@ const LinkedInButton: React.FC<IconButtonProps> = ({ ...props }) => {
         height={20}
         className="h-7 w-7"
       />
-    </button>
+    </Component>
   );
 };
 

@@ -79,10 +79,13 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
     );
 
     // Course Card Component
-    const CourseCard = ({ course, priority }: { course: Course; priority: boolean }) => {
+    const CourseCard = ({ course, index }: { course: Course; index: number }) => {
         const slug = generateCourseSlug(course.name, course._id);
         const imageUrl = course.imageUrl || "/images/placeholder.couse.png";
         const isFree = course.isFree === true || course.price === 0 || course.price === "0" || (typeof course.price === "string" && course.price.toLowerCase() === "free");
+        
+        // Optimización LCP: Solo las primeras 2 imágenes tienen prioridad alta
+        const isPriority = index < 2;
 
         return (
             <Link
@@ -90,14 +93,13 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
                 className="group relative flex flex-col overflow-hidden rounded-lg border border-solid border-brand-tertiary-lighten/40 bg-white transition-all duration-300 hover:shadow-xl hover:shadow-brand-tertiary/20 "
             >
                 <div className="relative aspect-4/3 w-full overflow-hidden bg-gray-200">
-                    <img
+                    <Image
                         src={imageUrl}
                         alt={course.name}
+                        fill
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        loading={priority ? "eager" : "lazy"}
-                        onError={(e) => {
-                            (e.target as HTMLImageElement).src = "/images/placeholder.couse.png";
-                        }}
+                        priority={isPriority}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                     {course.hasPromotionalCode && ( 
                         <span className={`absolute ${isFree ? "right-3 top-3" : "left-3 top-3"} inline-flex items-center gap-1 rounded-md bg-yellow-400 px-2 py-1 text-[11px] font-semibold text-black shadow-md max-w-27.5`}>
@@ -177,7 +179,7 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
                 ) : (
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:grid-cols-4">
                         {courses.map((course, index) => (
-                            <CourseCard key={course._id} course={course} priority={index < 4} />
+                            <CourseCard key={course._id} course={course} index={index} />
                         ))}
                     </div>
                 )}

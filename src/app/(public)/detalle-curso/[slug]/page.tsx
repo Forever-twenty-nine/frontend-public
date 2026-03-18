@@ -6,6 +6,8 @@ import CourseDetailClient from "./CourseDetailClient";
 import dbConnect from "@/lib/mongodb";
 import CourseService from "@/lib/services/course.service";
 
+export const revalidate = 3600; // Revalidar cada hora
+
 interface CourseDetailProps {
   params: Promise<{
     slug: string;
