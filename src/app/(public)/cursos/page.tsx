@@ -282,9 +282,6 @@ const CoursesPage: React.FC = () => {
  try {
  const response = await getPublishedCourses();
  
- // LOG PARA DEPURACIÓN: Ver la respuesta exacta del servidor
- console.log("Respuesta de getPublishedCourses:", response);
-
  // La respuesta puede venir en varios formatos:
  // 1. { success: true, data: items, total, message }  (API interna)
  // 2. { status, message, data: { items, total } }     (Si lo devolviera otro servicio)
@@ -298,10 +295,6 @@ const CoursesPage: React.FC = () => {
      coursesData = resp.data?.items || resp.data || resp.items || [];
  }
  
- if (isMounted) {
-     console.log("Cursos procesados:", coursesData.length);
- }
-
  const coursesWithoutImages = coursesData.map((course: any) => ({
  ...course,
  _id: course._id || course.id, // Normalizar ID
