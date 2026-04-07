@@ -24,7 +24,6 @@ test.describe("Validación de Formularios de Solicitud y Propuesta", () => {
 
     await page.getByRole("button", { name: /Enviar solicitud/i }).click();
 
-    // Usamos un selector que no falle si el frontend ignora el mensaje del mock
     await expect(page.locator("body")).toContainText(/Solicitud enviada correctamente|Gracias por tu mensaje/i, { timeout: 15000 });
   });
 
