@@ -28,11 +28,11 @@ ________________________________________________________________________________
 
 🛠️ Scripts Disponibles
 
-Comando,Descripción,Puerto
-npm run dev,Inicia el servidor con 4GB de RAM (usando cross-env),3002
-npm run dev:fast,Modo desarrollo ultra rápido usando el motor Turbo,3002
-npm run build,Compila la aplicación para producción,-
-npm run start,Inicia la app en modo producción (local),3001
+Comando                Descripción                                            Puerto
+npm run dev            Inicia el servidor con 4GB de RAM (usando cross-env)    3002
+npm run dev:fast       Modo desarrollo ultra rápido usando el motor Turbo      3002
+npm run build          Compila la aplicación para producción                     -
+npm run start          Inicia la app en modo producción (local)                3001
 
 _______________________________________________________________________________________________
 
