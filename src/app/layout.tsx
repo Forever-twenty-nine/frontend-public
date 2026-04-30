@@ -98,7 +98,7 @@ export default function RootLayout({
         {process.env.NODE_ENV !== 'development' && (
           <Script
             src="https://static.cloudflareinsights.com/beacon.min.js"
-            data-cf-beacon='{"token": "757eee8aa1ac4e3890e4ed4d28dcbd16"}'
+            data-cf-beacon={`{"token": "${process.env.NEXT_PUBLIC_CF_BEACON_TOKEN}"}`}
             strategy="lazyOnload"
           />
         )}
