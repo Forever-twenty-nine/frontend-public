@@ -1,57 +1,62 @@
-"use client";
-
-export const dynamicParams = false;
-
-import React, { Suspense, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import React from "react";
 import nextDynamic from "next/dynamic";
 import Navbar from "@/app/(public)/shared/Navbar";
 import Footer from "@/app/(public)/shared/Footer";
-import Link from "next/link";
+import CoursesSection, { type Course } from "./(public)/sections/CoursesSection";
+import HomeRedirectHandler from "./HomeRedirectHandler";
 
-// Metadata para la página principal se define en un archivo separado
-// para mantener el componente como cliente
+export const dynamicParams = false;
 
-// Lazy loading de secciones para mejor performance
-const CoursesSection = nextDynamic(() => import("./(public)/sections/CoursesSection"), {
-  loading: () => <div className="h-96 animate-pulse " />,
-});
 const FAQSection = nextDynamic(() => import("./(public)/sections/FAQSection"), {
-  loading: () => <div className="h-96 animate-pulse " />, 
+  loading: () => <div className="h-96 animate-pulse" />,
 });
 const CourseRequestForm = nextDynamic(
   () => import("./(public)/sections/CourseRequestForm").then(mod => mod.CourseRequestForm),
-  { loading: () => <div className="h-96 animate-pulse " /> }
+  { loading: () => <div className="h-96 animate-pulse" /> }
 );
-const MaintenancePage = nextDynamic(() => import("./(public)/mantenimiento/page"));
 
 // 🔧 MANTENIMIENTO: Cambiar a true para activar modo mantenimiento
 const MAINTENANCE_MODE = false;
 
-function HomePageInternal() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  
-  // Redirigir a la página de registro si viene con el parámetro
-  useEffect(() => {
-    const shouldRedirect = searchParams.get('register') === 'true';
-    if (shouldRedirect) {
-      router.push('/register');
-    }
-  }, [searchParams, router]);
+async function fetchInitialCourses(): Promise<Course[] | undefined> {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    if (!baseUrl) return undefined;
+    const res = await fetch(`${baseUrl}/courses/home`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return undefined;
+    const data = await res.json();
+    const list: any[] = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
+    if (list.length === 0) return undefined;
+    return list.map((c) => ({
+      ...c,
+      hasPromotionalCode: c.hasPromotionalCode ?? false,
+      imageUrl: c.imageUrl?.startsWith("http")
+        ? c.imageUrl
+        : c.imageUrl
+          ? `https://cursala.b-cdn.net/course-images/${c.imageUrl}`
+          : "/images/placeholder.couse.png",
+    }));
+  } catch {
+    return undefined;
+  }
+}
 
-  // 🔧 FÁCIL SWITCH: Solo cambiar MAINTENANCE_MODE arriba para activar/desactivar
+export default async function HomePage() {
   if (MAINTENANCE_MODE) {
+    const { default: MaintenancePage } = await import("./(public)/mantenimiento/page");
     return <MaintenancePage />;
   }
 
-  // Página normal
+  const initialCourses = await fetchInitialCourses();
+
   return (
     <div className="flex min-h-screen flex-col">
+      <HomeRedirectHandler />
       <Navbar />
       <main className="grow">
-        {/* <CarouselSection /> */}
-        <CoursesSection />
+        <CoursesSection initialCourses={initialCourses} />
         <FAQSection />
         <section className="bg-linear-to-b from-brand-primary/10 to-brand-primary/40 py-12 md:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,20 +77,4 @@ function HomePageInternal() {
       <Footer />
     </div>
   );
-};
-
-
-// Componente principal con Suspense
-const HomePage: React.FC = () => {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid border-primary border-t-transparent"></div>
-      </div>
-    }>
-      <HomePageInternal />
-    </Suspense>
-  );
-};
-
-export default HomePage;
+}

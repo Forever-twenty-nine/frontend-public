@@ -36,6 +36,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
  className="object-cover object-center opacity-30 pointer-events-none select-none z-0"
  priority
  sizes="100vw"
+ fetchPriority="high"
  />
  <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-3 lg:gap-20">
  <div className="order-2 w-full md:order-1">

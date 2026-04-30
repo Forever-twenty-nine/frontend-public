@@ -18,13 +18,15 @@ export interface Course {
 /**
  * Sección de cursos más solicitados
  */
-const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
-    const [courses, setCourses] = useState<Course[]>([]);
-    const [loading, setLoading] = useState(true);
+const CoursesSection: React.FC<{ className?: string; initialCourses?: Course[] }> = ({ className, initialCourses }) => {
+    const [courses, setCourses] = useState<Course[]>(initialCourses ?? []);
+    const [loading, setLoading] = useState(initialCourses === undefined);
     const [error, setError] = useState<string | null>(null);
 
-    // Cargar cursos
+    // Cargar cursos solo si no se proveyeron desde el servidor
     useEffect(() => {
+        if (initialCourses !== undefined) return;
+
         let isMounted = true;
 
         async function fetchCourses() {
@@ -66,7 +68,7 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
 
         fetchCourses();
         return () => { isMounted = false; };
-    }, []);
+    }, [initialCourses]);
 
     // Skeleton loader
     const SkeletonCard = () => (
@@ -96,7 +98,8 @@ const CoursesSection: React.FC<{ className?: string }> = ({ className }) => {
                         fill
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         priority={priority}
-                        unoptimized={imageUrl.includes("bunny") || imageUrl.startsWith("http")}
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        quality={60}
                     />
                     {course.hasPromotionalCode && ( 
                         <span className={`absolute ${isFree ? "right-3 top-3" : "left-3 top-3"} inline-flex items-center gap-1 rounded-md bg-yellow-400 px-2 py-1 text-[11px] font-semibold text-black shadow-md max-w-27.5`}>

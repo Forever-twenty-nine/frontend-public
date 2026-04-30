@@ -2,6 +2,7 @@
   <link rel="preconnect" href="https://cursala.b-cdn.net" crossOrigin="anonymous" />
 import "@/css/style.css";
 import type { Metadata } from "next";
+import Script from "next/script";
 import RootLayoutClient from "@/components/RootLayoutClient";
 import { Titillium_Web } from 'next/font/google';
 
@@ -89,21 +90,18 @@ export default function RootLayout({
         <meta charSet="utf-8" />
         {/* Content Security Policy básica */}
         <meta httpEquiv="Content-Security-Policy" content={getCSP()} />
-
-        {/* Preconnect para Bunny CDN */}
-        <link rel="preconnect" href="https://cursala.b-cdn.net" crossOrigin="anonymous" />
-
-        {/* Cloudflare Web Analytics */}
-        {process.env.NODE_ENV !== 'development' && (
-          <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "757eee8aa1ac4e3890e4ed4d28dcbd16"}'></script>
-        )}
-        {/* End Cloudflare Web Analytics */}
-
       </head>
       <body suppressHydrationWarning={true} className="front">
         <RootLayoutClient> 
           {children}
         </RootLayoutClient>
+        {process.env.NODE_ENV !== 'development' && (
+          <Script
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon='{"token": "757eee8aa1ac4e3890e4ed4d28dcbd16"}'
+            strategy="lazyOnload"
+          />
+        )}
       </body>
     </html>
   );

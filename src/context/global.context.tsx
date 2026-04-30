@@ -1,4 +1,3 @@
-import { triggerNotification } from "@/utils/swal";
 import { GlobalContextType, INotification } from "@/types";
 import React, {
   createContext,

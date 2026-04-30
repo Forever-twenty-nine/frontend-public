@@ -1,7 +1,12 @@
 "use client";
 import React from "react";
 import { GlobalProvider } from "@/context/global.context";
-import WhatsAppButton from "@/components/ui/misc/WhatsappFloat";
+import nextDynamic from "next/dynamic";
+
+const WhatsAppButton = nextDynamic(() => import("@/components/ui/misc/WhatsappFloat"), {
+  ssr: false,
+  loading: () => null,
+});
 
 interface RootLayoutClientProps {
   children: React.ReactNode;
